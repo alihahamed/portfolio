@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -24,6 +25,9 @@
   --font-tusker-condensed: var(--font-tusker-condensed);
   --font-tusker-standard: var(--font-tusker-standard);
   --font-tusker-expanded: var(--font-tusker-expanded);
+  
+  /* Pinyon Script font */
+  --font-pinyon: "Pinyon Script", cursive;
 }
 
 body {
@@ -37,4 +41,10 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+}
+
+.pinyon-script-regular {
+  font-family: "Pinyon Script", cursive !important;
+  font-weight: 400;
+  font-style: normal;
 }

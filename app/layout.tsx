@@ -22,6 +22,7 @@ const tuskerCondensed = localFont({
     { path: "../Tusker.Grotesk/Tusker.Grotesk/Tusker.Grotesk/TuskerGrotesk-2800Super.ttf", weight: "800", style: "normal" },
   ],
   variable: "--font-tusker-condensed",
+  display: "swap",
 });
 
 const tuskerStandard = localFont({
@@ -32,6 +33,7 @@ const tuskerStandard = localFont({
     { path: "../Tusker.Grotesk/Tusker.Grotesk/Tusker.Grotesk/TuskerGrotesk-4800Super.ttf", weight: "800", style: "normal" },
   ],
   variable: "--font-tusker-standard",
+  display: "swap",
 });
 
 const tuskerExpanded = localFont({
@@ -42,6 +44,7 @@ const tuskerExpanded = localFont({
     { path: "../Tusker.Grotesk/Tusker.Grotesk/Tusker.Grotesk/TuskerGrotesk-6800Super.ttf", weight: "800", style: "normal" },
   ],
   variable: "--font-tusker-expanded",
+  display: "swap",
 });
 
 // Register PP Neue Montreal custom foundry fonts
@@ -57,9 +60,11 @@ const neueMontreal = localFont({
     { path: "../NeueMontreal-BoldItalic.otf", weight: "700", style: "italic" },
   ],
   variable: "--font-neue-montreal",
+  display: "swap",
 });
 
 import SilkBackground from "@/components/SilkBackground";
+import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Tusker Grotesk - Portfolio",
@@ -76,10 +81,19 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${tuskerCondensed.variable} ${tuskerStandard.variable} ${tuskerExpanded.variable} ${neueMontreal.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
+      </head>
       <body className="min-h-full flex flex-col bg-[#050505] text-white relative">
         {/* Global WebGL Background Canvas */}
         <SilkBackground />
-        {children}
+        
+        {/* Butter-Smooth Lenis Scrolling Wrapper */}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

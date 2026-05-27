@@ -11,7 +11,7 @@ export default function SilkBackground() {
     <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none">
       <Silk
         color="#AB1509"
-        scale={0.7}
+        scale={0.9}
         noiseIntensity={2.9}
         rotation={1.66}
         speed={5}
