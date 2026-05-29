@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -33,7 +34,7 @@ const PROJECTS_DATA: Project[] = [
   {
     id: 1,
     title: "HAUTE COUTURE NIGHTS – PARIS",
-    images: ["/abg-1.png", "a.png", "/ab.png", "/abg.png"],
+    images: ["/abg-1.png", "/abgg.png", "/ab.png", "/abg.png"],
     description: "An immersive digital showcase capturing the elegance and fine craftsmanship of Parisian high fashion runways, designed with dark-mode brutalist elements and interactive projections.",
     approach: "Blending high-fashion editorial aesthetics with raw brutalist code structure. We engineered a seamless 3D projections system that casts virtual runway shadows across deep-pitch black frames. Standard scroll physics are modified to mimic the slow, luxurious pacing of Parisian high couture walks, creating a high-contrast experience.",
     techStack: [
@@ -402,7 +403,7 @@ export default function SelectedWork() {
               // Card 2 (Right Side): Starts dim, becomes bright at the center (0.5 scroll), then dims to the left
               tl.fromTo(card,
                 { filter: "brightness(45%)" },
-                { filter: "brightness(80%)", duration: 0.5, ease: "sine.inOut" },
+                { filter: "brightness(90%)", duration: 0.5, ease: "sine.inOut" },
                 0
               ).to(card,
                 { filter: "brightness(65%)", duration: 0.5, ease: "sine.inOut" },
@@ -506,7 +507,7 @@ export default function SelectedWork() {
         activeProjectId !== null ? "opacity-0 -translate-y-8" : "opacity-100 translate-y-0"
       }`}>
         <div className="hidden md:block md:col-span-3"></div>
-        <div className="text-[12px] uppercase tracking-widest font-montreal text-[#fff7d3] font-medium pl-2 md:pl-10">
+        <div className="text-[12px] monitor:text-[14px] uppercase tracking-widest font-montreal text-[#fff7d3] font-medium pl-2 md:pl-10">
           Selected Work
         </div>
       </div>
@@ -561,11 +562,11 @@ export default function SelectedWork() {
                     className="details-wipe-reveal opacity-0 flex flex-col items-start gap-1"
                     style={{ clipPath: "inset(0% 0% 100% 0%)" }}
                   >
-                    <span className="font-montreal font-normal text-[#AB1509] text-[11px] uppercase tracking-normal">
+                    <span className="font-montreal font-normal text-[#AB1509] text-[11px] monitor:text-[13px] uppercase tracking-normal">
                       {metric.label}
                     </span>
                     <span
-                      className={`metric-num-${idx} font-montreal font-normal text-white/90 text-[36px] md:text-[48px] leading-none tracking-tighter`}
+                      className={`metric-num-${idx} font-montreal font-normal text-white/90 text-[36px] md:text-[48px] monitor:text-[50px] leading-none tracking-tighter`}
                     >
                       0{metric.suffix || ""}
                     </span>
@@ -586,7 +587,7 @@ export default function SelectedWork() {
                     rel="noopener noreferrer"
                     onMouseEnter={() => setIsLinkHovered(true)}
                     onMouseLeave={() => setIsLinkHovered(false)}
-                    className="font-montreal font-normal text-white/90 hover:text-white text-[15px] leading-[1.5] uppercase tracking-normal border-b border-white/20 hover:border-white/90 transition-all duration-300 flex items-center gap-1.5"
+                    className="font-montreal font-normal text-white/90 hover:text-white text-[15px] monitor:text-[17px] leading-[1.5] uppercase tracking-normal border-b border-white/20 hover:border-white/90 transition-all duration-300 flex items-center gap-1.5"
                   >
                     Visit Work ↗
                   </a>
@@ -611,16 +612,16 @@ export default function SelectedWork() {
 
               {/* BOTTOM LEFT: Approach Block */}
               <div
-                className="details-wipe-reveal absolute bottom-[4%] left-6 md:left-12 lg:left-4 w-[90%] max-w-[450px] pointer-events-auto text-left opacity-0 hidden lg:flex flex-col z-30"
+                className="details-wipe-reveal absolute bottom-[4%] left-6 md:left-12 lg:left-4 w-[90%] max-w-[450px] monitor:!max-w-[550px] pointer-events-auto text-left opacity-0 hidden lg:flex flex-col z-30"
                 style={{ clipPath: "inset(0% 0% 100% 0%)" }}
               >
                 <div className={`w-full flex flex-col gap-2 transition-opacity duration-500 ease-in-out ${
                   isLinkHovered ? "opacity-25" : "opacity-100"
                 }`}>
-                  <span className="font-montreal font-normal text-[#AB1509] text-[11px] uppercase tracking-normal">
+                  <span className="font-montreal font-normal text-[#AB1509] text-[11px] monitor:text-[13px] uppercase tracking-normal">
                     Approach
                   </span>
-                  <p className="font-montreal font-normal text-white/90 text-[13px] leading-[1.2]">
+                  <p className="font-montreal font-normal text-white/90 text-[13px] monitor:text-[15px] leading-[1.2]">
                     {project.approach}
                   </p>
                 </div>
@@ -634,17 +635,19 @@ export default function SelectedWork() {
                 <div className={`w-full flex flex-col items-end gap-2 transition-opacity duration-500 ease-in-out ${
                   isLinkHovered ? "opacity-25" : "opacity-100"
                 }`}>
-                  <span className="font-montreal font-normal text-[#AB1509] text-[11px] uppercase tracking-normal mb-1">
+                  <span className="font-montreal font-normal text-[#AB1509] text-[11px] monitor:text-[13px] uppercase tracking-normal mb-1">
                     Technologies
                   </span>
                   <div className="flex gap-4 items-center">
                     {project.techStack.map((tech, idx) => (
                       <div
                         key={idx}
-                        className="group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/5 border border-white/10 text-yellow-soft hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                        className="group relative flex items-center justify-center w-9 h-9 monitor:w-[38px] monitor:h-[38px] rounded-full bg-white/5 border border-white/10 text-yellow-soft hover:bg-white/10 hover:border-white/20 transition-all duration-300"
                         title={tech.label}
                       >
-                        {TECH_ICONS[tech.iconKey]}
+                        <div className="w-5 h-5 monitor:w-[22px] monitor:h-[22px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                          {TECH_ICONS[tech.iconKey]}
+                        </div>
                         {/* Tooltip on hover */}
                         <span className="absolute bottom-full mb-2 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-black border border-white/10 text-yellow-soft text-[10px] py-1 px-2 rounded whitespace-nowrap pointer-events-none">
                           {tech.label}
@@ -657,10 +660,10 @@ export default function SelectedWork() {
             </div>
 
             {/* Bottom-left Project Title and Underline Wrapper */}
-            <div className={`absolute z-20 pointer-events-none left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[10%] lg:left-4 lg:right-auto lg:bottom-65 transition-opacity duration-500 ease-in-out ${
+            <div className={`absolute z-20 pointer-events-none left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[10%] lg:left-4 lg:right-auto lg:bottom-65 monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft uppercase tracking-normal text-[12px] md:text-[27px] text-left">
+              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft uppercase tracking-normal text-[12px] md:text-[29px] monitor:!text-[40px]  text-left">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
@@ -678,7 +681,7 @@ export default function SelectedWork() {
             </div>
 
             {/* Bottom-right Project Description (styled with Tailwind CSS directly for manual edits) */}
-            <p className={`work-scene-desc-new absolute m-0 pointer-events-none font-montreal font-normal text-yellow-soft/80 z-20 text-[10px] md:text-[15px] leading-[1.2] text-left left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[4%] lg:left-auto lg:right-10 lg:bottom-[4%] lg:text-right lg:w-[420px] transition-opacity duration-500 ease-in-out ${
+            <p className={`work-scene-desc-new absolute m-0 pointer-events-none font-montreal font-normal text-yellow-soft/80 z-20 text-[10px] md:text-[15px] monitor:text-[17px] leading-[1.2] text-left left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[4%] lg:left-auto lg:right-10 lg:bottom-[4%] lg:text-right lg:w-[420px] transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-25" : "opacity-100"
             }`}>
               {descChars.map((char, charIndex) => (
@@ -699,9 +702,9 @@ export default function SelectedWork() {
               onClick={() => handleCardClick(project.id)}
             >
               {project.images.map((imgUrl, cardIndex) => {
-                // Calculate circular geometry transforms for 4 cells (radius = 420px)
+                // Calculate circular geometry transforms for 4 cells (radius = 300px)
                 const angle = cardIndex * 90; // 360 / 4 = 90
-                const transform = `rotateY(${angle}deg) translateZ(420px)`;
+                const transform = `rotateY(${angle}deg) translateZ(300px)`;
 
                 return (
                   <div
@@ -710,12 +713,21 @@ export default function SelectedWork() {
                     style={{ transform }}
                   >
                     <div className="work__card">
-                      <div
-                        className="work__card-face"
-                        style={{
-                          backgroundImage: imgUrl ? `url(${imgUrl})` : undefined,
-                        }}
-                      />
+                      <div className="work__card-face relative overflow-hidden bg-[#121212]">
+                        {imgUrl && (
+                          <Image
+                            src={imgUrl}
+                            alt={`${project.title} - View ${cardIndex + 1}`}
+                            fill
+                            unoptimized
+                            loading="lazy"
+                            className="object-cover pointer-events-none"
+                            style={{
+                              transform: "translateZ(0)",
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 );

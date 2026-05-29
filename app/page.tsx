@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 import Menu from "@/components/Menu";
-// import Signature from "@/components/Signature";
+import { Signature } from "@/components/ui/signature";
 import ScrollArrow from "@/components/ScrollArrow";
 import { useTransitionContext } from "@/components/PageTransition";
 import SelectedWork from "@/components/SelectedWork";
@@ -243,10 +243,14 @@ export default function Home() {
       <div className="relative w-full h-screen min-h-[650px] flex flex-col justify-between overflow-hidden pb-6">
         
         {/* HEADER SECTION (Without grid borders, clean and floating) */}
-        <header className="relative z-10 w-full px-6 md:px-12 pt-6 pb-2 shrink-0">
+        <header className="relative z-10 w-full px-6 md:px-12 pt-8 pb-2 shrink-0">
           <div className="flex justify-between items-center w-full">
             {/* Logo - Handwritten Cursive Signature */}
-            {/* <Signature /> */}
+            {!showPreloader ? (
+              <Signature text="Ali Ahmed" color="#fff7d3" fontSize={12} />
+            ) : (
+              <div />
+            )}
 
             {/* Stylized ME/NU Stacked Menu Component */}
             <Menu />

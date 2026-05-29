@@ -15,12 +15,21 @@
 ## Last Session Work
 
 ### Summary
-Programmed an immersive backdrop dimming effect when hovering the "VISIT WORK" link. All surrounding elements are dimmed to the user's exact specification (carousel to 0.25, title to 0.35, approach to 0.25, description to 0.25, tech icons to 0.25, and grid lines to 0.15 opacity) using smooth GPU-accelerated CSS transitions, while keeping the preview video card and the link itself at full brightness.
+Added `unoptimized` property to the Next.js `Image` component inside `.work__card-face` to bypass image-size compression entirely. This serves the original high-resolution WebP files directly, matching the perfect uncompressed visual quality of the original Codrops source while maintaining proper React lazy-loading. Checked compile safety.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/SelectedWork.tsx` | Modified | Implemented `isLinkHovered` state, mouse listeners on link, and transition classes/inner wrappers. |
+| `components/SelectedWork.tsx` | Modified | Added `unoptimized` prop to `<Image />` tags to preserve full source pixel details. |
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -104,6 +113,23 @@ Programmed an immersive backdrop dimming effect when hovering the "VISIT WORK" l
 | 74 | React-State Selected Work Label Hide | Used React-state conditional class bindings and CSS transitions to reliably fade and translate the Selected Work section label away when any project details page is active, eliminating potential GSAP target failures. | 2026-05-29 |
 | 75 | Widescreen Widescreen aspect-ratio Tooltip Card | Adopted a standard 16:9 widescreen layout (`w-[320px] aspect-video`) for the absolute project website preview card, letting video frames draw fully without horizontal cropping. | 2026-05-29 |
 | 76 | Immerse Link-Hover Backdrop Dimming | Implemented smooth 500ms transition-opacity dimming on active project elements (carousel: 0.25, title: 0.35, approach: 0.25, description: 0.25, tech icons: 0.25, grid lines: 0.15) when hovering "VISIT WORK" to highlight the preview card and focus interaction. | 2026-05-29 |
+| 77 | Stagger-Loaded Handwritten Cursive Header Logo | Added the custom `Signature` component as the top-left header logo, set to white, displaying "Ali Ahmed" to mount precisely when the preloader ends. Locked it in relative layout bounds to scroll away naturally. | 2026-05-29 |
+| 78 | Zero-Dependency cn Merger | Created a lightweight, zero-dependency `cn` class merger in `lib/utils.ts` to satisfy shadcn interface requirements without requiring extra packages. | 2026-05-29 |
+| 79 | Wildcard Namespace Import for opentype.js | Swapped default import to namespace wildcard `import * as opentype` to resolve ES module default export mismatch in Next.js Turbopack. | 2026-05-29 |
+| 80 | Fetch + parse Font Loading | Replaced the deprecated `opentype.load` stub with a native fetch + `opentype.parse` buffer pipeline to render handwriting vector glyphs reliably in the browser. | 2026-05-29 |
+| 81 | Large Monitor Project Title Scale | Programmed `2xl:text-[42px]` responsive text scaling on the project title inside `SelectedWork.tsx` to preserve bold visual framing on wider screens (1536px+). (Superseded by height-aware class). | 2026-05-29 |
+| 82 | Height-Aware Title Sizing | Implemented a hybrid width/height-based media query (`min-width: 1600px` and `min-height: 900px`) for project title scaling to perfectly isolate physically large desktop displays from compact laptop viewports. (Superseded by inline Tailwind variant). | 2026-05-29 |
+| 83 | Inline Arbitrary Tailwind Media Query | Adopted Tailwind's arbitrary modifier `[@media(min-width:1600px)_and_(min-height:900px)]:text-[52px]` to handle combined dimensional responsive overrides inline, avoiding globals.css styles. (Superseded by custom theme breakpoint). | 2026-05-29 |
+| 84 | Tailwind v4 Custom Media Breakpoint | Declared a custom height-aware media query `--breakpoint-3xl` inside `@theme` in `globals.css` to enable clean, reusable native modifier classes (`3xl:`) across all components. (Superseded by @custom-variant directive). | 2026-05-29 |
+| 85 | Custom Tailwind Media Variant | Deployed the Tailwind CSS v4 `@custom-variant` directive to declare a native `3xl:` modifier representing large desktops, bypassing compiler parsing restrictions. | 2026-05-29 |
+| 86 | Re-namespace Custom Variant to monitor | Changed `@custom-variant 3xl` to `@custom-variant monitor` to completely avoid breakpoint namespace collisions and PostCSS compile errors in Tailwind CSS v4, and updated JSX classes to `monitor:!text-[52px]`. | 2026-05-29 |
+| 87 | Monitor Viewport Sub-element Scaling | Added height/width-aware `monitor:` classes to all details overlay sub-texts, metrics labels, numbers, approach blocks, tech label/SVG icons, and descriptions in `SelectedWork.tsx`, scaling sizes by +2px to balance visual density. | 2026-05-29 |
+| 88 | Square 3D Carousel Cards | Reverted 3D carousel card dimensions from landscape (600x340px) to square (340x340px) and updated the 3D cylinder translation math to a radius of 300px to ensure card separation gaps. | 2026-05-29 |
+| 89 | Crisp 3D Image Rendering | Aligned carousel parent size to 400x400px, changed background-size to cover, and added hardware-accelerated GPU translateZ and contrast-optimization properties to ensure ultra-sharp 3D card renders. | 2026-05-29 |
+| 90 | Next.js Image Component Optimization | Swapped CSS background-image style for Next.js Image component with loading="lazy", sizes="400px", and quality={100} to deliver optimized WebP assets at maximum crisp resolution. | 2026-05-29 |
+| 91 | High-Res Qualities and URL Parsing Fixes | Configured `images.qualities: [75, 100]` in `next.config.ts` to support quality 100, and corrected the relative image path in `PROJECTS_DATA` to have a leading slash `/` to avoid next/image construction crashes. | 2026-05-29 |
+| 92 | Restore 3D Context of Carousel Cards | Removed `backface-visibility: hidden` and `translateZ(0)` flattening properties from `.work__card` to prevent 3D rendering context collapse, restoring side cards to 3D visibility. | 2026-05-29 |
+| 93 | Uncompressed Crystal-Clear Carousel Images | Added unoptimized prop to Next.js Image component inside SelectedWork.tsx to serve raw high-resolution WebP files directly, matching the perfect image fidelity of the original Codrops source. | 2026-05-29 |
 
 ---
 

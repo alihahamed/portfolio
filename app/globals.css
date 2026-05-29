@@ -30,6 +30,8 @@
   --font-pinyon: "Pinyon Script", cursive;
 }
 
+@custom-variant monitor (@media (min-width: 1600px) and (min-height: 900px));
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -116,22 +118,22 @@ html {
 }
 
 .work__carousel {
-  width: 600px;
-  height: 340px;
+  width: 400px;
+  height: 400px;
   top: 50%;
   left: 50%;
-  margin-top: -170px;
-  margin-left: -300px;
+  margin-top: -200px;
+  margin-left: -200px;
   position: absolute;
   transform-style: preserve-3d;
   will-change: transform;
-  transform: translateZ(-420px) rotateY(0deg);
+  transform: translateZ(-300px) rotateY(0deg);
 }
 
 .work__carousel-cell {
   position: absolute;
-  width: 600px;
-  height: 340px;
+  width: 400px;
+  height: 400px;
   left: 0;
   top: 0;
   transform-style: preserve-3d;
@@ -143,7 +145,7 @@ html {
   position: relative;
   transform-style: preserve-3d;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  border-radius: 6px;
+  border-radius: 10px;
   overflow: hidden;
 }
 
@@ -152,11 +154,15 @@ html {
   height: 100%;
   position: absolute;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   background-color: #121212; /* Stark dark grey */
-  border-radius: 6px;
-  background-size: 100% 100% !important;
+  border-radius: 10px;
+  background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  transform: translateZ(0);
 }
 
 
