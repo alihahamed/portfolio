@@ -6,8 +6,11 @@ import { CustomEase } from "gsap/CustomEase";
 import Menu from "@/components/Menu";
 // import Signature from "@/components/Signature";
 import ScrollArrow from "@/components/ScrollArrow";
+import { useTransitionContext } from "@/components/PageTransition";
 
 export default function Home() {
+  const context = useTransitionContext();
+  const showPreloader = context?.showPreloader;
   const containerRef = useRef<HTMLDivElement>(null);
   const drumRef = useRef<HTMLSpanElement>(null);
   const projectsRef = useRef<HTMLSpanElement>(null);
@@ -98,6 +101,7 @@ export default function Home() {
 
   // 4. Master Creative Intro Animation Timeline on Load
   useEffect(() => {
+    if (showPreloader) return;
     const projectsObj = { value: 0 };
     const yearsObj = { value: 0 };
     const scoreObj = { value: 0 };
@@ -213,7 +217,7 @@ export default function Home() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [showPreloader]);
 
   return (
     <div

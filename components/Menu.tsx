@@ -4,8 +4,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
+import { TransitionLink, useTransitionContext } from "@/components/PageTransition";
 
 export default function Menu() {
+  const { showPreloader } = useTransitionContext();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -25,7 +27,7 @@ export default function Menu() {
   }, []);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && !showPreloader) {
       // Elegant, clean entrance animation for the menu trigger button
       gsap.fromTo(
         ".menu-trigger-wrap",
@@ -40,7 +42,7 @@ export default function Menu() {
         }
       );
     }
-  }, [mounted]);
+  }, [mounted, showPreloader]);
 
   useEffect(() => {
     gsap.registerPlugin(CustomEase);
@@ -108,9 +110,11 @@ export default function Menu() {
   }, [isOpen]);
 
   const menuItems = [
-    { label: "About", num: "01", href: "#about" },
-    { label: "Work", num: "02", href: "#work" },
-    { label: "Contact", num: "03", href: "#contact" },
+    { label: "Home", num: "00", href: "/" },
+    { label: "About", num: "01", href: "/#about" },
+    { label: "Work", num: "02", href: "/#work" },
+    { label: "Team", num: "03", href: "/team" },
+    { label: "Contact", num: "04", href: "/#contact" },
   ];
 
   const socials = [
@@ -172,7 +176,7 @@ export default function Menu() {
                 ref={(el) => { if (el) menuLinksRef.current[index] = el; }}
                 className="relative overflow-hidden w-full border-b border-white/[0.06] will-change-transform"
               >
-                <a
+                <TransitionLink
                   href={item.href}
                   onClick={closeMenu}
                   className="menu-link relative flex items-baseline gap-3 py-5 md:py-6 px-6 md:px-10 w-full no-underline group/link select-none"
@@ -194,7 +198,7 @@ export default function Menu() {
 
                   {/* Hover bg */}
                   <div className="absolute inset-0 bg-[#fff7d3] max-w-full origin-bottom scale-y-0 group-hover/link:scale-y-100 transition-transform duration-500 ease-out -z-10"></div>
-                </a>
+                </TransitionLink>
               </li>
             ))}
           </ul>
@@ -235,7 +239,7 @@ export default function Menu() {
         tabIndex={0}
         onClick={toggleMenu}
         onKeyDown={(e) => e.key === "Enter" && toggleMenu()}
-        className="menu-trigger-wrap fixed top-6 right-6 md:right-12 group flex items-center justify-center w-10 h-10 cursor-pointer select-none outline-none z-[10000] pointer-events-auto"
+        className={`menu-trigger-wrap fixed top-6 right-6 md:right-12 group flex items-center justify-center w-10 h-10 cursor-pointer select-none outline-none z-[10000] pointer-events-auto transition-all duration-500 ease-out ${showPreloader ? "opacity-0 scale-75 pointer-events-none" : "opacity-100 scale-100"}`}
         aria-label={isOpen ? "Close Menu" : "Open Menu"}
       >
         {/* ME/NU Text - animates away when open */}
@@ -254,6 +258,8 @@ export default function Menu() {
       </div>
     </div>
   );
+
+  if (showPreloader) return null;
 
   return (
     <>

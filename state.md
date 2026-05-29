@@ -6,23 +6,22 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development - Motion Principles Documentation`
+- **Phase:** `Page Transition Implementation`
 - **Status:** `Complete`
-- **Last Updated:** `2026-05-27`
+- **Last Updated:** `2026-05-29`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Documented the precise CustomEase entrance reveal curve parameters (`0.85, 0, 0.2, 1`), the 2D vertical sliding track baseline slot-machine configurations, the vector scale-drawing mechanics for the ScrollArrow, and the symmetrical connector line timelines under `Brutalist Motion Principles` in `design.md`. Verified that the Next.js bundle compiles and builds cleanly.
+Fixed a critical preloader restart bug caused by parent state updates during page transitions. When `playLeaveAnimation` fired `setIsTransitioning(true)`, the context provider would re-render, recreating non-memoized context functions (`triggerPreloadTransition`, `triggerEnterTransition`). This invalidated the `useEffect` dependency array in `Preloader.tsx`, killing the active timeline and restarting a fresh one (making the top row visible again and hiding the middle row). Memoized all transition hooks inside `PageTransition.tsx` using `useCallback`, and added a strict `timelineStartedRef` to `Preloader.tsx` to ensure the animation is single-shot and completely immune to re-renders.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `design.md` | Modified | Updated official design system specification with custom motion curves and parameters. |
-| `state.md` | Modified | Synchronized change lists, phase status, and decisions made. |
-| `state.md` | Modified | Synchronized phase, technical change summaries, and decisions. |
+| `components/Preloader.tsx` | Modified | Added a strict `timelineStartedRef` check to ensure the timeline executes exactly once |
+| `components/PageTransition.tsx` | Modified | Imported and applied `useCallback` to memoize all animation and transition functions |
 
 ---
 
@@ -59,6 +58,25 @@ Documented the precise CustomEase entrance reveal curve parameters (`0.85, 0, 0.
 | 27 | Baseline-Locked 2D Motion-Blurred Sliding Track | Swapped the 3D rotating cylinder for a vertical flex stack inside a baseline-aligned `h-[0.85em] overflow-hidden` wrapper. Programmed infinite downward scrolling and high-end motion blur offset transitions (`blur(1.5px)` -> `blur(0px)`) combined with snappy spring snaps (`back.out(1.8)`), locking vertical alignment perfectly to the browser's line-box baseline down to the pixel. | 2026-05-27 |
 | 28 | Lenis Smooth Scrolling Provider | Integrated the Lenis package and built a custom client-side React wrapper to initialize global smooth inertia scrolling with clean exponential easing, globally cached on mount. | 2026-05-27 |
 | 29 | CustomEase Acceleration Curve | Registered GSAP CustomEase (`0.85, 0, 0.2, 1`) on mount to power the vertical masked reveal. Text slides straight up (perfectly upright, zero skew/tilt angle) with an elegant slow crawl initially, then accelerates rapidly with high-craft speed before settling smoothly. Decoupled the slide-up cycler perfectly until this entrance has completely finished. | 2026-05-27 |
+| 30 | Native Next.js Page Interceptor System | Avoided barba.js hydration conflicts with Next.js App Router by building a custom context provider that intercepts cross-page Link clicks to coordinate page swap animations. | 2026-05-29 |
+| 31 | Custom-Themed Dynamic Clip-Path Overlay | Themed the transition overlay to slide in Deep Rich Red (`#AB1509`) and display massive centered Soft Yellow (`#fff7d3`) destination typography. | 2026-05-29 |
+| 32 | SplitText Word Stagger Reveals | Integrated the official GSAP `SplitText` plugin to slice target headings and stagger individual words upwards (`yPercent: -120`, `ease: "elastic.in(1, 0.75)"`) on mount. | 2026-05-29 |
+| 33 | Dynamic Vertical Clip-Path Percentages | Computed vertical clip percentages dynamically by measuring the bounds of the destination title against the viewport height, creating a fitted horizontal strip. | 2026-05-29 |
+| 34 | Use Tusker Standard for all Preloader Slides | Configured all three preloader text slides to use Tusker Standard typography, avoiding any PP Neue Montreal fallback. | 2026-05-29 |
+| 35 | Manage Preloader state in Provider | Mounted Preloader inside PageTransitionProvider conditionally to preserve layout structure. | 2026-05-29 |
+| 36 | Disable sessionStorage Preloader constraint | Temporarily disabled sessionStorage checks and writes to allow the preloader to play on every page refresh for development and testing. | 2026-05-29 |
+| 37 | Increase Preloader padding & line height | Prevent Tusker font clipping by increasing masking container padding to py-10/py-14 and leading-height to 1.1. | 2026-05-29 |
+| 38 | Drop Preloader z-index to 9999 | Lower Preloader z-index below PageTransition overlay (99999) to enable the horizontal leave wipe to sweep beautifully on top. | 2026-05-29 |
+| 39 | Stagger text slide-up inside Leave stripe | Programmed SplitText word reveals inside the expanding horizontal transition stripe before full-screen expansion. | 2026-05-29 |
+| 40 | Stretched edge-to-edge SVG typography | Rendered Row 1 and Row 3 text inside responsive SVGs with textLength="1000" to stretch letters full-width with 0px margins. | 2026-05-29 |
+| 41 | Stark Studio timing via GSAP set | Configured zero-fade ON/OFF toggle switches inside GSAP using set() to simulate a stark dark light bulb environment. | 2026-05-29 |
+| 42 | Solid soft yellow text color (#fff7d3) | Removed all gradients and opacity filters, displaying text in solid #fff7d3 at 1.0 opacity as requested. | 2026-05-29 |
+| 43 | Conditionally hide Menu trigger wrap | Bound showPreloader state to Menu button class rendering, making it cleanly disappear during preloader screen. | 2026-05-29 |
+| 44 | Persist Row 1 text during red swipe | Set row1 autoAlpha: 1 at t = 9.0s in Preloader.tsx timeline, keeping the top line visible as the red stripe sweeps across. | 2026-05-29 |
+| 45 | Add top/bottom row margins | Added pt-6 mt-4 to Row 1 and pb-6 mb-4 to Row 3 for clean visual layout spacing. | 2026-05-29 |
+| 46 | Prevent StrictMode leakage on Preloader | Reset row1/row2/row3 to autoAlpha: 0 on timeline start to prevent properties sticking during React StrictMode double mounts. | 2026-05-29 |
+| 47 | Mount Menu trigger conditionally | Prevent the menu button trigger from flashing/rendering by returning null immediately when showPreloader is true. | 2026-05-29 |
+| 48 | Delay Hero entrance animation | Blocked the main Home page entrance timeline from executing when showPreloader is true to prevent background animation playback. | 2026-05-29 |
 
 ---
 

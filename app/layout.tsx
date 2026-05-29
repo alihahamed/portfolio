@@ -65,6 +65,8 @@ const neueMontreal = localFont({
 
 import SilkBackground from "@/components/SilkBackground";
 import SmoothScroll from "@/components/SmoothScroll";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { PageTransitionProvider } from "@/components/PageTransition";
 
 export const metadata: Metadata = {
   title: "Tusker Grotesk - Portfolio",
@@ -87,13 +89,18 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-full flex flex-col bg-[#050505] text-white relative">
-        {/* Global WebGL Background Canvas */}
-        <SilkBackground />
-        
-        {/* Butter-Smooth Lenis Scrolling Wrapper */}
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <PageTransitionProvider>
+          {/* Global WebGL Background Canvas */}
+          <SilkBackground />
+          
+          {/* Custom fluid cursor follower */}
+          <SmoothCursor />
+          
+          {/* Butter-Smooth Lenis Scrolling Wrapper */}
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+        </PageTransitionProvider>
       </body>
     </html>
   );
