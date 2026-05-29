@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Page Transition Implementation`
+- **Phase:** `Selected Work Right-Aligned Descriptions`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-29`
 
@@ -15,13 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Fixed the preloader restart bug and added a persistent session state to the preloader so it only runs once per user visit. Used `sessionStorage` to check if `portfolio-preloader-played` is `"true"` upon client mount; if so, the preloader is bypassed and the page entrance animation plays instantly. When the preloader finishes playing for the first time, it sets this sessionStorage key to `"true"`.
+Repositioned project descriptions horizontally to the far bottom-right of the screen on desktop viewports (`lg:left-auto lg:right-10 lg:bottom-55 lg:text-right`), matching the vertical level of the left-aligned title. This creates an elegant, balanced layout with the title on the far-left and the description on the far-right, while preserving mobile stacked positioning and typing stagger animations.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/Preloader.tsx` | Modified | Add `timelineStartedRef` single-shot guard |
-| `components/PageTransition.tsx` | Modified | Implement `sessionStorage` preloader state checking on mount & update onComplete |
+| `components/SelectedWork.tsx` | Modified | Update project description Tailwind CSS classes to position it at the far bottom-right on desktop. |
 
 ---
 
@@ -77,6 +76,18 @@ Fixed the preloader restart bug and added a persistent session state to the prel
 | 46 | Prevent StrictMode leakage on Preloader | Reset row1/row2/row3 to autoAlpha: 0 on timeline start to prevent properties sticking during React StrictMode double mounts. | 2026-05-29 |
 | 47 | Mount Menu trigger conditionally | Prevent the menu button trigger from flashing/rendering by returning null immediately when showPreloader is true. | 2026-05-29 |
 | 48 | Delay Hero entrance animation | Blocked the main Home page entrance timeline from executing when showPreloader is true to prevent background animation playback. | 2026-05-29 |
+| 49 | 3D Cylinder Scroll Carousel | Implemented a circular 3D cylinder rotating scroll-driven carousel of 6 cards for each selected project using CSS 3D transforms and GSAP ScrollTrigger. | 2026-05-29 |
+| 50 | Horizontal Draw-Out Grid Lines | Added 7 thin horizontal brand-red (#AB1509) lines spaced at exactly 12.5vh vertically that draw out from left to right on scroll as each scene is entered. | 2026-05-29 |
+| 51 | 4-Cell Landscape 3D Carousel | Reduced 3D carousel cylinder cells to 4 and widened card dimensions to landscape (460x300px) with Z-translation at 400px. | 2026-05-29 |
+| 52 | Remove Red Card Borders | Removed brand-red card borders from Selected Work cards to maintain a clean, borderless brutalist screen projection look. | 2026-05-29 |
+| 53 | Parent-Level Continuous Grid Lines | Relocated brand-red lines to the parent container level for a continuous grid background, reducing line count to 5 per viewport (15 total spaced at exactly 20vh intervals). | 2026-05-29 |
+| 54 | True Landscape 3D Carousel Cards | Updated work__carousel and work__carousel-cell to a true landscape size (600x340px) and matched 420px translateZ cylinder math. | 2026-05-29 |
+| 55 | Sync GSAP Scroll Rotation Durations | Explicitly declared duration: 1 on rotating and tilting cylinder tweens to match lighting timelines and ensure complete, smooth rotations spanning the full scroll length. | 2026-05-29 |
+| 56 | Bottom-Left Typewriter Scroll-Linked Titles | Repositioned project titles to the bottom-left of the viewport, styled with Neue Montreal Medium, and animated them with scroll-linked typing and redaction stagger curves for highly tactile motion. | 2026-05-29 |
+| 57 | Responsive Title Alignment and Accelerated Stagger | Positioned titles horizontally on the left of 3D cards using media queries for a clean layout on desktops, while maintaining responsive bottom alignment on mobile. Accelerated typing/redacting scrub speed to 15% scroll progress. | 2026-05-29 |
+| 58 | Typewriter Title Tailwind Conversion | Migrated custom responsive media query styling of titles to inline Tailwind classes in `SelectedWork.tsx` to enable seamless manual edits, while retaining a non-styled target selector class for GSAP. | 2026-05-29 |
+| 59 | Interactive Project Descriptions with Typing Staggers | Integrated character-split project descriptions positioned below titles using inline Tailwind styles, driving them with smooth scroll-scrubbed typing and redaction curves. | 2026-05-29 |
+| 60 | Far-Right Symmetrical Descriptions | Positioned project descriptions at the far bottom-right on desktop, level with left-aligned titles, forming a clean, balanced frame around the central 3D carousel projection. | 2026-05-29 |
 
 ---
 

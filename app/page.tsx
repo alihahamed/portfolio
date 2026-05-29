@@ -7,6 +7,7 @@ import Menu from "@/components/Menu";
 // import Signature from "@/components/Signature";
 import ScrollArrow from "@/components/ScrollArrow";
 import { useTransitionContext } from "@/components/PageTransition";
+import SelectedWork from "@/components/SelectedWork";
 
 export default function Home() {
   const context = useTransitionContext();
@@ -222,10 +223,8 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col h-screen max-h-screen overflow-hidden selection:bg-white selection:text-black font-sans antialiased text-white"
+      className="relative flex flex-col w-full overflow-x-hidden selection:bg-white selection:text-black font-sans antialiased text-white"
     >
-      {/* Tactile Noise Overlay */}
-      <div className="absolute inset-0 z-50 pointer-events-none opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
       {/* Hidden measuring nodes to read viewport-relative text widths dynamically */}
       <div className="absolute opacity-0 pointer-events-none select-none invisible whitespace-nowrap" aria-hidden="true">
@@ -240,19 +239,22 @@ export default function Home() {
         ))}
       </div>
 
-      {/* HEADER SECTION (Without grid borders, clean and floating) */}
-      <header className="relative z-10 w-full px-6 md:px-12 pt-6 pb-2">
-        <div className="flex justify-between items-center w-full">
-          {/* Logo - Handwritten Cursive Signature */}
-          {/* <Signature /> */}
+      {/* HERO SECTION CONTAINER (Fills exactly 100vh, transparent background to reveal WebGL) */}
+      <div className="relative w-full h-screen min-h-[650px] flex flex-col justify-between overflow-hidden pb-6">
+        
+        {/* HEADER SECTION (Without grid borders, clean and floating) */}
+        <header className="relative z-10 w-full px-6 md:px-12 pt-6 pb-2 shrink-0">
+          <div className="flex justify-between items-center w-full">
+            {/* Logo - Handwritten Cursive Signature */}
+            {/* <Signature /> */}
 
-          {/* Stylized ME/NU Stacked Menu Component */}
-          <Menu />
-        </div>
-      </header>
+            {/* Stylized ME/NU Stacked Menu Component */}
+            <Menu />
+          </div>
+        </header>
 
-      {/* HERO / CONTENT REGION (Configured as full-viewport, flex-1 layout) */}
-      <main className="relative z-10 flex flex-col flex-1 w-full justify-between px-6 md:px-12 pb-6 overflow-hidden">
+        {/* HERO / CONTENT REGION (Configured as full-viewport layout) */}
+        <main className="relative z-10 flex flex-col flex-1 w-full justify-between px-6 md:px-12 pb-0 overflow-hidden">
         
         {/* TOP STATS ROW SPACER (Preserves the exact vertical layout flow and height) */}
         <div className="flex justify-end w-full relative -bottom-22 text-[10px] font-medium uppercase tracking-wider text-transparent select-none pointer-events-none">
@@ -341,7 +343,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-4 w-full -mt-6 md:-mt-16 lg:-mt-10 z-20 pb-1">
           
           {/* Col 1: Standalone About title on the left in PP Neue Montreal Bold */}
-          <div className="about-label-reveal pl-2 pb-2 md:pb-0 text-[10px] uppercase tracking-widest font-montreal text-white/70 font-bold">
+          <div className="about-label-reveal pl-2 pb-2 md:pb-0 text-[10px] uppercase tracking-widest font-montreal text-white/70 font-medium">
             About
           </div>
 
@@ -367,6 +369,10 @@ export default function Home() {
         </div>
 
       </main>
+      </div>
+
+      {/* SELECTED WORK SECTION */}
+      <SelectedWork />
     </div>
   );
 }

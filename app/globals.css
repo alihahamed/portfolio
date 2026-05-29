@@ -34,6 +34,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-montreal);
+  overflow-x: hidden;
+}
+
+/* Hide standard browser scrollbars completely for clean, immersive creative look */
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .heading-gradient {
@@ -90,3 +102,61 @@ body {
   display: inline-block;
   will-change: transform;
 }
+
+/* 3D Carousel & Scene Styles */
+.work__scene {
+  perspective: 900px;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: transparent; /* Show continuous parent background and grid lines */
+}
+
+.work__carousel {
+  width: 600px;
+  height: 340px;
+  top: 50%;
+  left: 50%;
+  margin-top: -170px;
+  margin-left: -300px;
+  position: absolute;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: translateZ(-420px) rotateY(0deg);
+}
+
+.work__carousel-cell {
+  position: absolute;
+  width: 600px;
+  height: 340px;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
+
+.work__card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.work__card-face {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  background-color: #121212; /* Stark dark grey */
+  border-radius: 6px;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+

@@ -83,9 +83,6 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
       className="fixed inset-0 w-full h-dvh bg-[#050505] select-none grid grid-rows-3 overflow-hidden"
       style={{ zIndex: 9999 }} // Underneath transition overlay (99999) to cover smoothly
     >
-      {/* 16px Grid noise texture for brutal print effect */}
-      <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03] bg-[radial-gradient(#050505_1px,transparent_1px)] [background-size:16px_16px]"></div>
-
       {/* Row 1 (Top): "MOST WEBSITES LOOK THE SAME" - stretched end-to-end with slight top margin */}
       <div 
         ref={row1Ref} 
