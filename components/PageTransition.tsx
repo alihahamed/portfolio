@@ -206,16 +206,39 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
     });
   }, []);
 
-  // Main external navigation click handler
+  // Main navigation click handler with hash scroll support
   const triggerTransition = useCallback(async (href: string) => {
-    if (pathname === href) return;
+    const [targetPath, targetHash] = href.split("#");
+    const isCurrentPageHash = targetHash && (pathname === targetPath || (pathname === "/" && targetPath === ""));
 
-    // A: Leave Phase
-    await playLeaveAnimation(href);
+    if (isCurrentPageHash) {
+      let customTitle: string | undefined;
+      if (targetHash === "work") {
+        customTitle = "selected work";
+      } else if (targetHash === "about") {
+        customTitle = "about the studio";
+      } else if (targetHash === "contact") {
+        customTitle = "get in touch";
+      }
 
-    // B: Next.js route change (Renders new page context underneath overlay)
-    router.push(href);
-  }, [pathname, router, playLeaveAnimation]);
+      // A: Leave Phase
+      await playLeaveAnimation(href, customTitle);
+
+      // B: Position viewport at the hash element instantly while screen is fully covered
+      const el = document.getElementById(targetHash);
+      if (el) {
+        el.scrollIntoView({ behavior: "instant" });
+      }
+
+      // C: Enter Phase
+      await playEnterAnimation();
+    } else {
+      if (pathname === href) return;
+      // Standard cross-page transition
+      await playLeaveAnimation(href);
+      router.push(href);
+    }
+  }, [pathname, router, playLeaveAnimation, playEnterAnimation]);
 
   // Specialized preload wipe handler
   const triggerPreloadTransition = useCallback(async (customTitle: string) => {
@@ -269,8 +292,8 @@ export const TransitionLink: React.FC<{
   const handleClick = (e: React.MouseEvent) => {
     if (onClick) onClick(e);
 
-    // Only intercept cross-page links (not anchor hash-links)
-    if (href.startsWith("/") && !href.includes("#")) {
+    // Intercept both cross-page links and hash-links starting with "/"
+    if (href.startsWith("/")) {
       e.preventDefault();
       if (!isTransitioning) {
         triggerTransition(href);

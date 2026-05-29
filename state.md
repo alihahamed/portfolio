@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Selected Work Right-Aligned Descriptions`
+- **Phase:** `Brutalist Project Details Projection System`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-29`
 
@@ -15,12 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Repositioned project descriptions horizontally to the far bottom-right of the screen on desktop viewports (`lg:left-auto lg:right-10 lg:bottom-55 lg:text-right`), matching the vertical level of the left-aligned title. This creates an elegant, balanced layout with the title on the far-left and the description on the far-right, while preserving mobile stacked positioning and typing stagger animations.
+Programmed an immersive backdrop dimming effect when hovering the "VISIT WORK" link. All surrounding elements are dimmed to the user's exact specification (carousel to 0.25, title to 0.35, approach to 0.25, description to 0.25, tech icons to 0.25, and grid lines to 0.15 opacity) using smooth GPU-accelerated CSS transitions, while keeping the preview video card and the link itself at full brightness.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/SelectedWork.tsx` | Modified | Update project description Tailwind CSS classes to position it at the far bottom-right on desktop. |
+| `components/SelectedWork.tsx` | Modified | Implemented `isLinkHovered` state, mouse listeners on link, and transition classes/inner wrappers. |
 
 ---
 
@@ -88,6 +88,22 @@ Repositioned project descriptions horizontally to the far bottom-right of the sc
 | 58 | Typewriter Title Tailwind Conversion | Migrated custom responsive media query styling of titles to inline Tailwind classes in `SelectedWork.tsx` to enable seamless manual edits, while retaining a non-styled target selector class for GSAP. | 2026-05-29 |
 | 59 | Interactive Project Descriptions with Typing Staggers | Integrated character-split project descriptions positioned below titles using inline Tailwind styles, driving them with smooth scroll-scrubbed typing and redaction curves. | 2026-05-29 |
 | 60 | Far-Right Symmetrical Descriptions | Positioned project descriptions at the far bottom-right on desktop, level with left-aligned titles, forming a clean, balanced frame around the central 3D carousel projection. | 2026-05-29 |
+| 61 | Decoupling Typewriter Scroll Triggers | Programmed independent triggers for typewriter staggers, preventing large text length or high stagger values from stretching the main 3D rotation timeline, ensuring bulletproof 3D carousel scroll mechanics. | 2026-05-29 |
+| 62 | Transition-Driven Hash Scrolling | Upgraded `PageTransition` and link interceptors to coordinate full page wipes for in-page hash navigation, scrolling seamlessly to target sections while viewport is fully covered for an ultra-premium feel. | 2026-05-29 |
+| 63 | Circular Hover Tooltip Cursor | Programmed a butter-smooth custom circular white tooltip cursor saying "Open" that tracks the user's cursor inside 3D project carousel bounds at 60fps using GSAP quickTo. | 2026-05-29 |
+| 64 | Brutalist Project Details Projection | Framed the centered 3D carousel symmetrically with Top-Right Metrics (counting up with GSAP odometers), Bottom-Right Upper Tech Icons, Bottom-Left Lower Approach paragraphs, and Title/Description at default coordinates, revealing all details with vertical SVG clip-path wipes and auto-dismissing on 15vh scroll downs. | 2026-05-29 |
+| 65 | Metrics Shift & Smooth Title Scaling | Shifted stats horizontally to the top-left side and pushed the tech stack block up to `bottom-[35%]`. Built a custom smooth GSAP transition that scales the project title by `+2px` (`scale: 1.11` lock on baseline `transformOrigin: "left bottom"`) on project open, returning to default on dismiss. | 2026-05-29 |
+| 66 | Scroll-Drawn Title Underline | Designed a `white/80` absolute border underline positioned within a relative wrapping block directly under the project title, and animated it to draw out dynamically (`scaleX: 0` -> `1`) via GSAP ScrollTrigger as the user scrolls to each 3D carousel scene to capture attention. | 2026-05-29 |
+| 67 | Layout-Aware Scroll Pacing | Configured scroll typewriter and drawing triggers to start at `top 70%` (when titles/lines scroll onto the screen) and end at `top 15%`, using smooth inertia variables (`scrub: 1.2`) to prevent speed rushes and ensure premium visibility. | 2026-05-29 |
+| 68 | Cinematic Trigger-Once Typewriter | Converted typewriter (titles, descriptions) and underline triggers to execute once at a premium, fixed speed (`stagger: 0.012` for titles, `stagger: 0.006` for descriptions, `1.0s` for line draws) when entering the viewport at `top 60%`, resetting on reverse scrolling (`toggleActions: "play none none reverse"`) to eliminate speed variations and ensure 100% stable visibility. | 2026-05-29 |
+| 69 | Instant state-clearing clicks | Removed delayed timeline callbacks and setTimeouts from closeDetails and handleCardClick to set states instantly, eliminating double-click locks and guaranteeing highly responsive toggle actions. | 2026-05-29 |
+| 70 | Hover Video Website Preview | Designed a stark, top-right `VISIT WORK ↗` project link accompanied by a floating video preview card with a thin brand-red (`#AB1509`) border and square corners. Hovering triggers an auto-playing, muted, looping high-fashion video preview (`autoPlay muted loop playsInline`), disappearing instantly when hover ends. | 2026-05-29 |
+| 71 | Sibling clip-path isolation | Isolated the `details-wipe-reveal` clip-path styling to a dedicated inner wrapper around the `a` link, rendering the floating video card as a sibling to escape clip-path overflow masking, guaranteeing 100% hover visibility. | 2026-05-29 |
+| 72 | Immersive Global Interface Hiding | Programmed GSAP animations to smoothly slide and fade away the global menu button (`.menu-trigger-wrap`) and the "Selected Work" section label (`.selected-work-label`) when any details overlay is active, restoring them dynamically on details close or scroll dismissal to maximize visual immersion. | 2026-05-29 |
+| 73 | Flat 2D Parent Click Interceptor | Relocated `onClick` triggers from 3D transform cards to the flat, absolute 2D `.work__carousel` parent wrapper, adding `pointer-events-auto z-20` to cure WebKit/Blink 3D hit-testing flake completely and ensure instant, single-click responses. | 2026-05-29 |
+| 74 | React-State Selected Work Label Hide | Used React-state conditional class bindings and CSS transitions to reliably fade and translate the Selected Work section label away when any project details page is active, eliminating potential GSAP target failures. | 2026-05-29 |
+| 75 | Widescreen Widescreen aspect-ratio Tooltip Card | Adopted a standard 16:9 widescreen layout (`w-[320px] aspect-video`) for the absolute project website preview card, letting video frames draw fully without horizontal cropping. | 2026-05-29 |
+| 76 | Immerse Link-Hover Backdrop Dimming | Implemented smooth 500ms transition-opacity dimming on active project elements (carousel: 0.25, title: 0.35, approach: 0.25, description: 0.25, tech icons: 0.25, grid lines: 0.15) when hovering "VISIT WORK" to highlight the preview card and focus interaction. | 2026-05-29 |
 
 ---
 

@@ -113,8 +113,7 @@ export default function Menu() {
     { label: "Home", num: "00", href: "/" },
     { label: "About", num: "01", href: "/#about" },
     { label: "Work", num: "02", href: "/#work" },
-    { label: "Team", num: "03", href: "/team" },
-    { label: "Contact", num: "04", href: "/#contact" },
+    { label: "Contact", num: "03", href: "/#contact" },
   ];
 
   const socials = [
