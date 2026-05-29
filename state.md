@@ -15,13 +15,13 @@
 ## Last Session Work
 
 ### Summary
-Fixed a critical preloader restart bug caused by parent state updates during page transitions. When `playLeaveAnimation` fired `setIsTransitioning(true)`, the context provider would re-render, recreating non-memoized context functions (`triggerPreloadTransition`, `triggerEnterTransition`). This invalidated the `useEffect` dependency array in `Preloader.tsx`, killing the active timeline and restarting a fresh one (making the top row visible again and hiding the middle row). Memoized all transition hooks inside `PageTransition.tsx` using `useCallback`, and added a strict `timelineStartedRef` to `Preloader.tsx` to ensure the animation is single-shot and completely immune to re-renders.
+Fixed the preloader restart bug and added a persistent session state to the preloader so it only runs once per user visit. Used `sessionStorage` to check if `portfolio-preloader-played` is `"true"` upon client mount; if so, the preloader is bypassed and the page entrance animation plays instantly. When the preloader finishes playing for the first time, it sets this sessionStorage key to `"true"`.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/Preloader.tsx` | Modified | Added a strict `timelineStartedRef` check to ensure the timeline executes exactly once |
-| `components/PageTransition.tsx` | Modified | Imported and applied `useCallback` to memoize all animation and transition functions |
+| `components/Preloader.tsx` | Modified | Add `timelineStartedRef` single-shot guard |
+| `components/PageTransition.tsx` | Modified | Implement `sessionStorage` preloader state checking on mount & update onComplete |
 
 ---
 

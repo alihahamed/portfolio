@@ -40,9 +40,14 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
   const splitTitleRef = useRef<SplitText | null>(null);
   const percentageVerticalClipRef = useRef<number>(10);
 
-  // Set up custom Hop ease curve on client mount
+  // Set up custom Hop ease curve on client mount and check preloader session state
   useEffect(() => {
     CustomEase.create("hop", "0.85, 0, 0.15, 1");
+
+    const hasPlayed = sessionStorage.getItem("portfolio-preloader-played");
+    if (hasPlayed === "true") {
+      setShowPreloader(false);
+    }
   }, []);
 
   // Calculate dynamic clip percentage so the strip opens perfectly around the heading bounds
@@ -232,7 +237,14 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
   return (
     <TransitionContext.Provider value={{ triggerTransition, triggerPreloadTransition, triggerEnterTransition, isTransitioning, showPreloader }}>
-      {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
+      {showPreloader && (
+        <Preloader
+          onComplete={() => {
+            sessionStorage.setItem("portfolio-preloader-played", "true");
+            setShowPreloader(false);
+          }}
+        />
+      )}
       {children}
       
       {/* Fixed global overlay layer */}
