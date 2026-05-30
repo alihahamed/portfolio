@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Document Color Scheme Inversion`
+- **Phase:** `Document Centering & Typography Polish`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-30`
 
@@ -15,13 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Inverted the document color scheme: background changed from soft yellow (`#fff7d3`) to brand red (`#AB1509`), and all text/lines/borders changed from brand red to soft yellow (`#fff7d3`). Applied to both `About.tsx` (docWrap container) and `Document.tsx` (all text, grid lines, borders, image border).
+Redesigned the layout structure of the `Document` component to achieve perfect symmetry and alignment. Instead of standard CSS grid margins, used pixel-perfect percentage coordinates (`absolute` positioning with exact `left` offsets and `width` allocations) to center the columns perfectly inside their respective half-compartments (`[4%, 50%]` and `[50%, 96%]`). Centered the profile image, removed the contact section, and significantly increased the font size of "Ali Ahmed" (`text-[6.5vw] md:text-[4vh]`, initials `text-[9vw] md:text-[5.5vh]`).
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/About.tsx` | Modified | docWrapRef bg → `#AB1509`, border → `#fff7d3/30` |
-| `components/Document.tsx` | Modified | All text color → `#fff7d3`, all grid lines/borders → `#fff7d3` |
+| `components/Document.tsx` | Modified | Swapped grid layout to precise absolute columns (`left: 7%` and `left: 53%` with `width: 40%`), enlarged name title, and deleted contact section. |
 
 ---
 
