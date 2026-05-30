@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useState, forwardRef, useImperativeHandle, useRef } from "react";
 import { motion } from "framer-motion";
 // @ts-ignore
 import * as opentype from "opentype.js";
 import { cn } from "@/lib/utils";
+
+export interface SignatureRef {
+  setProgress: (progress: number) => void;
+}
 
 interface SignatureProps {
   /** Text to generate signature for */
@@ -27,7 +31,9 @@ interface SignatureProps {
   fontUrl?: string;
 }
 
-export function Signature({
+
+
+export const Signature = forwardRef<SignatureRef, SignatureProps>(({
   text = "Signature",
   color = "currentColor",
   fontSize = 22,
@@ -37,9 +43,15 @@ export function Signature({
   inView = false,
   once = true,
   fontUrl,
-}: SignatureProps) {
+}, ref) => {
   const [paths, setPaths] = useState<string[]>([]);
   const [width, setWidth] = useState<number>(300);
+  
+  // Refs for the path elements so we can mutate them imperatively
+  const fillRef = useRef<SVGGElement>(null);
+  const pathRefs = useRef<(SVGPathElement | null)[]>([]);
+  const pathLengths = useRef<number[]>([]);
+
   const height = fontSize * 3; // Give plenty of vertical space
   const horizontalPadding = fontSize * 0.1;
   const topMargin = fontSize * 1.5; // Shift down
@@ -101,6 +113,26 @@ export function Signature({
     load();
   }, [text, fontSize, baseline, horizontalPadding, fontUrl]);
 
+  useImperativeHandle(ref, () => ({
+    setProgress: (progress: number) => {
+      pathRefs.current.forEach((path, i) => {
+        if (!path) return;
+        const length = pathLengths.current[i] || 0;
+        const drawLength = length * progress;
+        path.style.strokeDashoffset = String(length - drawLength);
+      });
+      
+      if (fillRef.current) {
+        if (progress > 0.9) {
+          const fadeProgress = (progress - 0.9) / 0.1;
+          fillRef.current.style.opacity = String(fadeProgress);
+        } else {
+          fillRef.current.style.opacity = "0";
+        }
+      }
+    }
+  }));
+
   const variants = {
     hidden: { pathLength: 0, opacity: 0 },
     visible: { pathLength: 1, opacity: 1 },
@@ -128,8 +160,9 @@ export function Signature({
               stroke="white"
               strokeWidth={fontSize * 0.22}
               fill="none"
-              variants={variants}
-              transition={{
+              // Only use variants if NOT using imperative progress
+              variants={ref ? undefined : variants}
+              transition={ref ? undefined : {
                 pathLength: {
                   delay: delay + i * 0.2,
                   duration,
@@ -151,12 +184,26 @@ export function Signature({
       {paths.map((d, i) => (
         <motion.path
           key={i}
+          ref={(el) => {
+            // @ts-ignore - motion.path ref type mismatch
+            pathRefs.current[i] = el;
+            if (el && !pathLengths.current[i]) {
+              // Only read getTotalLength once to avoid layout thrashing
+              const len = el.getTotalLength();
+              pathLengths.current[i] = len;
+              // Initialize to 0 length if we have a ref (meaning GSAP controls it)
+              if (ref) {
+                el.style.strokeDasharray = String(len);
+                el.style.strokeDashoffset = String(len);
+              }
+            }
+          }}
           d={d}
           stroke={color}
           strokeWidth={2}
           fill="none"
-          variants={variants}
-          transition={{
+          variants={ref ? undefined : variants}
+          transition={ref ? undefined : {
             pathLength: {
               delay: delay + i * 0.2,
               duration,
@@ -173,9 +220,9 @@ export function Signature({
         />
       ))}
 
-      <g mask={`url(#${maskId})`}>
+      <g ref={fillRef} style={{ opacity: 0 }}>
         {paths.map((d, i) => <path key={i} d={d} fill={color} />)}
       </g>
     </motion.svg>
   );
-}
+});

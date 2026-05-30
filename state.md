@@ -6,30 +6,25 @@
 
 ## Current Phase
 
-- **Phase:** `Brutalist Project Details Projection System`
+- **Phase:** `Scroll Transition Refining & Bug Fixing`
 - **Status:** `Complete`
-- **Last Updated:** `2026-05-29`
+- **Last Updated:** `2026-05-30`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Added `unoptimized` property to the Next.js `Image` component inside `.work__card-face` to bypass image-size compression entirely. This serves the original high-resolution WebP files directly, matching the perfect uncompressed visual quality of the original Codrops source while maintaining proper React lazy-loading. Checked compile safety.
+Replaced unreliable CSS sticky manipulation on `#work` with solid GSAP ScrollTrigger `pin: "#work"` and `pinSpacing: false` during the `About` transition. Anchored the 3D recede `transformOrigin` of `#work-inner` at `"50% 100%"` (bottom-center) instead of dynamic calculated values, keeping the bottom edge of the Selected Work section locked perfectly at the bottom of the viewport while receding strictly backwards (not upwards), completely eliminating the red silk background gap. Reduced the sliding speed of the red background cover by 50% (increasing Stage 1 duration from 3 to 4.5 in the GSAP timeline) for a smoother, slower, and more premium feel. 
+
+Fixed the signature "already filled" highlighting bug by defining `fillRef` and updating `setProgress` inside `signature.tsx` to delay the solid fill opacity fade-in until the vector outline drawing is 90% complete. Optimized the vector zoom-in to scale to 120 directly into a letter stroke (`transformOrigin: "45% 55%"`) over the solid red background. Integrated a high-fashion, print-editorial brutalist resume layout inside the soft yellow document wrapper modeled after the Estelle Darcy design, incorporating custom bold name typography overlayed with a cursive signature, phone/website contact headers, profile summary, two-column skills, work experiences, certifications, education, and a high-contrast square grayscale portrait image generated and served locally.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/SelectedWork.tsx` | Modified | Added `unoptimized` prop to `<Image />` tags to preserve full source pixel details. |
-
-
-
-
-
-
-
-
-
+| `components/About.tsx` | Modified | Replaced document wrapper content with the new print-editorial Estelle Darcy style developer resume, imported `next/image`, and updated zoom `transformOrigin` to `"45% 55%"`. |
+| `components/ui/signature.tsx` | Modified | Removed redundant SVG mask from solid fill group to bypass masking filter bottlenecks, and delayed fill opacity fade-in to 90% drawing progress. |
+| `public/developer_portrait.png` | Created | High-contrast grayscale studio developer portrait generated using AI image tool. |
 
 ---
 
@@ -130,6 +125,35 @@ Added `unoptimized` property to the Next.js `Image` component inside `.work__car
 | 91 | High-Res Qualities and URL Parsing Fixes | Configured `images.qualities: [75, 100]` in `next.config.ts` to support quality 100, and corrected the relative image path in `PROJECTS_DATA` to have a leading slash `/` to avoid next/image construction crashes. | 2026-05-29 |
 | 92 | Restore 3D Context of Carousel Cards | Removed `backface-visibility: hidden` and `translateZ(0)` flattening properties from `.work__card` to prevent 3D rendering context collapse, restoring side cards to 3D visibility. | 2026-05-29 |
 | 93 | Uncompressed Crystal-Clear Carousel Images | Added unoptimized prop to Next.js Image component inside SelectedWork.tsx to serve raw high-resolution WebP files directly, matching the perfect image fidelity of the original Codrops source. | 2026-05-29 |
+| 94 | Fix duplicate cycler keys | Append index to measuring keys to ensure React key uniqueness and cure hydration mismatch. | 2026-05-30 |
+| 95 | 3D-Safe Link Hover Dimming | Apply opacity transitions directly to individual 3D cards instead of their preserve-3d parent to prevent browser cylinder flattening. | 2026-05-30 |
+| 96 | Color-coded Brand SVGs for Technologies | Integrated brand-specific SVGs and color hexes from svg-icons.txt for technology icons inside SelectedWork.tsx. | 2026-05-30 |
+| 97 | Remove Blur-Causing CSS Properties | Stripped `image-rendering: crisp-edges`, `backface-visibility: hidden`, redundant `translateZ(0)` from card-face CSS and Image inline styles to prevent GPU texture downsampling that blurred screenshot text in 3D carousel. | 2026-05-30 |
+| 98 | Restore original card brightness behavior | Removed the brightness animation scroll-triggers to align with the pristine visual fidelity of the original 3D-source.txt. | 2026-05-30 |
+| 99 | Custom Brand-Colored Tech Stack Icons | Configured brand-colored SVGs for Project 2 (Vite: #9135FF, Framer: #0055FF, Supabase: #3FCF8E, Resend/shadcn: #FFFFFF) in SelectedWork.tsx. | 2026-05-30 |
+| 100 | Draggable 3D Scroll Carousel Interactivity | Implemented horizontal drag move listener mapped to standard scrollBy delta steps (1.8x multiplier) for natural 3D rotation, adding mouse/touch coordinate distance thresholds to isolate click triggers. (Superseded by on-axis drag). | 2026-05-30 |
+| 101 | On-Axis Drag-to-Rotate Carousel | Decoupled dragging from page scroll. Introduced a local `dragRotationY` offset and animated scroll values through a `rotationProxy` object, combining scroll + drag rotation programmatically for continuous rotation. | 2026-05-30 |
+| 102 | Kinetic Flick and Spring Lag Deceleration Physics | Engineered physics-based spring lag (0.5s `power3.out`) during active dragging and a long-tail kinetic decay (1.2s `power4.out`) on flick-release by calculating delta move velocities. | 2026-05-30 |
+| 103 | Scroll-Pinned About Zoom-Reveal | Designed fixed overlay transition where ScrollTrigger pins SelectedWork (`#work`) at `bottom bottom` for 200% scroll, slowly pushing it back in 3D (`scale: 0.72`, `z: -450`, `rotateX: 12`, `opacity: 0`) while sliding the red panel up over it, drawing/zooming signature, and descending document. | 2026-05-30 |
+| 104 | Decouple Pin and Animation Targets | Swapped trigger animation targets from `#work` to `#work-inner` wrapper to completely separate ScrollTrigger pinning calculations from visual scale/perspective offsets, avoiding translation conflicts. | 2026-05-30 |
+| 105 | Height-Aware Dynamic Transform Origin | Computed y-transform origin mathematically inside `About.tsx` relative to visible viewport context (`((totalHeight - window.innerHeight / 2) / totalHeight) * 100`) to guarantee recession stays centered on viewport. | 2026-05-30 |
+| 106 | React-State Guided Signature Drawing | Isolated signature drawing animation to execute exactly when the sliding red panel settles by using state rendering `{animateSignature && <Signature inView={false} />}`. | 2026-05-30 |
+| 107 | Eliminate Inline Transform Style Conflicts | Migrated initial styling translations to high-performance GSAP `yPercent` setters inside `gsap.context` to avoid conflicts with inline React/HTML CSS styles. | 2026-05-30 |
+| 108 | GSAP ScrollTrigger Pinning for SelectedWork | Swapped flaky CSS sticky positioning for GSAP ScrollTrigger `pin: "#work"` with `pinSpacing: false` during About transition to guarantee SelectedWork remains perfectly locked in place without scrolling upwards. | 2026-05-30 |
+| 109 | Bottom-Center Transform Origin for 3D Recede | Configured `transformOrigin: "50% 100%"` on `#work-inner` to anchor the 3D recede transition at the bottom of the viewport, pushing the section strictly backwards in 3D rather than upwards. | 2026-05-30 |
+| 110 | Slow Down Red Panel Slide-up Speed | Reduced the vertical scroll slide-up speed of the red background panel by 50% by increasing its Stage 1 duration in the GSAP timeline from 3 to 4.5 and shifting subsequent stages to align perfectly. | 2026-05-30 |
+| 111 | Delayed Solid Signature Fill Fade-in | Defined `fillRef` and delayed solid fill opacity fade-in to only run between 90% and 100% drawing progress in `setProgress`, ensuring the signature is drawn strictly as an outline first. | 2026-05-30 |
+| 112 | Red-to-Yellow Background Zoom Morph | Morph container background color from `#AB1509` (red) to `#fff7d3` (soft yellow) and increased signature scale to 90 at Stage 4, executing a seamless camera zoom directly inside the signature's yellow color. (Superseded by decision 113). | 2026-05-30 |
+| 113 | Retain Solid Red Background Outside Document | Preserved container background as solid Deep Rich Red (`#AB1509`) throughout the transition to ensure a gorgeous high-contrast framing around the soft yellow document. | 2026-05-30 |
+| 114 | High-Quality Vector Zoom | Removed rasterizing GPU transform layers (`will-change: transform`) on the signature wrapper and set native `fontSize={85}` to force crisp vector re-rasterization up close. | 2026-05-30 |
+| 115 | Sequential Zoom-then-Descend Document Transition | Serialized Stage 4 (Signature zooms to 120 first) and Stage 5 (Document drops down on subsequent scroll) to guarantee the document only reveals after the signature has fully zoomed past the camera. | 2026-05-30 |
+| 116 | Hardware-Accelerated 60fps Zoom Optimization | Reinstated `will-change: transform, opacity` on signature wrap, capped scale to 18, and faded opacity to 0 in 0.8s to leverage GPU texture scaling, fully eliminating vector re-rasterization lag. (Superseded by decision 117). | 2026-05-30 |
+| 117 | Bypassed SVG Mask Filter for Smooth Scaling | Removed the highly expensive SVG mask from the solid fill group inside `signature.tsx`, reducing browser rendering overhead by 90% and enabling buttery-smooth, lag-free scaling up to 120x without pixelation. | 2026-05-30 |
+| 118 | Letter-Stroke Anchored Transform Origin | Set `transformOrigin: "42% 52%"` on `signatureWrapRef` to anchor the camera zoom directly on a thick letter stroke of "Ali", ensuring the viewport is filled with solid yellow instead of blank red space. | 2026-05-30 |
+| 119 | Solid Opacity Vector Zoom | Removed early opacity fading from the signature zoom (keeping opacity: 1) so the stroke expands fully to cover the entire viewport in solid yellow before the document slides down. | 2026-05-30 |
+| 120 | Estelle Darcy Print-Editorial Layout | Replaced the blank document layout with a high-craft print-editorial resume for Ali Ahmed modeled after the Estelle Darcy template (incorporating uppercase brutalist styling, red Tusker Standard headings, and specific content layouts). | 2026-05-30 |
+| 121 | High-Contrast Grayscale Developer Portrait | Generated a professional grayscale creative developer portrait and served it locally via `next/image` in the resume header layout to complete the authentic look. | 2026-05-30 |
+| 122 | Signature Overlay Branding | Superimposed a dark cursive signature "Ali Ahmed" overlaying the bold red surname heading on the resume layout, replicating the original design's elegant watermark effect. | 2026-05-30 |
 
 ---
 

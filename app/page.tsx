@@ -8,6 +8,7 @@ import { Signature } from "@/components/ui/signature";
 import ScrollArrow from "@/components/ScrollArrow";
 import { useTransitionContext } from "@/components/PageTransition";
 import SelectedWork from "@/components/SelectedWork";
+import About from "@/components/About";
 
 export default function Home() {
   const context = useTransitionContext();
@@ -223,14 +224,14 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col w-full overflow-x-hidden selection:bg-white selection:text-black font-sans antialiased text-white"
+      className="relative flex flex-col w-full selection:bg-white selection:text-black font-sans antialiased text-white"
     >
 
       {/* Hidden measuring nodes to read viewport-relative text widths dynamically */}
       <div className="absolute opacity-0 pointer-events-none select-none invisible whitespace-nowrap" aria-hidden="true">
         {words.map((w, i) => (
           <span
-            key={`measure-${w}`}
+            key={`measure-${w}-${i}`}
             id={`word-measure-${i}`}
             className="font-tusker-standard text-[8.5vw] md:text-[10vw] font-medium uppercase tracking-tight"
           >
@@ -377,6 +378,9 @@ export default function Home() {
 
       {/* SELECTED WORK SECTION */}
       <SelectedWork />
+
+      {/* ABOUT ME TRANSITION & DOCUMENT SECTION */}
+      <About />
     </div>
   );
 }
