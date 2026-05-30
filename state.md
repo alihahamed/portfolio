@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Scroll Transition Refining & Bug Fixing`
+- **Phase:** `Document Color Scheme Inversion`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-30`
 
@@ -15,16 +15,13 @@
 ## Last Session Work
 
 ### Summary
-Replaced unreliable CSS sticky manipulation on `#work` with solid GSAP ScrollTrigger `pin: "#work"` and `pinSpacing: false` during the `About` transition. Anchored the 3D recede `transformOrigin` of `#work-inner` at `"50% 100%"` (bottom-center) instead of dynamic calculated values, keeping the bottom edge of the Selected Work section locked perfectly at the bottom of the viewport while receding strictly backwards (not upwards), completely eliminating the red silk background gap. Reduced the sliding speed of the red background cover by 50% (increasing Stage 1 duration from 3 to 4.5 in the GSAP timeline) for a smoother, slower, and more premium feel. 
-
-Fixed the signature "already filled" highlighting bug by defining `fillRef` and updating `setProgress` inside `signature.tsx` to delay the solid fill opacity fade-in until the vector outline drawing is 90% complete. Optimized the vector zoom-in to scale to 120 directly into a letter stroke (`transformOrigin: "45% 55%"`) over the solid red background. Integrated a high-fashion, print-editorial brutalist resume layout inside the soft yellow document wrapper modeled after the Estelle Darcy design, incorporating custom bold name typography overlayed with a cursive signature, phone/website contact headers, profile summary, two-column skills, work experiences, certifications, education, and a high-contrast square grayscale portrait image generated and served locally.
+Inverted the document color scheme: background changed from soft yellow (`#fff7d3`) to brand red (`#AB1509`), and all text/lines/borders changed from brand red to soft yellow (`#fff7d3`). Applied to both `About.tsx` (docWrap container) and `Document.tsx` (all text, grid lines, borders, image border).
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/About.tsx` | Modified | Replaced document wrapper content with the new print-editorial Estelle Darcy style developer resume, imported `next/image`, and updated zoom `transformOrigin` to `"45% 55%"`. |
-| `components/ui/signature.tsx` | Modified | Removed redundant SVG mask from solid fill group to bypass masking filter bottlenecks, and delayed fill opacity fade-in to 90% drawing progress. |
-| `public/developer_portrait.png` | Created | High-contrast grayscale studio developer portrait generated using AI image tool. |
+| `components/About.tsx` | Modified | docWrapRef bg → `#AB1509`, border → `#fff7d3/30` |
+| `components/Document.tsx` | Modified | All text color → `#fff7d3`, all grid lines/borders → `#fff7d3` |
 
 ---
 
@@ -151,9 +148,11 @@ Fixed the signature "already filled" highlighting bug by defining `fillRef` and 
 | 117 | Bypassed SVG Mask Filter for Smooth Scaling | Removed the highly expensive SVG mask from the solid fill group inside `signature.tsx`, reducing browser rendering overhead by 90% and enabling buttery-smooth, lag-free scaling up to 120x without pixelation. | 2026-05-30 |
 | 118 | Letter-Stroke Anchored Transform Origin | Set `transformOrigin: "42% 52%"` on `signatureWrapRef` to anchor the camera zoom directly on a thick letter stroke of "Ali", ensuring the viewport is filled with solid yellow instead of blank red space. | 2026-05-30 |
 | 119 | Solid Opacity Vector Zoom | Removed early opacity fading from the signature zoom (keeping opacity: 1) so the stroke expands fully to cover the entire viewport in solid yellow before the document slides down. | 2026-05-30 |
-| 120 | Estelle Darcy Print-Editorial Layout | Replaced the blank document layout with a high-craft print-editorial resume for Ali Ahmed modeled after the Estelle Darcy template (incorporating uppercase brutalist styling, red Tusker Standard headings, and specific content layouts). | 2026-05-30 |
-| 121 | High-Contrast Grayscale Developer Portrait | Generated a professional grayscale creative developer portrait and served it locally via `next/image` in the resume header layout to complete the authentic look. | 2026-05-30 |
-| 122 | Signature Overlay Branding | Superimposed a dark cursive signature "Ali Ahmed" overlaying the bold red surname heading on the resume layout, replicating the original design's elegant watermark effect. | 2026-05-30 |
+| 120 | Estelle Darcy Print-Editorial Layout | Replaced the blank document layout with a high-craft print-editorial resume for Ali Ahmed modeled after the Estelle Darcy template. (Superseded by decision 123). | 2026-05-30 |
+| 121 | High-Contrast Grayscale Developer Portrait | Generated a professional grayscale creative developer portrait and served it locally via `next/image` in the resume header layout to complete the authentic look. (Superseded by decision 123). | 2026-05-30 |
+| 122 | Signature Overlay Branding | Superimposed a dark cursive signature "Ali Ahmed" overlaying the bold red surname heading on the resume layout, replicating the original design's elegant watermark effect. (Superseded by decision 123). | 2026-05-30 |
+| 123 | Solid Blank Document Sheet | Removed all children, headers, footers, text, and images from inside the document paper `docWrapRef`, leaving a solid, blank, high-contrast soft yellow print sheet. | 2026-05-30 |
+| 124 | Inline Base Transforms for FOUC Prevention | Embedded base layout translation styles (`translateY(100%)` on `redBgRef` and `translate(-50%, -150%)` with `opacity: 0` on `docWrapRef`) directly in the markup to completely eliminate reload flashes. | 2026-05-30 |
 
 ---
 
