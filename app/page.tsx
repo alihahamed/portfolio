@@ -6,7 +6,7 @@ import { CustomEase } from "gsap/CustomEase";
 import Menu from "@/components/Menu";
 import { Signature } from "@/components/ui/signature";
 import ScrollArrow from "@/components/ScrollArrow";
-import { useTransitionContext } from "@/components/PageTransition";
+import { TransitionLink, useTransitionContext } from "@/components/PageTransition";
 import SelectedWork from "@/components/SelectedWork";
 import About from "@/components/About";
 
@@ -358,12 +358,12 @@ export default function Home() {
               I'm Ali. I spend way too much time thinking about why some websites make you stay and others make you leave. Then I build the kind that make you stay. Fast, sharp, and designed like someone actually gave a damn. That's the only way I know how to build.
             </p>
             <div>
-              <a
-                href="#about"
+              <TransitionLink
+                href="/#about"
                 className="inline-flex items-center gap-1 hover:underline text-white font-medium text-xs md:text-sm transition-all"
               >
                 Learn more ↗
-              </a>
+              </TransitionLink>
             </div>
           </div>
 

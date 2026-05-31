@@ -234,6 +234,7 @@ export function SmoothCursor({
 
   return (
     <motion.div
+      className="global-custom-cursor"
       style={{
         position: "fixed",
         left: cursorX,

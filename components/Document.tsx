@@ -57,8 +57,8 @@ const skills = [
     name: "TypeScript",
     src: "/ts.png",
     style: {
-      left: "32%",
-      top: "65%",
+      left: "34%",
+      top: "60%",
       width: "9.5vh",
       height: "9.5vh",
       filter: "drop-shadow(0px 4px 7px rgba(0,0,0,0.35))"
@@ -76,6 +76,30 @@ const skills = [
       filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.32))"
     },
     rotate: 10
+  },
+  {
+    name: "Docker",
+    src: "/docker.png",
+    style: {
+      left: "5%",
+      top: "88%",
+      width: "9.5vh",
+      height: "9.5vh",
+      filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.30))"
+    },
+    rotate: -8
+  },
+  {
+    name: "SQL",
+    src: "/sql.png",
+    style: {
+      left: "62%",
+      top: "90%",
+      width: "11vh",
+      height: "11vh",
+      filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.30))"
+    },
+    rotate: 12
   }
 ];
 
@@ -286,7 +310,7 @@ export default function Document() {
           {/* SKILLS */}
           <div>
             <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Skills</h2>
-            <div className="relative w-full h-[20vh]" style={{ perspective: "1000px" }}>
+            <div className="relative w-full h-[28vh]" style={{ perspective: "1000px" }}>
               {skills.map((skill, index) => (
                 <DraggableSkill key={index} skill={skill} />
               ))}
@@ -360,6 +384,7 @@ export default function Document() {
 
       {/* FOOTER QUOTE (At the bottom right, below 89% horizontal line) */}
       <div 
+        id="contact"
         className="absolute z-10 flex flex-col justify-center text-[#AB1509]" 
         style={{ left: "53%", width: "40%", bottom: "2%", height: "8%" }}
       >

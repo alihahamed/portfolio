@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -34,7 +35,7 @@ const PROJECTS_DATA: Project[] = [
   {
     id: 1,
     title: "Accountants For Global Business",
-    images: ["/agb-3.png", "/agb-1.png", "/agb-2.png", "/agb-4.png"],
+    images: ["/agb-3.png", "/agb.png", "/agb-2.png", "/agb-4.png"],
     description: "AGB needed more than just a website. they needed a whole ecosystem where accounting firms from around the world could be found, contacted and trusted. I built that. a global directory, country specific business guides, service pages and a full CMS so the client never has to ask a developer to update anything. just a platform that works and keeps working.",
     approach: "I didn't just build pages, I thought about the two people using this thing. the business owner who needs an accountant in a country they've never worked in, and the firm that wants to be found without chasing leads. everything I built was with both of them in mind.",
     techStack: [
@@ -180,6 +181,56 @@ export default function SelectedWork() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [activeProjectId, setActiveProjectId] = useState<number | null>(null);
   const [isLinkHovered, setIsLinkHovered] = useState(false);
+
+  const [mounted, setMounted] = useState(false);
+  const xToRef = useRef<((val: number) => void) | null>(null);
+  const yToRef = useRef<((val: number) => void) | null>(null);
+
+  // Set mounted flag on client mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Initialize GSAP quickTo refs when portal container mounts on client
+  useEffect(() => {
+    if (mounted && cursorRef.current) {
+      xToRef.current = gsap.quickTo(cursorRef.current, "x", { duration: 0.15, ease: "power2.out" });
+      yToRef.current = gsap.quickTo(cursorRef.current, "y", { duration: 0.15, ease: "power2.out" });
+    }
+  }, [mounted]);
+
+  const handleTooltipMouseMove = (e: React.MouseEvent) => {
+    if (xToRef.current && yToRef.current) {
+      xToRef.current(e.clientX);
+      yToRef.current(e.clientY);
+    }
+  };
+
+  const handleTooltipMouseEnter = () => {
+    document.body.classList.add("carousel-hovered");
+    if (cursorRef.current) {
+      gsap.to(cursorRef.current, {
+        opacity: 1,
+        scale: 1,
+        overwrite: "auto",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    }
+  };
+
+  const handleTooltipMouseLeave = () => {
+    document.body.classList.remove("carousel-hovered");
+    if (cursorRef.current) {
+      gsap.to(cursorRef.current, {
+        opacity: 0,
+        scale: 0.5,
+        overwrite: "auto",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    }
+  };
 
   // Entrance & counters logic when activeProjectId changes
   useEffect(() => {
@@ -636,58 +687,9 @@ export default function SelectedWork() {
       });
     }, containerRef);
 
-    // 4. Decoupled Tooltip Cursor tracking on 3D carousel hover
-    const carousels = containerRef.current?.querySelectorAll(".work__carousel");
-    const cursor = cursorRef.current;
-
-    let onMouseMove: (e: MouseEvent) => void;
-    let onMouseEnter: () => void;
-    let onMouseLeave: () => void;
-
-    if (cursor && carousels && carousels.length > 0) {
-      const xTo = gsap.quickTo(cursor, "x", { duration: 0.15, ease: "power2.out" });
-      const yTo = gsap.quickTo(cursor, "y", { duration: 0.15, ease: "power2.out" });
-
-      onMouseMove = (e: MouseEvent) => {
-        xTo(e.clientX);
-        yTo(e.clientY);
-      };
-
-      onMouseEnter = () => {
-        gsap.to(cursor, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      };
-
-      onMouseLeave = () => {
-        gsap.to(cursor, {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      };
-
-      carousels.forEach((carousel) => {
-        carousel.addEventListener("mousemove", onMouseMove as EventListener);
-        carousel.addEventListener("mouseenter", onMouseEnter);
-        carousel.addEventListener("mouseleave", onMouseLeave);
-      });
-    }
-
     return () => {
       ctx.revert();
       cleanups.forEach((cleanup) => cleanup());
-      if (carousels && carousels.length > 0 && onMouseMove) {
-        carousels.forEach((carousel) => {
-          carousel.removeEventListener("mousemove", onMouseMove as EventListener);
-          carousel.removeEventListener("mouseenter", onMouseEnter);
-          carousel.removeEventListener("mouseleave", onMouseLeave);
-        });
-      }
     };
   }, []);
 
@@ -897,6 +899,9 @@ export default function SelectedWork() {
               onClick={(e) => handleCarouselClick(e, project.id)}
               onTouchStart={handleCarouselTouchStart}
               onTouchEnd={(e) => handleCarouselTouchEnd(e, project.id)}
+              onMouseMove={handleTooltipMouseMove}
+              onMouseEnter={handleTooltipMouseEnter}
+              onMouseLeave={handleTooltipMouseLeave}
             >
               {project.images.map((imgUrl, cardIndex) => {
                 // Calculate circular geometry transforms for 4 cells (radius = 300px)
@@ -933,13 +938,16 @@ export default function SelectedWork() {
         );
       })}
       </div>
-      {/* Decoupled custom white circular tooltip cursor saying "open" in black */}
-      <div
-        ref={cursorRef}
-        className="fixed top-0 left-0 w-12 h-12 rounded-full bg-white text-black font-montreal font-medium text-[11px] tracking-normal flex items-center justify-center pointer-events-none z-[9999] opacity-0 scale-50 -translate-x-1/2 -translate-y-1/2 will-change-transform select-none uppercase"
-      >
-        {activeProjectId !== null ? "Close" : "Open"}
-      </div>
+      {/* Decoupled custom white circular tooltip cursor saying "open" in black rendered via Portal to document.body */}
+      {mounted && createPortal(
+        <div
+          ref={cursorRef}
+          className="fixed top-0 left-0 w-12 h-12 rounded-full bg-white text-black font-montreal font-medium text-[11px] tracking-normal flex items-center justify-center pointer-events-none z-[9999] opacity-0 scale-50 -translate-x-1/2 -translate-y-1/2 will-change-transform select-none uppercase"
+        >
+          {activeProjectId !== null ? "Close" : "Open"}
+        </div>,
+        document.body
+      )}
     </section>
   );
 }

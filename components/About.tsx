@@ -158,7 +158,7 @@ export default function About() {
 
   return (
     <section
-      id="about-section"
+      id="about"
       ref={containerRef}
       className="relative w-full h-[300vh] bg-transparent pointer-events-none z-20"
     >

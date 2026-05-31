@@ -209,26 +209,45 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
   // Main navigation click handler with hash scroll support
   const triggerTransition = useCallback(async (href: string) => {
     const [targetPath, targetHash] = href.split("#");
-    const isCurrentPageHash = targetHash && (pathname === targetPath || (pathname === "/" && targetPath === ""));
+    const isCurrentPage = targetPath === pathname || (pathname === "/" && targetPath === "");
 
-    if (isCurrentPageHash) {
-      let customTitle: string | undefined;
-      if (targetHash === "work") {
-        customTitle = "selected work";
-      } else if (targetHash === "about") {
-        customTitle = "about the studio";
-      } else if (targetHash === "contact") {
-        customTitle = "get in touch";
-      }
+    if (isCurrentPage) {
+      // Determine dynamic custom title
+      const destination = targetHash || "home";
+      const customTitle = `we're going to ${destination}`;
 
       // A: Leave Phase
       await playLeaveAnimation(href, customTitle);
 
-      // B: Position viewport at the hash element instantly while screen is fully covered
-      const el = document.getElementById(targetHash);
-      if (el) {
-        el.scrollIntoView({ behavior: "instant" });
+      // B: Position viewport instantly while screen is fully covered
+      if (targetHash === "about" || targetHash === "contact") {
+        // Scroll fully to the bottom so the document is completely rendered down
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "instant"
+        });
+      } else if (targetHash) {
+        const el = document.getElementById(targetHash);
+        if (el) {
+          // If the element is pinned by GSAP, target its pin-spacer to find the original top scroll position
+          const spacer = el.closest(".pin-spacer") as HTMLElement || el;
+          const targetY = spacer.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: targetY,
+            behavior: "instant"
+          });
+        }
+      } else {
+        // No hash: scroll to the top of the page (Home)
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "instant"
+        });
       }
+
+      // Notify Lenis and ScrollTrigger to synchronize their scroll metrics instantly
+      window.dispatchEvent(new Event("scroll"));
 
       // C: Enter Phase
       await playEnterAnimation();

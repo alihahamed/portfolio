@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Simplified Quote Layout`
+- **Phase:** `Portal Cursor Implementation`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-31`
 
@@ -15,14 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Removed all custom SVG ink-bleed filters and hover animations from the quote block, keeping the layout clean and simple:
-- **Clean Typography:** The quote by Bertrand Russell is now styled in simple, clean Neue Montreal italic text with `opacity-90`.
-- **Left-Aligned Author:** Maintained the left-aligned author signature `— bertrand russell` (`opacity-85`) positioned at the bottom left of the block.
+Resolved containing block position shifts that hid the circular white tooltip cursor on the 2nd and 3rd carousels. Wrapped the custom cursor in a React Portal targeting `document.body`, escaping all transformed parent containers (`#work-inner`, `.work__scene`) and ensuring perfect alignment with mouse pointer coordinates.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/Document.tsx` | Modified | Removed SVG filter definitions, blur/smudge styles, and mouse listeners from the footer quote container. |
+| `components/SelectedWork.tsx` | Modified | Added React `createPortal` and mounted the tooltip cursor div to `document.body` on mount. |
 
 ---
 
@@ -154,6 +152,14 @@ Removed all custom SVG ink-bleed filters and hover animations from the quote blo
 | 122 | Signature Overlay Branding | Superimposed a dark cursive signature "Ali Ahmed" overlaying the bold red surname heading on the resume layout, replicating the original design's elegant watermark effect. (Superseded by decision 123). | 2026-05-30 |
 | 123 | Solid Blank Document Sheet | Removed all children, headers, footers, text, and images from inside the document paper `docWrapRef`, leaving a solid, blank, high-contrast soft yellow print sheet. | 2026-05-30 |
 | 124 | Inline Base Transforms for FOUC Prevention | Embedded base layout translation styles (`translateY(100%)` on `redBgRef` and `translate(-50%, -150%)` with `opacity: 0` on `docWrapRef`) directly in the markup to completely eliminate reload flashes. | 2026-05-30 |
+| 125 | Transition-Enabled Section Navigation | Connected homepage and menu section links to the global horizontal wipe transition system. | 2026-05-31 |
+| 126 | Dynamic Preloader Wipe Text | Programmed the preloader to dynamically set overlay text as "we're going to X" based on the target section name. | 2026-05-31 |
+| 127 | Fully Rendered Document Target | Directed "#about" and "#contact" scrolling targets to "document.documentElement.scrollHeight" instantly while covered by the transition wipe, ensuring the document is fully rendered down in position. | 2026-05-31 |
+| 128 | CV Footer Target | Added "id='contact'" directly to the document's footer quote block so contact links correctly trigger and align at the end of the fully rendered CV. | 2026-05-31 |
+| 129 | Pinned Navigation Spacer Resolution | Calculated the absolute top scroll position of target elements' GSAP `.pin-spacer` parent during transitions, preventing scrollIntoView locks when navigating away from the About section while `#work` is pinned. | 2026-05-31 |
+| 130 | React Native Carousel Tooltip | Converted decoupled native DOM event listeners in SelectedWork.tsx to inline React event handlers. This ensures the "Open/Close" white tooltip cursor works reliably across all three 3D project carousels during dynamic re-renders. | 2026-05-31 |
+| 131 | Duplicate Cursor Hiding | Appended className `.global-custom-cursor` to the main custom cursor and toggled `body.carousel-hovered` on carousel enter/leave, hiding the red custom cursor during carousel hovers to prevent trailing cursor overlaps. | 2026-05-31 |
+| 132 | Tooltip Portal Containment | Wrapped the custom circular "Open/Close" white tooltip cursor inside a React Portal targeting `document.body`. This completely escapes the transformed coordinate contexts of `.work__scene` and `#work` (which shifted the cursor's containing block and caused it to render off-screen for the 2nd and 3rd carousels), ensuring the cursor remains fully visible and tracks viewport client coordinates perfectly across all scroll heights. | 2026-05-31 |
 
 ---
 

@@ -157,4 +157,11 @@ html {
   border-radius: 10px;
 }
 
+/* Hide global red cursor on 3D carousel hover to prevent duplicate cursor trailing */
+body.carousel-hovered .global-custom-cursor {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease;
+}
+
 
