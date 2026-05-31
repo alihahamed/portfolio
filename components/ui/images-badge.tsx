@@ -76,14 +76,15 @@ export function ImagesBadge({
         }}
         animate={{
           rotateZ: 0, // perfectly straight
-          rotateX: isHovered ? -22 : -17, // tilted downwards from the top (laying back slightly on the page)
+          rotateX: isHovered ? -24 : -20, // tilted downwards from the top (laying back slightly on the page)
           y: isHovered ? -5 : 0,
+          
         }}
         transition={{ type: "spring", stiffness: 180, damping: 20 }}
       >
         {/* FOLDER BACK - Deeper, highly-visible 3D drop shadow projecting onto document */}
         <div
-          className="absolute inset-0 rounded-[6px] bg-[#851007] shadow-[0_25px_50px_rgba(44,10,7,0.5),_0_8px_20px_rgba(44,10,7,0.3)]"
+          className="absolute inset-0 rounded-[6px] bg-[#851007] shadow-[0_25px_50px_rgba(44,10,7,0.5),_0_8px_10px_rgba(44,10,7,0.3)]"
           style={{
             transform: "translateZ(-15px)",
             border: "1px solid rgba(255, 247, 211, 0.15)",
@@ -150,7 +151,7 @@ export function ImagesBadge({
             >
               {/* VISUAL PAPER CARD - Handles individual pop-up, Z-axis pop, and scale-up */}
               <motion.div
-                className="w-full h-full rounded-[3px] bg-[#fff7d3] border border-[#AB1509] p-2 flex flex-col justify-between overflow-hidden shadow-[0_6px_15px_rgba(0,0,0,0.22),_0_2px_5px_rgba(0,0,0,0.12)] origin-bottom"
+                className="w-full h-full rounded-[3px] bg-[#fff7d3] border border-[#AB1509] p-2 flex flex-col justify-between overflow-hidden shadow-[0_6px_15px_rgba(0,0,0,0.62),_0_2px_5px_rgba(0,0,0,0.42)] origin-bottom"
                 style={{
                   transformStyle: "preserve-3d",
                 }}

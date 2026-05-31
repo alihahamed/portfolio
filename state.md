@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Tactile Folder Back panel Isolation`
+- **Phase:** `Simplified Quote Layout`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-31`
 
@@ -15,14 +15,14 @@
 ## Last Session Work
 
 ### Summary
-Isolated the deeper crimson shade (`#851007`) specifically to the folder back panel:
-- **Depth Contrast:** Only the folder back panel is `#851007`, casting a natural inside shadow behind the paper cards.
-- **Brand Consistency:** Reverted the front cover and the folder back tab to the brand red `#AB1509`.
+Removed all custom SVG ink-bleed filters and hover animations from the quote block, keeping the layout clean and simple:
+- **Clean Typography:** The quote by Bertrand Russell is now styled in simple, clean Neue Montreal italic text with `opacity-90`.
+- **Left-Aligned Author:** Maintained the left-aligned author signature `— bertrand russell` (`opacity-85`) positioned at the bottom left of the block.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/ui/images-badge.tsx` | Modified | Reverted front cover and folder tab to `#AB1509`; only folder back remains `#851007`. |
+| `components/Document.tsx` | Modified | Removed SVG filter definitions, blur/smudge styles, and mouse listeners from the footer quote container. |
 
 ---
 
