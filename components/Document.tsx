@@ -37,7 +37,7 @@ export default function Document() {
           <div className="flex flex-col" style={{ gap: "4%" }}>
             <div style={{ marginBottom: "3%" }}>
               <h3 className="text-[2.2vw] md:text-[1.7vh] font-medium leading-tight mb-2">Undergraduate - Information Science & Engineering</h3>
-              <p className="text-[1.6vw] md:text-[1.5vh] font-normal ">Yenepoya Institute of Technology (2023 - 2027)</p>
+              <p className="text-[1.6vw] md:text-[1.6vh] font-normal ">Yenepoya Institute of Technology (2023 - 2027)</p>
             </div>
           </div>
         </div>

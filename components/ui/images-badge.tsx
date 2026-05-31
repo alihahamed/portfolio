@@ -83,7 +83,7 @@ export function ImagesBadge({
       >
         {/* FOLDER BACK - Deeper, highly-visible 3D drop shadow projecting onto document */}
         <div
-          className="absolute inset-0 rounded-[6px] bg-[#AB1509] shadow-[0_25px_50px_rgba(44,10,7,0.5),_0_8px_20px_rgba(44,10,7,0.3)]"
+          className="absolute inset-0 rounded-[6px] bg-[#851007] shadow-[0_25px_50px_rgba(44,10,7,0.5),_0_8px_20px_rgba(44,10,7,0.3)]"
           style={{
             transform: "translateZ(-15px)",
             border: "1px solid rgba(255, 247, 211, 0.15)",

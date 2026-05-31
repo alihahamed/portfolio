@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Card Flicker Fix — Fast Tween Return`
+- **Phase:** `Tactile Folder Back panel Isolation`
 - **Status:** `Complete`
 - **Last Updated:** `2026-05-31`
 
@@ -15,14 +15,14 @@
 ## Last Session Work
 
 ### Summary
-Fixed card return flicker by switching from spring to fast tween transitions on unhover:
-- **Conditional Transitions:** Hover-in uses spring (bouncy feel), unhover uses fast `tween` (0.12–0.18s ease-out) so cards snap back to resting state before any visual clipping through adjacent cards can occur.
-- **Root Cause:** Spring transitions caused cards to linger at elevated scale/z while zIndex had already dropped, making them visually clip through cards stacked above → flicker.
+Isolated the deeper crimson shade (`#851007`) specifically to the folder back panel:
+- **Depth Contrast:** Only the folder back panel is `#851007`, casting a natural inside shadow behind the paper cards.
+- **Brand Consistency:** Reverted the front cover and the folder back tab to the brand red `#AB1509`.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/ui/images-badge.tsx` | Modified | Slot wrapper + inner visual card now use conditional transitions: spring on hover, fast tween on unhover. |
+| `components/ui/images-badge.tsx` | Modified | Reverted front cover and folder tab to `#AB1509`; only folder back remains `#851007`. |
 
 ---
 
