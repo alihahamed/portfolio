@@ -6,21 +6,23 @@
 
 ## Current Phase
 
-- **Phase:** `Document Centering & Typography Polish`
+- **Phase:** `Card Flicker Fix — Fast Tween Return`
 - **Status:** `Complete`
-- **Last Updated:** `2026-05-30`
+- **Last Updated:** `2026-05-31`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Redesigned the layout structure of the `Document` component to achieve perfect symmetry and alignment. Instead of standard CSS grid margins, used pixel-perfect percentage coordinates (`absolute` positioning with exact `left` offsets and `width` allocations) to center the columns perfectly inside their respective half-compartments (`[4%, 50%]` and `[50%, 96%]`). Centered the profile image, removed the contact section, and significantly increased the font size of "Ali Ahmed" (`text-[6.5vw] md:text-[4vh]`, initials `text-[9vw] md:text-[5.5vh]`).
+Fixed card return flicker by switching from spring to fast tween transitions on unhover:
+- **Conditional Transitions:** Hover-in uses spring (bouncy feel), unhover uses fast `tween` (0.12–0.18s ease-out) so cards snap back to resting state before any visual clipping through adjacent cards can occur.
+- **Root Cause:** Spring transitions caused cards to linger at elevated scale/z while zIndex had already dropped, making them visually clip through cards stacked above → flicker.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/Document.tsx` | Modified | Swapped grid layout to precise absolute columns (`left: 7%` and `left: 53%` with `width: 40%`), enlarged name title, and deleted contact section. |
+| `components/ui/images-badge.tsx` | Modified | Slot wrapper + inner visual card now use conditional transitions: spring on hover, fast tween on unhover. |
 
 ---
 

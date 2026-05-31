@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { ImagesBadge } from "./ui/images-badge";
 
 export default function Document() {
   return (
@@ -16,12 +17,12 @@ export default function Document() {
       {/* Middle horizontal line (right side) */}
       <div className="absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "66%" }} />
       {/* Lower horizontal line (right side) */}
-      <div className="absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "75%" }} />
+      <div className="absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "89%" }} />
 
       {/* HEADER (Top Section) */}
       <div className="absolute left-[7%] right-[7%] flex items-center justify-between z-10" style={{ top: "0", height: "17%" }}>
-        <div className="flex items-baseline" style={{ gap: "0.8vh" }}>
-          <h1 className="text-[8vw] md:text-[11.5vh] font-medium font-tusker-standard tracking-tight leading-none">About.</h1>
+        <div className="flex items-baseline" style={{ gap: "0.5vh" }}>
+          <h1 className="text-[8vw] md:text-[12.5vh] font-medium font-tusker-standard tracking-tight leading-none mt-6">About.</h1>
           <span className="border border-[#AB1509] rounded-full font-medium tracking-wider uppercase" style={{ padding: "0.1vh 0.8vh", fontSize: "0.9vh", lineHeight: "1" }}>cv</span>
         </div>
         {/* Asterisk icon */}
@@ -36,7 +37,7 @@ export default function Document() {
           <div className="flex flex-col" style={{ gap: "4%" }}>
             <div style={{ marginBottom: "3%" }}>
               <h3 className="text-[2.2vw] md:text-[1.7vh] font-medium leading-tight mb-2">Undergraduate - Information Science & Engineering</h3>
-              <p className="text-[1.6vw] md:text-[1.5vh] font-medium ">Yenepoya Institute of Technology (2023 - 2027)</p>
+              <p className="text-[1.6vw] md:text-[1.5vh] font-normal ">Yenepoya Institute of Technology (2023 - 2027)</p>
             </div>
           </div>
         </div>
@@ -70,8 +71,8 @@ export default function Document() {
         </div>
       </div>
 
-      {/* RIGHT COLUMN (Photo, Profile, Interests/Languages, Skills) */}
-      <div className="absolute flex flex-col justify-between font-montreal font-medium z-10" style={{ left: "53%", width: "40%", top: "19%", bottom: "5%" }}>
+      {/* RIGHT COLUMN (Photo, Profile, Interactive Folder) */}
+      <div className="absolute flex flex-col justify-between font-montreal font-medium z-10" style={{ left: "53%", width: "40%", top: "19%", bottom: "6%" }}>
         {/* PHOTO & INITIALS & PROFILE */}
         <div>
           <div className="relative w-full aspect-[4/3] border border-[#AB1509] overflow-hidden">
@@ -86,61 +87,29 @@ export default function Document() {
           </div>
 
           <div className="flex items-baseline" style={{ marginTop: "6%" }}>
-            <h2 className="text-[6.5vw] md:text-[4vh] tracking-tight font-medium font-montreal  leading-none">
+            <h2 className="text-[6.5vw] md:text-[4.8vh] tracking-tight font-medium font-montreal  leading-none">
               <span className="text-[9vw] md:text-[5.6vh] font-medium font-tusker-standard">A</span>li <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">A</span>hmed <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">S</span>yed
             </h2>
           </div>
 
           <div style={{ marginTop: "6%" }}>
             <h3 className="text-[2.2vw] md:text-[2vh] monitor:text-[1.5vh] font-semibold uppercase tracking-wider font-montreal" style={{ marginBottom: "1%" }}>Profile</h3>
-            <p className="text-[1.6vw] md:text-[1.5vh] monitor:text-[1.3vh] leading-tight font-medium">
-              I'm a creative developer who enjoys experimenting with bold combinations of form, motion, and interaction to design digital experiences that stick. For me, development is crafting immersive details.
-            </p>
+            <p className="text-[1.6vw] md:text-[1.7vh] monitor:text-[1.5vh] leading-tight font-normal">
+I started building websites because the ones I kept seeing were boring. That annoyance turned into a skillset, which turned into clients, which turned into this.            </p>
           </div>
         </div>
 
-        {/* INTERESTS & LANGUAGES (Between center line to bottom) */}
-        <div style={{ paddingTop: "4%", marginTop: "2%" }}>
-          <div className="flex justify-between">
-            <div style={{ width: "45%" }}>
-              <h3 className="text-[2.2vw] md:text-[1.5vh] font-bold uppercase tracking-wider font-montreal" style={{ marginBottom: "2%" }}>Interests</h3>
-              <ul className="text-[1.6vw] md:text-[1.2vh] list-disc list-inside leading-tight flex flex-col font-medium" style={{ gap: "1%" }}>
-                <li>Creative Coding</li>
-                <li>WebGL / Shaders</li>
-                <li>Motion Graphics</li>
-                <li>Typography</li>
-              </ul>
-            </div>
-            <div style={{ width: "45%" }}>
-              <h3 className="text-[2.2vw] md:text-[1.5vh] font-bold uppercase tracking-wider font-montreal" style={{ marginBottom: "2%" }}>Languages</h3>
-              <ul className="text-[1.6vw] md:text-[1.2vh] list-disc list-inside leading-tight flex flex-col font-medium" style={{ gap: "1%" }}>
-                <li>English (fluent)</li>
-                <li>Arabic (native)</li>
-                <li>Hindi (fluent)</li>
-                <li>Malayalam (conversational)</li>
-              </ul>
-            </div>
-          </div>
+        {/* PHYSICAL APPROACH FOLDER */}
+        <div className="flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "45%",  }}>
+          <ImagesBadge folderSize={{ width: 180, height: 120 }} />
         </div>
+      </div>
 
-        {/* SKILLS */}
-        <div style={{ paddingTop: "4%" }}>
-          <h3 className="text-[2.2vw] md:text-[1.5vh] font-bold uppercase tracking-wider font-montreal" style={{ marginBottom: "1%" }}>Skills</h3>
-          <div className="flex justify-between">
-            <ul className="text-[1.6vw] md:text-[1.2vh] list-disc list-inside leading-tight flex flex-col w-[48%] font-medium" style={{ gap: "1%" }}>
-              <li>React / Next.js</li>
-              <li>Three.js / WebGL</li>
-              <li>GSAP / Timeline</li>
-            </ul>
-            <ul className="text-[1.6vw] md:text-[1.2vh] list-disc list-inside leading-tight flex flex-col w-[48%] font-medium" style={{ gap: "1%" }}>
-              <li>TailwindCSS</li>
-              <li>TypeScript / Git</li>
-              <li>Node.js / Supabase</li>
-            </ul>
-          </div>
-          <div className="text-right italic opacity-85 font-medium" style={{ marginTop: "3%", fontSize: "0.8vh" }}>
-            *Portfolio available upon request
-          </div>
+      {/* SKILLS (At the very bottom right, below 89% horizontal line) */}
+      <div className="absolute font-montreal font-medium z-10 flex items-center justify-between" style={{ left: "53%", width: "40%", bottom: "4.5%", height: "7.5%" }}>
+        <h3 className="text-[2.2vw] md:text-[2vh] monitor:text-[1.5vh] font-semibold uppercase tracking-wider font-montreal">Skills</h3>
+        <div className="text-right italic opacity-85 font-medium font-montreal" style={{ fontSize: "0.8vh" }}>
+          *Portfolio available upon request
         </div>
       </div>
     </div>

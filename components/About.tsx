@@ -186,7 +186,7 @@ export default function About() {
 
           <div
             ref={docWrapRef}
-            className="absolute left-1/2 w-[90vw] h-screen md:w-[78vh] md:h-screen lg:w-[82vh] lg:h-screen bg-[#fff7d3] border-l border-r border-[#AB1509] shadow-[0_30px_70px_rgba(0,0,0,0.7)] z-50 overflow-hidden select-none"
+            className="absolute left-1/2 w-[90vw] h-screen md:w-[78vh] md:h-screen lg:w-[82vh] lg:h-screen bg-[#fff7d3] border-l border-r border-[#AB1509] shadow-[0_30px_70px_rgba(0,0,0,0.7)] z-50 overflow-visible select-none"
             style={{ 
               transform: "translate(-50%, -150%)", 
               willChange: "transform"
