@@ -6,21 +6,22 @@
 
 ## Current Phase
 
-- **Phase:** `Portal Cursor Implementation`
+- **Phase:** `About Grid Lines Animation`
 - **Status:** `Complete`
-- **Last Updated:** `2026-05-31`
+- **Last Updated:** `2026-06-02`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Resolved containing block position shifts that hid the circular white tooltip cursor on the 2nd and 3rd carousels. Wrapped the custom cursor in a React Portal targeting `document.body`, escaping all transformed parent containers (`#work-inner`, `.work__scene`) and ensuring perfect alignment with mouse pointer coordinates.
+Designed and integrated horizontal deep black grid lines on the `About` section's red background. Styled them to replicate the blueprint/drafting grid lines in `SelectedWork.tsx`. Programmed them in the GSAP scroll-driven timeline as a sequential Stage 6, so they stagger-draw out from left to right once the resume sheet has fully settled into position.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/SelectedWork.tsx` | Modified | Added React `createPortal` and mounted the tooltip cursor div to `document.body` on mount. |
+| `components/About.tsx` | Modified | Appended horizontal drafting lines markup and added Stage 6 to scroll timeline. |
+| `app/globals.css` | Modified | Defined `.about-line` styling with deep black (`#050505`) color and opacity. |
 
 ---
 
@@ -160,6 +161,8 @@ Resolved containing block position shifts that hid the circular white tooltip cu
 | 130 | React Native Carousel Tooltip | Converted decoupled native DOM event listeners in SelectedWork.tsx to inline React event handlers. This ensures the "Open/Close" white tooltip cursor works reliably across all three 3D project carousels during dynamic re-renders. | 2026-05-31 |
 | 131 | Duplicate Cursor Hiding | Appended className `.global-custom-cursor` to the main custom cursor and toggled `body.carousel-hovered` on carousel enter/leave, hiding the red custom cursor during carousel hovers to prevent trailing cursor overlaps. | 2026-05-31 |
 | 132 | Tooltip Portal Containment | Wrapped the custom circular "Open/Close" white tooltip cursor inside a React Portal targeting `document.body`. This completely escapes the transformed coordinate contexts of `.work__scene` and `#work` (which shifted the cursor's containing block and caused it to render off-screen for the 2nd and 3rd carousels), ensuring the cursor remains fully visible and tracks viewport client coordinates perfectly across all scroll heights. | 2026-05-31 |
+| 133 | Signature Zoom Speed Deceleration | Increased the relative timeline duration of Stage 4 (signature zoom) from `2.0` to `5.0` (extending it by 2.5x), slowing down the camera zoom in/zoom out transitions significantly to make them feel highly gradual and organic under the scroll wheel. | 2026-06-02 |
+| 134 | About Section Drafting Grid Lines | Added 5 horizontal deep black (`#050505`) drafting/blueprint grid lines on the `About` section's red background. Programmed them inside the GSAP scroll timeline as Stage 6 (from `18.5` to `22.0`), so they stagger-draw out from left to right immediately after the CV document has fully dropped into position, perfectly matching the aesthetic of the Selected Work grid lines. | 2026-06-02 |
 
 ---
 

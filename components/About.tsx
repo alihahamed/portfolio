@@ -118,23 +118,38 @@ export default function About() {
         // Stage 3 (time 8.0 to 8.5): Brief hold/buffer
         tl.to({}, { duration: 0.5 }, 8.0);
 
-        // Stage 4 (time 8.5 to 10.5): Signature zooms out (scales up massively) to cover the screen
+        // Stage 4 (time 8.5 to 13.5): Signature physically zooms out (scales up massively) to cover the screen
         tl.to(signatureWrapRef.current, {
           scale: 120,
-          duration: 2,
+          duration: 5,
           ease: "power2.in"
         }, 8.5);
 
-        // Stage 5 (time 10.5 to 15.0): Document lowers into position — NO fade, pure scroll-driven descent
+        // Stage 5 (time 13.5 to 18.5): Document lowers into position — NO fade, pure scroll-driven descent
         tl.fromTo(docWrapRef.current,
           { yPercent: -150 },
           {
             yPercent: 0,
-            duration: 4.5,
+            duration: 5,
             ease: "none" // Linear mapping makes it feel 1:1 physically controlled by the scroll wheel
           },
-          10.5
+          13.5
         );
+
+        // Stage 6 (time 18.5 to 22.0): Black horizontal blueprint drafting lines draw out staggered
+        const allAboutLines = redBgRef.current?.querySelectorAll(".about-line");
+        if (allAboutLines && allAboutLines.length > 0) {
+          tl.fromTo(allAboutLines,
+            { scaleX: 0 },
+            {
+              scaleX: 1,
+              duration: 3.5,
+              stagger: 0.15,
+              ease: "power2.out"
+            },
+            18.5
+          );
+        }
 
       });
     };
@@ -169,6 +184,15 @@ export default function About() {
           className="absolute inset-0 w-full h-full bg-[#AB1509] flex items-center justify-center overflow-hidden z-30 pointer-events-auto"
           style={{ transform: "translateY(100%)" }}
         >
+          {/* Deep black horizontal blueprint drafting lines */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-hidden">
+            <div className="about-line absolute left-0 w-full h-[2px] origin-left" style={{ top: "16.6%", transform: "scaleX(0)" }} />
+            <div className="about-line absolute left-0 w-full h-[2px] origin-left" style={{ top: "33.3%", transform: "scaleX(0)" }} />
+            <div className="about-line absolute left-0 w-full h-[2px] origin-left" style={{ top: "50%", transform: "scaleX(0)" }} />
+            <div className="about-line absolute left-0 w-full h-[2px] origin-left" style={{ top: "66.6%", transform: "scaleX(0)" }} />
+            <div className="about-line absolute left-0 w-full h-[2px] origin-left" style={{ top: "83.3%", transform: "scaleX(0)" }} />
+          </div>
+
           <div
             ref={signatureWrapRef}
             className="absolute inset-0 flex items-center justify-center pointer-events-none transform origin-center z-40"
