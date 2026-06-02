@@ -861,7 +861,7 @@ export default function SelectedWork() {
             <div className={`absolute z-20 pointer-events-none left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[10%] lg:left-4 lg:right-auto lg:bottom-65 monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft uppercase tracking-normal text-[12px] md:text-[29px] monitor:!text-[40px]  text-left">
+              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft  tracking-normal text-[12px] md:text-[29px] monitor:!text-[40px]  text-left">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}

@@ -58,6 +58,20 @@ export default function About() {
         // Ensure signature is hidden initially
         if (sigRef.current) sigRef.current.setProgress(0);
 
+        // Set initial positions for entrance reveal animations
+        gsap.set(".reveal-line-v", { opacity: 1, scaleY: 0, transformOrigin: "50% 0%" });
+        gsap.set(".reveal-line-h", { opacity: 1, scaleX: 0, transformOrigin: "0% 50%" });
+        gsap.set(".reveal-footer", { opacity: 1, y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-interests-title", { opacity: 1, x: -20, clipPath: "inset(0% 100% 0% 0%)" });
+        gsap.set(".reveal-interest-item", { opacity: 1, scale: 0 });
+        gsap.set(".reveal-folder", { opacity: 1, y: 150 });
+        gsap.set(".reveal-skills-title", { opacity: 1, x: -20, clipPath: "inset(0% 100% 0% 0%)" });
+        gsap.set(".reveal-skill-item", { opacity: 1, scale: 0 });
+        gsap.set(".reveal-profile", { opacity: 1, y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-education", { opacity: 1, y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-photo", { opacity: 1, y: 40, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-header", { opacity: 1, y: -20, clipPath: "inset(0% 0% 100% 0%)" });
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current, 
@@ -135,6 +149,94 @@ export default function About() {
           },
           13.5
         );
+
+        // Staggered callbacks to trigger entrance reveals during document descent
+        // 1. Grid Lines and Footer Reveal (Time 14.2)
+        tl.call(() => {
+          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
+          if (isForward) {
+            // Blueprint grid drafting lines draw themselves in
+            gsap.to(".reveal-line-v", { scaleY: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto" });
+            gsap.to(".reveal-line-h", { scaleX: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto" });
+            // Editorial reveal footer container via high-performance clipPath wipe
+            gsap.to(".reveal-footer", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
+          } else {
+            gsap.to(".reveal-line-v", { scaleY: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-line-h", { scaleX: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-footer", { y: 30, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+          }
+        }, undefined, 14.2);
+
+        // 2. Interests & Folder Reveal (Time 15.2)
+        tl.call(() => {
+          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
+          if (isForward) {
+            // Editorial reveal interests title
+            gsap.to(".reveal-interests-title", { x: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out", overwrite: "auto" });
+            // Smooth pop-out scale up for interests icons (from scale 0 to 1, no opacity fade)
+            gsap.to(".reveal-interest-item", { 
+              scale: 1, 
+              duration: 1.4, 
+              stagger: 0.08, 
+              ease: "power4.out", 
+              overwrite: "auto" 
+            });
+            // Elegant vertical slide for folder component
+            gsap.to(".reveal-folder", { y: 0, duration: 2.0, ease: "power4.out", overwrite: "auto" });
+          } else {
+            gsap.to(".reveal-interests-title", { x: -20, clipPath: "inset(0% 100% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-folder", { y: 150, duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-interest-item", { scale: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
+          }
+        }, undefined, 15.2);
+
+        // 3. Profile & Skills Reveal (Time 16.2)
+        tl.call(() => {
+          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
+          if (isForward) {
+            // Editorial reveal skills title
+            gsap.to(".reveal-skills-title", { x: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out", overwrite: "auto" });
+            // Smooth pop-out scale up for skills icons (from scale 0 to 1, no opacity fade)
+            gsap.to(".reveal-skill-item", { 
+              scale: 1, 
+              duration: 1.4, 
+              stagger: 0.08, 
+              ease: "power4.out", 
+              overwrite: "auto" 
+            });
+            // Editorial reveal profile container via high-performance clipPath wipe
+            gsap.to(".reveal-profile", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
+          } else {
+            gsap.to(".reveal-skills-title", { x: -20, clipPath: "inset(0% 100% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-profile", { y: 30, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-skill-item", { scale: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
+          }
+        }, undefined, 16.2);
+
+        // 4. Initials & Education Reveal (Time 17.2)
+        tl.call(() => {
+          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
+          if (isForward) {
+            // Editorial reveal education container via high-performance clipPath wipe
+            gsap.to(".reveal-education", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
+          } else {
+            gsap.to(".reveal-education", { y: 30, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+          }
+        }, undefined, 17.2);
+
+        // 5. Photo & Header Reveal (Time 18.2)
+        tl.call(() => {
+          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
+          if (isForward) {
+            // Editorial vertical sliding clipping mask for portrait photo
+            gsap.to(".reveal-photo", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 2.0, ease: "power4.out", overwrite: "auto" });
+            // Editorial reveal header elements
+            gsap.to(".reveal-header", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, stagger: 0.15, ease: "power4.out", overwrite: "auto" });
+          } else {
+            gsap.to(".reveal-photo", { y: 40, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            gsap.to(".reveal-header", { y: -20, clipPath: "inset(0% 0% 100% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+          }
+        }, undefined, 18.2);
 
       });
     };

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { ImagesBadge } from "./ui/images-badge";
 import { motion } from "motion/react";
@@ -175,28 +175,45 @@ interface InterestItem {
 
 function DraggableSkill({ skill }: { skill: SkillItem }) {
   const elRef = useRef<HTMLDivElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const el = elRef.current;
-    if (!el) return;
+    const imgWrapper = imageWrapperRef.current;
+    if (!el || !imgWrapper) return;
 
     let isDragging = false;
     let lastX = 0;
     let lastY = 0;
     let currentRotateZ = skill.rotate;
 
-    gsap.set(el, {
-      x: 0,
-      y: 0,
+    gsap.set(imgWrapper, {
       rotateX: 0,
       rotateY: 0,
       rotateZ: skill.rotate,
+      scale: 1,
       transformPerspective: 1000
     });
 
+    const onEnter = () => {
+      if (!isDragging) {
+        gsap.set(el, { zIndex: 999 });
+      }
+    };
+
+    const onLeave = () => {
+      if (!isDragging) {
+        gsap.set(el, { zIndex: "" });
+      }
+    };
+
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+
     const onMouseDown = (e: MouseEvent | TouchEvent) => {
       isDragging = true;
+      gsap.set(el, { zIndex: 1000 });
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
 
@@ -208,7 +225,7 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
         timeoutRef.current = null;
       }
 
-      gsap.to(el, {
+      gsap.to(imgWrapper, {
         scale: 1.2,
         filter: "drop-shadow(0px 18px 25px rgba(0, 0, 0, 0.45))",
         duration: 0.3,
@@ -236,15 +253,13 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
       const dragSpeed = Math.sqrt(dx * dx + dy * dy);
       if (dragSpeed === 0) return;
 
-      // Spin around Z-axis proportional to speed/velocity (inverted direction for natural feel)
       const spinDelta = -(dx - dy) * 0.7;
       currentRotateZ += spinDelta;
 
-      // Realtime 3D tilt based on drag direction/velocity
       const targetRotateY = gsap.utils.clamp(-30, 30, dx * 1.5);
       const targetRotateX = gsap.utils.clamp(-30, 30, -dy * 1.5);
 
-      gsap.to(el, {
+      gsap.to(imgWrapper, {
         rotateZ: currentRotateZ,
         rotateY: targetRotateY,
         rotateX: targetRotateX,
@@ -255,25 +270,23 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
 
     const onMouseUp = () => {
       isDragging = false;
+      gsap.set(el, { zIndex: "" });
 
-      // Spring flat 3D tilts, maintaining new accumulated spin angle
-      gsap.to(el, {
+      gsap.to(imgWrapper, {
         rotateX: 0,
         rotateY: 0,
         scale: 1,
-        filter: "drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.25))",
+        filter: skill.style.filter || "drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.25))",
         duration: 0.8,
         ease: "elastic.out(1, 0.5)"
       });
 
-      // Clear any previous timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
 
-      // Start 10s timer to reset Z-rotation back to initial default angle
       timeoutRef.current = setTimeout(() => {
-        gsap.to(el, {
+        gsap.to(imgWrapper, {
           rotateZ: skill.rotate,
           duration: 1.2,
           ease: "power2.inOut",
@@ -296,6 +309,8 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
       el.removeEventListener("mousedown", onMouseDown);
       el.removeEventListener("touchstart", onMouseDown);
       document.removeEventListener("mousemove", onMouseMove);
@@ -303,18 +318,33 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
       document.removeEventListener("touchmove", onMouseMove);
       document.removeEventListener("touchend", onMouseUp);
     };
-  }, [skill.rotate]);
+  }, [skill.rotate, skill.style.filter]);
+
+  const { left, top, width, height } = skill.style;
 
   return (
     <div
       ref={elRef}
-      className="absolute cursor-grab active:cursor-grabbing select-none"
+      className="reveal-skill-item opacity-0 absolute cursor-grab active:cursor-grabbing select-none"
       style={{
-        ...skill.style,
-        transformStyle: "preserve-3d",
+        left,
+        top,
+        width,
+        height
       }}
     >
-      <div className="relative w-full h-full pointer-events-none">
+      <div
+        ref={imageWrapperRef}
+        className="relative w-full h-full pointer-events-none"
+        style={{
+          transformStyle: "preserve-3d",
+          filter: skill.style.filter,
+          willChange: "transform",
+          transform: "translate3d(0,0,0)",
+          WebkitBackfaceVisibility: "hidden",
+          backfaceVisibility: "hidden"
+        }}
+      >
         <Image
           src={skill.src}
           alt={skill.name}
@@ -330,6 +360,7 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
 
 function DraggableInterest({ interest }: { interest: InterestItem }) {
   const elRef = useRef<HTMLDivElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -361,27 +392,33 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
 
   useEffect(() => {
     const el = elRef.current;
-    if (!el) return;
+    const imgWrapper = imageWrapperRef.current;
+    if (!el || !imgWrapper) return;
 
     let isDragging = false;
     let lastX = 0;
     let lastY = 0;
     let currentRotateZ = interest.rotate;
 
-    gsap.set(el, {
-      x: 0,
-      y: 0,
+    gsap.set(imgWrapper, {
       rotateX: 0,
       rotateY: 0,
       rotateZ: interest.rotate,
+      scale: 1,
       transformPerspective: 1000
     });
 
     const onEnter = () => {
-      if (!isDragging) showTooltip();
+      if (!isDragging) {
+        showTooltip();
+        gsap.set(el, { zIndex: 999 });
+      }
     };
     const onLeave = () => {
       hideTooltip();
+      if (!isDragging) {
+        gsap.set(el, { zIndex: "" });
+      }
     };
 
     el.addEventListener("mouseenter", onEnter);
@@ -390,6 +427,7 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
     const onMouseDown = (e: MouseEvent | TouchEvent) => {
       isDragging = true;
       hideTooltip();
+      gsap.set(el, { zIndex: 1000 });
 
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
@@ -402,7 +440,7 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
         timeoutRef.current = null;
       }
 
-      gsap.to(el, {
+      gsap.to(imgWrapper, {
         scale: 1.2,
         filter: "drop-shadow(0px 18px 25px rgba(0, 0, 0, 0.45))",
         duration: 0.3,
@@ -436,7 +474,7 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
       const targetRotateY = gsap.utils.clamp(-30, 30, dx * 1.5);
       const targetRotateX = gsap.utils.clamp(-30, 30, -dy * 1.5);
 
-      gsap.to(el, {
+      gsap.to(imgWrapper, {
         rotateZ: currentRotateZ,
         rotateY: targetRotateY,
         rotateX: targetRotateX,
@@ -448,12 +486,13 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
     const onMouseUp = () => {
       isDragging = false;
       hideTooltip();
+      gsap.set(el, { zIndex: "" });
 
-      gsap.to(el, {
+      gsap.to(imgWrapper, {
         rotateX: 0,
         rotateY: 0,
         scale: 1,
-        filter: "drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.25))",
+        filter: interest.style.filter || "drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.25))",
         duration: 0.8,
         ease: "elastic.out(1, 0.5)"
       });
@@ -463,7 +502,7 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
       }
 
       timeoutRef.current = setTimeout(() => {
-        gsap.to(el, {
+        gsap.to(imgWrapper, {
           rotateZ: interest.rotate,
           duration: 1.2,
           ease: "power2.inOut",
@@ -495,18 +534,33 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
       document.removeEventListener("touchmove", onMouseMove);
       document.removeEventListener("touchend", onMouseUp);
     };
-  }, [interest.rotate]);
+  }, [interest.rotate, interest.style.filter]);
+
+  const { left, top, width, height } = interest.style;
 
   return (
     <div
       ref={elRef}
-      className="absolute cursor-grab active:cursor-grabbing select-none"
+      className="reveal-interest-item opacity-0 absolute cursor-grab active:cursor-grabbing select-none"
       style={{
-        ...interest.style,
-        transformStyle: "preserve-3d",
+        left,
+        top,
+        width,
+        height
       }}
     >
-      <div className="relative w-full h-full pointer-events-none">
+      <div
+        ref={imageWrapperRef}
+        className="relative w-full h-full pointer-events-none"
+        style={{
+          transformStyle: "preserve-3d",
+          filter: interest.style.filter,
+          willChange: "transform",
+          transform: "translate3d(0,0,0)",
+          WebkitBackfaceVisibility: "hidden",
+          backfaceVisibility: "hidden"
+        }}
+      >
         <Image
           src={interest.src}
           alt={interest.name}
@@ -517,12 +571,11 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
           className="object-contain"
         />
       </div>
-      {/* Tooltip */}
       <div
         ref={tooltipRef}
-        className="absolute left-1/2 pointer-events-none font-montreal font-normal whitespace-nowrap"
+        className="absolute left-1/2 pointer-events-none font-montreal font-normal whitespace-nowrap z-50"
         style={{
-          top: "-3vh",
+          top: "-3.5vh",
           transform: "translateX(-50%)",
           backgroundColor: "#000",
           color: "#fff7d3",
@@ -531,6 +584,7 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
           borderRadius: "0.6vh",
           opacity: 0,
           letterSpacing: "0.02em",
+          boxShadow: "0px 4px 10px rgba(0,0,0,0.15)"
         }}
       >
         {interest.desc}
@@ -539,31 +593,95 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
   );
 }
 
+// EditorialText removed for performance and non-fade entrance animations
+
 export default function Document() {
+  const [mounted, setMounted] = useState(false);
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+    const updateClock = () => {
+      const options = {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit" as const,
+        minute: "2-digit" as const,
+        second: "2-digit" as const,
+        hour12: false
+      };
+      setTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
+    };
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="w-full h-full relative text-[#AB1509]">
       {/* GRID LINES FOR BLUEPRINT STYLE */}
       {/* Left vertical line */}
-      <div className="absolute top-0 bottom-0 w-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "4%" }} />
+      <div className="reveal-line-v opacity-0 absolute top-0 bottom-0 w-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "4%" }} />
       {/* Right vertical line */}
-      <div className="absolute top-0 bottom-0 w-[1px] bg-[#AB1509] pointer-events-none" style={{ right: "4%" }} />
+      <div className="reveal-line-v opacity-0 absolute top-0 bottom-0 w-[1px] bg-[#AB1509] pointer-events-none" style={{ right: "4%" }} />
       {/* Center vertical line */}
-      <div className="absolute top-[17%] bottom-0 w-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%" }} />
+      <div className="reveal-line-v opacity-0 absolute top-[17%] bottom-0 w-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%" }} />
       {/* Header horizontal line */}
-      <div className="absolute left-0 right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ top: "17%" }} />
+      <div className="reveal-line-h opacity-0 absolute left-0 right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ top: "17%" }} />
       {/* Middle horizontal line (right side) */}
-      <div className="absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "66%" }} />
+      <div className="reveal-line-h opacity-0 absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "66%" }} />
       {/* Lower horizontal line (right side) */}
-      <div className="absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "89%" }} />
+      <div className="reveal-line-h opacity-0 absolute right-0 h-[1px] bg-[#AB1509] pointer-events-none" style={{ left: "50%", top: "89%" }} />
 
       {/* HEADER (Top Section) */}
       <div className="absolute left-[7%] right-[7%] flex items-center justify-between z-10" style={{ top: "0", height: "17%" }}>
-        <div className="flex items-baseline" style={{ gap: "0.5vh" }}>
+        <div className="reveal-header opacity-0 flex items-baseline" style={{ gap: "0.5vh" }}>
           <h1 className="text-[8vw] md:text-[12.5vh] font-medium font-tusker-standard tracking-tight leading-none mt-6">About.</h1>
-          <span className="border border-[#AB1509] rounded-full font-medium tracking-wider uppercase" style={{ padding: "0.1vh 0.8vh", fontSize: "0.9vh", lineHeight: "1" }}>cv</span>
         </div>
-        {/* Asterisk icon */}
-        <div className="text-[7.5vw] md:text-[4vh] font-bold leading-none select-none" style={{ transform: "translateY(0.4vh)" }}>*</div>
+        
+        {/* Far Right Header Info & Asterisk */}
+        <div className="reveal-header opacity-0 flex flex-col items-end justify-between h-full select-none" style={{ paddingTop: "2vh", paddingBottom: "1vh" }}>
+          <div className="text-[7.5vw] md:text-[8vh] font-bold leading-none select-none mt-2">*</div>
+          
+          {/* Location, Temperature & Indian Standard Time */}
+          <div 
+            className="flex items-center font-montreal font-normal text-[#AB1509]"
+            style={{ fontSize: "1.4vh", gap: "0.6vh", marginBottom: "0.1vh" }}
+          >
+            {/* Location Icon with Red Outline */}
+            <div className="flex items-center" style={{ gap: "0.4vh" }}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.8}
+                stroke="#AB1509"
+                className="w-[1.5vh] h-[1.5vh]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                />
+              </svg>
+              <span>Mangalore</span>
+            </div>
+
+            <span className="opacity-40">/</span>
+
+            {/* Temperature */}
+            <span>29°C</span>
+
+            <span className="opacity-40">/</span>
+
+            {/* Indian Standard Time */}
+            <span className="font-mono tabular-nums">{mounted ? time : "--:--:--"} IST</span>
+          </div>
+        </div>
       </div>
 
       {/* LEFT COLUMN (Education, Skills & Experience) */}
@@ -571,19 +689,25 @@ export default function Document() {
         {/* TOP SECTION: EDUCATION & SKILLS */}
         <div className="flex flex-col" style={{ gap: "2.5vh" }}>
           {/* EDUCATION */}
-          <div>
-            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Education</h2>
+          <div className="reveal-education opacity-0">
+            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>
+              Education
+            </h2>
             <div className="flex flex-col" style={{ gap: "4%" }}>
               <div style={{ marginBottom: "1%" }}>
-                <h3 className="text-[2.2vw] md:text-[1.7vh] font-medium leading-tight mb-2">Undergraduate - Information Science & Engineering</h3>
-                <p className="text-[1.6vw] md:text-[1.6vh] font-normal">Yenepoya Institute of Technology (2023 - 2027)</p>
+                <h3 className="text-[2.2vw] md:text-[1.7vh] font-medium leading-tight mb-2">
+                  Undergraduate - Information Science & Engineering
+                </h3>
+                <p className="text-[1.6vw] md:text-[1.6vh] font-normal">
+                  Yenepoya Institute of Technology (2023 - 2027)
+                </p>
               </div>
             </div>
           </div>
 
           {/* SKILLS */}
-          <div className="">
-            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Skills</h2>
+          <div>
+            <h2 className="reveal-skills-title opacity-0 text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Skills</h2>
             <div className="relative w-full h-[28vh]" style={{ perspective: "1000px" }}>
               {skills.map((skill, index) => (
                 <DraggableSkill key={index} skill={skill} />
@@ -592,8 +716,8 @@ export default function Document() {
           </div>
 
           {/* INTERESTS */}
-          <div className="" style={{ marginTop: "5vh" }}>
-            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>What I alt-tab to</h2>
+          <div style={{ marginTop: "5vh" }}>
+            <h2 className="reveal-interests-title opacity-0 text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>What I alt-tab to</h2>
             <div className="relative w-full h-[28vh]" style={{ perspective: "1000px", overflow: "visible" }}>
               {interests.map((interest, index) => (
                 <DraggableInterest key={index} interest={interest} />
@@ -603,39 +727,13 @@ export default function Document() {
         </div>
 
         {/* EXPERIENCE */}
-        <div className="flex flex-col justify-end" style={{ marginTop: "2%" }}>
-          {/* <h2 className="text-[3.2vw] md:text-[2vh] font-bold uppercase tracking-wide font-montreal" style={{ marginBottom: "3%" }}>Experience</h2>
-          <div className="flex flex-col" style={{ gap: "3%" }}>
-            <div style={{ marginBottom: "3%" }}>
-              <h3 className="text-[2.2vw] md:text-[1.4vh] font-medium leading-tight">Creative Technologist</h3>
-              <p className="text-[1.6vw] md:text-[1.2vh] font-medium opacity-80">INDEPENDENT | 2024 - PRESENT</p>
-              <p className="text-[1.4vw] md:text-[1.1vh] leading-tight" style={{ marginTop: "1%" }}>
-                Building fast, interactive portfolios, motion design suites, and performance-first 3D assets.
-              </p>
-            </div>
-            <div style={{ marginBottom: "3%" }}>
-              <h3 className="text-[2.2vw] md:text-[1.4vh] font-medium leading-tight">Design Head</h3>
-              <p className="text-[1.6vw] md:text-[1.2vh] font-medium opacity-80">ENROOT Festival, Dubai | 2024</p>
-              <p className="text-[1.4vw] md:text-[1.1vh] leading-tight" style={{ marginTop: "1%" }}>
-                Led visual design and spatial interaction strategy. Managed frontend architecture and code.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-[2.2vw] md:text-[1.4vh] font-medium leading-tight">Freelance Developer</h3>
-              <p className="text-[1.6vw] md:text-[1.2vh] font-medium opacity-80">Dubai | 2022 - 2024</p>
-              <p className="text-[1.4vw] md:text-[1.1vh] leading-tight" style={{ marginTop: "1%" }}>
-                Built high-fidelity reactive components, custom typography, and fine-tuned scroll timelines.
-              </p>
-            </div>
-          </div> */}
-        </div>
+       
       </div>
-
       {/* RIGHT COLUMN (Photo, Profile, Interactive Folder) */}
-      <div className="absolute flex flex-col justify-between font-montreal font-medium z-10" style={{ left: "53%", width: "40%", top: "19%", bottom: "6%" }}>
+      <div className="absolute flex flex-col justify-between font-montreal font-medium z-10" style={{ left: "53%", width: "40%", top: "18%", bottom: "6%" }}>
         {/* PHOTO & INITIALS & PROFILE */}
         <div>
-          <div className="relative w-full aspect-[4/3] border border-[#AB1509] overflow-hidden">
+          <div className="reveal-photo opacity-0 relative w-full aspect-[4/3] border border-[#AB1509] overflow-hidden">
             <Image
               src="/developer_portrait.png"
               alt="Ali Ahmed Portrait"
@@ -645,23 +743,25 @@ export default function Document() {
               className="object-cover grayscale contrast-125 brightness-95"
             />
           </div>
-
-          <div className="flex items-baseline" style={{ marginTop: "4%" }}>
-            <h2 className="text-[6.5vw] md:text-[4.8vh] tracking-tight font-medium font-montreal leading-none">
+ 
+          <div className="reveal-profile opacity-0 flex items-baseline" style={{ marginTop: "4%" }}>
+            <h2 className="text-[6.5vw] md:text-[4.5vh] tracking-tight font-medium font-montreal leading-none">
               <span className="text-[9vw] md:text-[5.6vh] font-medium font-tusker-standard">A</span>li <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">A</span>hmed <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">S</span>yed
             </h2>
           </div>
-
-          <div style={{ marginTop: "3%" }}>
+ 
+          <div className="reveal-profile opacity-0" style={{ marginTop: "3%" }}>
             {/* <h3 className="text-[2.2vw] md:text-[2vh] monitor:text-[1.5vh] font-semibold uppercase tracking-wider font-montreal" style={{ marginBottom: "1%" }}>Profile</h3> */}
             <p className="text-[1.6vw] md:text-[1.7vh] monitor:text-[1.5vh] leading-tight font-normal">
-              I started building websites because the ones I kept seeing were boring. That annoyance turned into a skillset, which turned into clients, which turned into this. 
+              I started building websites because the ones I kept seeing were boring. That annoyance turned into a skillset, which turned into clients, which turned into this.
+              <br />
+              I'm a full stack dev who believes great products are built through equal parts design and code.
             </p>
           </div>
         </div>
-
+ 
         {/* PHYSICAL APPROACH FOLDER */}
-        <div className="flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "40%" }}>
+        <div className="reveal-folder opacity-0 flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "40%" }}>
           <ImagesBadge folderSize={{ width: 180, height: 120 }} />
         </div>
       </div>
@@ -669,7 +769,7 @@ export default function Document() {
       {/* FOOTER QUOTE (At the bottom right, below 89% horizontal line) */}
       <div 
         id="contact"
-        className="absolute z-10 flex flex-col justify-center text-[#AB1509]" 
+        className="reveal-footer opacity-0 absolute z-10 flex flex-col justify-center text-[#AB1509]" 
         style={{ left: "53%", width: "40%", bottom: "2%", height: "8%" }}
       >
         <div className="w-full flex flex-col select-none">
