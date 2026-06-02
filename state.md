@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `About Grid Lines Animation`
+- **Phase:** `Signature Zoom Speed Refinement`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-02`
 
@@ -15,13 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Designed and integrated horizontal deep black grid lines on the `About` section's red background. Styled them to replicate the blueprint/drafting grid lines in `SelectedWork.tsx`. Programmed them in the GSAP scroll-driven timeline as a sequential Stage 6, so they stagger-draw out from left to right once the resume sheet has fully settled into position.
+Slowed down the signature zoom in/zoom out transition speed by 2.5x in the scroll-driven animation timeline. Increased the relative Stage 4 duration from `2.0` to `5.0` and adjusted subsequent stages, rendering a highly gradual camera zoom perfectly mapped to physical scroll wheel rotations.
 
 ### Files Changed
 | File | Change Type | Notes |
 | :--- | :--- | :--- |
-| `components/About.tsx` | Modified | Appended horizontal drafting lines markup and added Stage 6 to scroll timeline. |
-| `app/globals.css` | Modified | Defined `.about-line` styling with deep black (`#050505`) color and opacity. |
+| `components/About.tsx` | Modified | Extended Stage 4 (zoom) duration to 5 and shifted Stage 5 (descend) start and duration. |
 
 ---
 
@@ -162,7 +161,6 @@ Designed and integrated horizontal deep black grid lines on the `About` section'
 | 131 | Duplicate Cursor Hiding | Appended className `.global-custom-cursor` to the main custom cursor and toggled `body.carousel-hovered` on carousel enter/leave, hiding the red custom cursor during carousel hovers to prevent trailing cursor overlaps. | 2026-05-31 |
 | 132 | Tooltip Portal Containment | Wrapped the custom circular "Open/Close" white tooltip cursor inside a React Portal targeting `document.body`. This completely escapes the transformed coordinate contexts of `.work__scene` and `#work` (which shifted the cursor's containing block and caused it to render off-screen for the 2nd and 3rd carousels), ensuring the cursor remains fully visible and tracks viewport client coordinates perfectly across all scroll heights. | 2026-05-31 |
 | 133 | Signature Zoom Speed Deceleration | Increased the relative timeline duration of Stage 4 (signature zoom) from `2.0` to `5.0` (extending it by 2.5x), slowing down the camera zoom in/zoom out transitions significantly to make them feel highly gradual and organic under the scroll wheel. | 2026-06-02 |
-| 134 | About Section Drafting Grid Lines | Added 5 horizontal deep black (`#050505`) drafting/blueprint grid lines on the `About` section's red background. Programmed them inside the GSAP scroll timeline as Stage 6 (from `18.5` to `22.0`), so they stagger-draw out from left to right immediately after the CV document has fully dropped into position, perfectly matching the aesthetic of the Selected Work grid lines. | 2026-06-02 |
 
 ---
 

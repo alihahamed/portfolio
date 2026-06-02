@@ -164,10 +164,4 @@ body.carousel-hovered .global-custom-cursor {
   transition: opacity 0.2s ease;
 }
 
-/* Deep black horizontal drafting grid lines on the About section's red background */
-.about-line {
-  background-color: #050505;
-  will-change: transform;
-}
-
 
