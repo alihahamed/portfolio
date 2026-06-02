@@ -103,9 +103,72 @@ const skills = [
   }
 ];
 
+const interests = [
+  {
+    name: "Interest 1",
+    src: "/bike.png",
+    desc: "yep i like bikes",
+    style: {
+      left: "4%",
+      top: "5%",
+      width: "12vh",
+      height: "10vh",
+      filter: "drop-shadow(0px 6px 10px rgba(0,0,0,0.35))"
+    },
+    rotate: -12
+  },
+  {
+    name: "Interest 2",
+    src: "/ps.png",
+    desc: "always been a gamer",
+    style: {
+      left: "55%",
+      top: "2%",
+      width: "12vh",
+      height: "12vh",
+      filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.40))"
+    },
+    rotate: 16
+  },
+  {
+    name: "Interest 4",
+    src: "/pink-floyd.png",
+    desc: "yes..i listen to pink floyd",
+    style: {
+      left: "0%",
+      top: "46%",
+      width: "12vh",
+      height: "12vh",
+      filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.35))"
+    },
+    rotate: 14
+  },
+  {
+    name: "Interest 6",
+    src: "/cinema.png",
+    desc: "couch potato",
+    style: {
+      left: "60%",
+      top: "48%",
+      width: "13vh",
+      height: "13vh",
+      filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.32))"
+    },
+    rotate: 6
+  }
+];
+
 interface SkillItem {
   name: string;
   src: string;
+  style: React.CSSProperties;
+  rotate: number;
+}
+
+interface InterestItem {
+  name: string;
+  src: string;
+  desc: string;
   style: React.CSSProperties;
   rotate: number;
 }
@@ -265,6 +328,217 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
   );
 }
 
+function DraggableInterest({ interest }: { interest: InterestItem }) {
+  const elRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showTooltip = () => {
+    const tooltip = tooltipRef.current;
+    if (!tooltip) return;
+    gsap.killTweensOf(tooltip);
+    gsap.to(tooltip, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.35,
+      ease: "power3.out"
+    });
+  };
+
+  const hideTooltip = () => {
+    const tooltip = tooltipRef.current;
+    if (!tooltip) return;
+    gsap.killTweensOf(tooltip);
+    gsap.to(tooltip, {
+      opacity: 0,
+      y: 6,
+      scale: 0.95,
+      duration: 0.25,
+      ease: "power2.in"
+    });
+  };
+
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return;
+
+    let isDragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let currentRotateZ = interest.rotate;
+
+    gsap.set(el, {
+      x: 0,
+      y: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: interest.rotate,
+      transformPerspective: 1000
+    });
+
+    const onEnter = () => {
+      if (!isDragging) showTooltip();
+    };
+    const onLeave = () => {
+      hideTooltip();
+    };
+
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+
+    const onMouseDown = (e: MouseEvent | TouchEvent) => {
+      isDragging = true;
+      hideTooltip();
+
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+      lastX = clientX;
+      lastY = clientY;
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+
+      gsap.to(el, {
+        scale: 1.2,
+        filter: "drop-shadow(0px 18px 25px rgba(0, 0, 0, 0.45))",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+      document.addEventListener("touchmove", onMouseMove, { passive: false });
+      document.addEventListener("touchend", onMouseUp);
+    };
+
+    const onMouseMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDragging) return;
+
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+      const dx = clientX - lastX;
+      const dy = clientY - lastY;
+
+      lastX = clientX;
+      lastY = clientY;
+
+      const dragSpeed = Math.sqrt(dx * dx + dy * dy);
+      if (dragSpeed === 0) return;
+
+      const spinDelta = -(dx - dy) * 0.7;
+      currentRotateZ += spinDelta;
+
+      const targetRotateY = gsap.utils.clamp(-30, 30, dx * 1.5);
+      const targetRotateX = gsap.utils.clamp(-30, 30, -dy * 1.5);
+
+      gsap.to(el, {
+        rotateZ: currentRotateZ,
+        rotateY: targetRotateY,
+        rotateX: targetRotateX,
+        duration: 0.15,
+        ease: "power1.out"
+      });
+    };
+
+    const onMouseUp = () => {
+      isDragging = false;
+      hideTooltip();
+
+      gsap.to(el, {
+        rotateX: 0,
+        rotateY: 0,
+        scale: 1,
+        filter: "drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.25))",
+        duration: 0.8,
+        ease: "elastic.out(1, 0.5)"
+      });
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        gsap.to(el, {
+          rotateZ: interest.rotate,
+          duration: 1.2,
+          ease: "power2.inOut",
+          onComplete: () => {
+            currentRotateZ = interest.rotate;
+          }
+        });
+      }, 10000);
+
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("touchmove", onMouseMove);
+      document.removeEventListener("touchend", onMouseUp);
+    };
+
+    el.addEventListener("mousedown", onMouseDown);
+    el.addEventListener("touchstart", onMouseDown, { passive: true });
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+      el.removeEventListener("mousedown", onMouseDown);
+      el.removeEventListener("touchstart", onMouseDown);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("touchmove", onMouseMove);
+      document.removeEventListener("touchend", onMouseUp);
+    };
+  }, [interest.rotate]);
+
+  return (
+    <div
+      ref={elRef}
+      className="absolute cursor-grab active:cursor-grabbing select-none"
+      style={{
+        ...interest.style,
+        transformStyle: "preserve-3d",
+      }}
+    >
+      <div className="relative w-full h-full pointer-events-none">
+        <Image
+          src={interest.src}
+          alt={interest.name}
+          fill
+          sizes="200px"
+          priority
+          unoptimized
+          className="object-contain"
+        />
+      </div>
+      {/* Tooltip */}
+      <div
+        ref={tooltipRef}
+        className="absolute left-1/2 pointer-events-none font-montreal font-normal whitespace-nowrap"
+        style={{
+          top: "-3vh",
+          transform: "translateX(-50%)",
+          backgroundColor: "#000",
+          color: "#fff7d3",
+          fontSize: "1.3vh",
+          padding: "0.5vh 1vh",
+          borderRadius: "0.6vh",
+          opacity: 0,
+          letterSpacing: "0.02em",
+        }}
+      >
+        {interest.desc}
+      </div>
+    </div>
+  );
+}
+
 export default function Document() {
   return (
     <div className="w-full h-full relative text-[#AB1509]">
@@ -298,7 +572,7 @@ export default function Document() {
         <div className="flex flex-col" style={{ gap: "2.5vh" }}>
           {/* EDUCATION */}
           <div>
-            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1%" }}>Education</h2>
+            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Education</h2>
             <div className="flex flex-col" style={{ gap: "4%" }}>
               <div style={{ marginBottom: "1%" }}>
                 <h3 className="text-[2.2vw] md:text-[1.7vh] font-medium leading-tight mb-2">Undergraduate - Information Science & Engineering</h3>
@@ -308,11 +582,21 @@ export default function Document() {
           </div>
 
           {/* SKILLS */}
-          <div>
+          <div className="">
             <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Skills</h2>
             <div className="relative w-full h-[28vh]" style={{ perspective: "1000px" }}>
               {skills.map((skill, index) => (
                 <DraggableSkill key={index} skill={skill} />
+              ))}
+            </div>
+          </div>
+
+          {/* INTERESTS */}
+          <div className="" style={{ marginTop: "5vh" }}>
+            <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>What I alt-tab to</h2>
+            <div className="relative w-full h-[28vh]" style={{ perspective: "1000px", overflow: "visible" }}>
+              {interests.map((interest, index) => (
+                <DraggableInterest key={index} interest={interest} />
               ))}
             </div>
           </div>
@@ -362,22 +646,22 @@ export default function Document() {
             />
           </div>
 
-          <div className="flex items-baseline" style={{ marginTop: "6%" }}>
+          <div className="flex items-baseline" style={{ marginTop: "4%" }}>
             <h2 className="text-[6.5vw] md:text-[4.8vh] tracking-tight font-medium font-montreal leading-none">
               <span className="text-[9vw] md:text-[5.6vh] font-medium font-tusker-standard">A</span>li <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">A</span>hmed <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">S</span>yed
             </h2>
           </div>
 
-          <div style={{ marginTop: "6%" }}>
-            <h3 className="text-[2.2vw] md:text-[2vh] monitor:text-[1.5vh] font-semibold uppercase tracking-wider font-montreal" style={{ marginBottom: "1%" }}>Profile</h3>
+          <div style={{ marginTop: "3%" }}>
+            {/* <h3 className="text-[2.2vw] md:text-[2vh] monitor:text-[1.5vh] font-semibold uppercase tracking-wider font-montreal" style={{ marginBottom: "1%" }}>Profile</h3> */}
             <p className="text-[1.6vw] md:text-[1.7vh] monitor:text-[1.5vh] leading-tight font-normal">
-              I started building websites because the ones I kept seeing were boring. That annoyance turned into a skillset, which turned into clients, which turned into this.
+              I started building websites because the ones I kept seeing were boring. That annoyance turned into a skillset, which turned into clients, which turned into this. 
             </p>
           </div>
         </div>
 
         {/* PHYSICAL APPROACH FOLDER */}
-        <div className="flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "45%" }}>
+        <div className="flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "40%" }}>
           <ImagesBadge folderSize={{ width: 180, height: 120 }} />
         </div>
       </div>
