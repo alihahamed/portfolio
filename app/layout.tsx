@@ -89,6 +89,23 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-full flex flex-col bg-[#050505] text-white relative">
+        {/* Inline script to prevent preloader flash on fresh sessions */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var hasPlayed = sessionStorage.getItem("portfolio-preloader-played");
+                  if (hasPlayed !== "true") {
+                    document.documentElement.classList.add("preloader-active");
+                  } else {
+                    document.documentElement.classList.add("preloader-played");
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <PageTransitionProvider>
           {/* Global WebGL Background Canvas */}
           <SilkBackground />
@@ -97,9 +114,11 @@ export default function RootLayout({
           <SmoothCursor />
           
           {/* Butter-Smooth Lenis Scrolling Wrapper */}
-          <SmoothScroll>
-            {children}
-          </SmoothScroll>
+          <div id="app-main-content" className="w-full min-h-full flex flex-col">
+            <SmoothScroll>
+              {children}
+            </SmoothScroll>
+          </div>
         </PageTransitionProvider>
       </body>
     </html>

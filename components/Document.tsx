@@ -679,7 +679,7 @@ export default function Document() {
             <span className="opacity-40">/</span>
 
             {/* Indian Standard Time */}
-            <span className="font-mono tabular-nums">{mounted ? time : "--:--:--"} IST</span>
+            <span className=" tabular-nums">{mounted ? time : "--:--:--"} IST</span>
           </div>
         </div>
       </div>
@@ -689,7 +689,7 @@ export default function Document() {
         {/* TOP SECTION: EDUCATION & SKILLS */}
         <div className="flex flex-col" style={{ gap: "2.5vh" }}>
           {/* EDUCATION */}
-          <div className="reveal-education opacity-0">
+          <div className="reveal-education">
             <h2 className="text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>
               Education
             </h2>
@@ -707,7 +707,7 @@ export default function Document() {
 
           {/* SKILLS */}
           <div>
-            <h2 className="reveal-skills-title opacity-0 text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Skills</h2>
+            <h2 className="reveal-skills-title text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>Skills</h2>
             <div className="relative w-full h-[28vh]" style={{ perspective: "1000px" }}>
               {skills.map((skill, index) => (
                 <DraggableSkill key={index} skill={skill} />
@@ -717,7 +717,7 @@ export default function Document() {
 
           {/* INTERESTS */}
           <div style={{ marginTop: "5vh" }}>
-            <h2 className="reveal-interests-title opacity-0 text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>What I alt-tab to</h2>
+            <h2 className="reveal-interests-title text-[3.2vw] md:text-[2vh] font-semibold uppercase tracking-wide font-montreal" style={{ marginBottom: "1.5%" }}>What I alt-tab to</h2>
             <div className="relative w-full h-[28vh]" style={{ perspective: "1000px", overflow: "visible" }}>
               {interests.map((interest, index) => (
                 <DraggableInterest key={index} interest={interest} />
@@ -733,7 +733,7 @@ export default function Document() {
       <div className="absolute flex flex-col justify-between font-montreal font-medium z-10" style={{ left: "53%", width: "40%", top: "18%", bottom: "6%" }}>
         {/* PHOTO & INITIALS & PROFILE */}
         <div>
-          <div className="reveal-photo opacity-0 relative w-full aspect-[4/3] border border-[#AB1509] overflow-hidden">
+          <div className="reveal-photo relative w-full aspect-[4/3] border border-[#AB1509] overflow-hidden">
             <Image
               src="/developer_portrait.png"
               alt="Ali Ahmed Portrait"
@@ -744,13 +744,13 @@ export default function Document() {
             />
           </div>
  
-          <div className="reveal-profile opacity-0 flex items-baseline" style={{ marginTop: "4%" }}>
+          <div className="reveal-profile flex items-baseline" style={{ marginTop: "4%" }}>
             <h2 className="text-[6.5vw] md:text-[4.5vh] tracking-tight font-medium font-montreal leading-none">
               <span className="text-[9vw] md:text-[5.6vh] font-medium font-tusker-standard">A</span>li <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">A</span>hmed <span className="text-[9vw] md:text-[5.5vh] font-medium font-tusker-standard">S</span>yed
             </h2>
           </div>
  
-          <div className="reveal-profile opacity-0" style={{ marginTop: "3%" }}>
+          <div className="reveal-profile" style={{ marginTop: "3%" }}>
             {/* <h3 className="text-[2.2vw] md:text-[2vh] monitor:text-[1.5vh] font-semibold uppercase tracking-wider font-montreal" style={{ marginBottom: "1%" }}>Profile</h3> */}
             <p className="text-[1.6vw] md:text-[1.7vh] monitor:text-[1.5vh] leading-tight font-normal">
               I started building websites because the ones I kept seeing were boring. That annoyance turned into a skillset, which turned into clients, which turned into this.
@@ -761,7 +761,7 @@ export default function Document() {
         </div>
  
         {/* PHYSICAL APPROACH FOLDER */}
-        <div className="reveal-folder opacity-0 flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "40%" }}>
+        <div className="reveal-folder flex items-center justify-center z-20 monitor:!h-[40%]" style={{ height: "40%" }}>
           <ImagesBadge folderSize={{ width: 180, height: 120 }} />
         </div>
       </div>
@@ -769,7 +769,7 @@ export default function Document() {
       {/* FOOTER QUOTE (At the bottom right, below 89% horizontal line) */}
       <div 
         id="contact"
-        className="reveal-footer opacity-0 absolute z-10 flex flex-col justify-center text-[#AB1509]" 
+        className="reveal-footer absolute z-10 flex flex-col justify-center text-[#AB1509]" 
         style={{ left: "53%", width: "40%", bottom: "2%", height: "8%" }}
       >
         <div className="w-full flex flex-col select-none">

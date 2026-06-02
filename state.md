@@ -6,28 +6,27 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – Editorial Entrance Animations`
+- **Phase:** `Feature Development – Contact Section Circular Reveal`
 - **Status:** `Complete`
-- **Last Updated:** `2026-06-02`
+- **Last Updated:** `2026-06-03`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Designed and implemented a highly optimized, ultra-premium editorial entrance reveal animation system for the CV document. Completely eliminated all springy/elastic bounces, 3D flips, rotations, and **all opacity-based fade-in animations** to maintain a clean, sophisticated, flat high-contrast aesthetic with near-zero computational overhead:
-1. **Grid Lines Wipes (Time 14.2)**: Red blueprint boundary lines dynamically scale in (`scaleY: 0` to `1` for vertical / `scaleX: 0` to `1` for horizontal) using a smooth, hardware-accelerated `power4.inOut` ease, acting as if they are drafted on the screen.
-2. **Horizontal/Vertical Plotter Mask Wipes**: Text containers (Header, Education, Profile, Footer) and physical folder components slide and wipe into view using highly performant CSS clipping masks (`clipPath: inset(...)`), with absolutely zero muddy opacity fading.
-3. **Smooth 2D Icon Pops**: Draggable Skills and Interests icons smoothly pop out and scale up from invisible (`scale: 0` to `1`) into position using a clean deceleration curve (`power4.out`, duration: 1.4s) and elegant staggering, with zero transparency animations.
-4. **DOM & Resource Optimization**: Removed all word-splitting and letter-splitting span wrapper elements (`EditorialText`) in [Document.tsx](file:///c:/Users/aliah/Pictures/portfolio/components/Document.tsx) to restore clean plain-text nodes. This reduces the document size by hundreds of elements, eliminating CPU and layout paint stutter during scroll scrub.
-
-All entrance animations reset smoothly on reverse scroll.
+Fixed and polished the `<Contact />` section circular reveal transition to ensure it is visible and performs beautifully when scrolling past the `<About />` section:
+1. **Stacking Context Correction**: Added `z-[60]` to the `<Contact />` container to place it on top of `<About />`'s fixed overlay elements (`z-30`/`z-50`).
+2. **Fixed Viewport clipPath Circle**: Changed the container to a viewport-fixed (`fixed inset-0`) element with `clipPath: circle(R% at 50% 100%)` animation, preventing parent scroll container clipping and maintaining a perfect circular curve at the bottom of the screen.
+3. **Slowed Scroll Speed**: Increased the section height to `h-[200vh]` to double the scroll scrub duration, making the circular reveal transition expand much slower and more elegantly.
+4. **Resume Pause / Hold**: Increased `<About />` height to `h-[400vh]` and added a `100vh` scroll hold (6.1 units) at the end of its timeline, pinning the fully-rendered resume on screen for a full viewport scroll before the circular background transition begins.
+5. **Editorial Title Reveal**: Added a giant bold "CONTACT" heading (`font-tusker-standard text-[12vw] md:text-[15vw]`) inside the fixed circle container so that it is naturally revealed by the circular mask.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Document.tsx`   | Modified    | Removed EditorialText component and all character-splitting wraps to optimize DOM overhead |
-| `components/About.tsx`      | Modified    | Switched timeline triggers to pure scale and clip-path wipes, stripping all opacity transitions |
+| `components/Contact.tsx`    | Modified    | Switched to fixed viewport clip-path circle expander and nested title reveal |
+| `components/About.tsx`      | Modified    | Increased height to 400vh and added scroll hold at the end of the timeline |
 
 ---
 
@@ -47,6 +46,15 @@ All entrance animations reset smoothly on reverse scroll.
 | 10| Unclipped Folder Reveal Translation   | Slides up from y: 150 without a clipping mask to allow fanned cards to overflow unclipped at the top boundary | 2026-06-02 |
 | 11| Stacking Lift for Draggable Stickers  | Dynamically raises z-index to 999 on hover and 1000 on drag to keep active stickers and tooltips floating at the top of the stack | 2026-06-02 |
 | 12| Isolate Interests Title Shutter Mask  | Moved the reveal-interests-title class onto the h2 itself instead of wrapping the entire interests section. This avoids parent clipPath mask clipping overflowing tooltips | 2026-06-02 |
+| 13| Block-Render Script for Preloader     | Executing a script at the top of the body before layout paints guarantees that fresh sessions are instantly hidden, preventing hero flash | 2026-06-02 |
+| 14| Instant Glow & Canvas Fade-in         | Uses an SSR-ready radial gradient glow for immediate visual feedback and fades in the WebGL canvas dynamically to prevent canvas snap | 2026-06-02 |
+| 15| Use scale over clipPath for circle    | GPU-accelerated scaling transforms on a circular div are more performant and cross-browser stable than complex CSS clip-path interpolation on large screens (Replaced by Decision 18) | 2026-06-02 |
+| 16| Raise Contact z-index to z-[60]      | Allows the contact section to stack on top of the fixed z-30/z-50 elements in the preceding About section as it scrolls up, enabling the transparent overlap reveal | 2026-06-02 |
+| 17| Wipe reveal for CONTACT heading       | Synchronizes the bold title entrance with the final 40% of the scroll timeline, ensuring high-contrast visibility only after the black background covers the screen | 2026-06-02 |
+| 18| Fixed Viewport clipPath circle reveal | Using a fixed inset-0 viewport container with clip-path: circle(R at 50% 100%) prevents the circle from being clipped by the parent scrolling section and ensures a perfect, centered circle curve | 2026-06-03 |
+| 19| Increased Contact height to h-[200vh] | Doubles the scroll distance of the scrub, letting the circular background reveal expand slowly and elegantly instead of snapping instantly | 2026-06-03 |
+| 20| Pin resume longer via About hold    | Increased About section height to h-[400vh] and added a 100vh scroll hold (6.1 units) at the end of the timeline. This keeps the fully-rendered resume pinned stationary before entering the contact section circular reveal | 2026-06-03 |
+| 21| Reduce line drawing delay by 1.5s    | Adjusted blueprint grid lines drawing delay from 3.5s to 2.0s in About.tsx to trigger line drafting faster after text elements settle | 2026-06-03 |
 
 ---
 

@@ -9,6 +9,7 @@ import ScrollArrow from "@/components/ScrollArrow";
 import { TransitionLink, useTransitionContext } from "@/components/PageTransition";
 import SelectedWork from "@/components/SelectedWork";
 import About from "@/components/About";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   const context = useTransitionContext();
@@ -381,6 +382,9 @@ export default function Home() {
 
       {/* ABOUT ME TRANSITION & DOCUMENT SECTION */}
       <About />
+
+      {/* FINAL CONTACT SECTION WITH CIRCULAR REVEAL */}
+      <Contact />
     </div>
   );
 }

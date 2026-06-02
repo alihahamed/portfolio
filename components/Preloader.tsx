@@ -75,12 +75,11 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
     };
   }, [isMounted, triggerPreloadTransition, triggerEnterTransition, onComplete]);
 
-  if (!isMounted) return null;
-
+  // Render the preloader DOM immediately during SSR so the black screen covers the page instantly
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 w-full h-dvh bg-[#050505] select-none grid grid-rows-3 overflow-hidden"
+      className="preloader-container fixed inset-0 w-full h-dvh bg-[#050505] select-none grid grid-rows-3 overflow-hidden"
       style={{ zIndex: 9999 }} // Underneath transition overlay (99999) to cover smoothly
     >
       {/* Row 1 (Top): "MOST WEBSITES LOOK THE SAME" - stretched end-to-end with slight top margin */}

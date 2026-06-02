@@ -8,8 +8,7 @@ import { SplitText } from "gsap/SplitText";
 import { CustomEase } from "gsap/CustomEase";
 
 // Register GSAP plugins
-// Dynamically import Preloader to prevent circular dependency and disable SSR
-const Preloader = dynamic(() => import("./Preloader"), { ssr: false });
+import Preloader from "./Preloader";
 
 interface TransitionContextType {
   triggerTransition: (href: string) => Promise<void>;
@@ -47,6 +46,7 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
     const hasPlayed = sessionStorage.getItem("portfolio-preloader-played");
     if (hasPlayed === "true") {
       setShowPreloader(false);
+      document.documentElement.classList.remove("preloader-active");
     }
   }, []);
 
@@ -284,6 +284,7 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
           onComplete={() => {
             sessionStorage.setItem("portfolio-preloader-played", "true");
             setShowPreloader(false);
+            document.documentElement.classList.remove("preloader-active");
           }}
         />
       )}

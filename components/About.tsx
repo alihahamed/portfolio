@@ -150,14 +150,26 @@ export default function About() {
           13.5
         );
 
+        // --- PREPARE INITIAL STATES FOR EDITORIAL REVEALS (Replacing opacity-0 fade-ins) ---
+        gsap.set(".reveal-line-v", { scaleY: 0, transformOrigin: "top" });
+        gsap.set(".reveal-line-h", { scaleX: 0, transformOrigin: "left" });
+        gsap.set(".reveal-footer", { y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-interests-title, .reveal-skills-title", { x: -20, clipPath: "inset(0% 100% 0% 0%)" });
+        gsap.set(".reveal-interest-item, .reveal-skill-item", { scale: 0 });
+        gsap.set(".reveal-folder", { y: 150 });
+        gsap.set(".reveal-profile, .reveal-education", { y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-photo", { y: 40, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-header", { y: -20, clipPath: "inset(0% 0% 100% 0%)" });
+        // -------------------------------------------------------------------------------------
+
         // Staggered callbacks to trigger entrance reveals during document descent
         // 1. Grid Lines and Footer Reveal (Time 14.2)
         tl.call(() => {
           const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
           if (isForward) {
-            // Blueprint grid drafting lines draw themselves in
-            gsap.to(".reveal-line-v", { scaleY: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto" });
-            gsap.to(".reveal-line-h", { scaleX: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto" });
+            // Blueprint grid drafting lines draw themselves in with a massive delay so they appear after everything else
+            gsap.to(".reveal-line-v", { scaleY: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto", delay: 2.0 });
+            gsap.to(".reveal-line-h", { scaleX: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto", delay: 2.0 });
             // Editorial reveal footer container via high-performance clipPath wipe
             gsap.to(".reveal-footer", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
           } else {
@@ -238,6 +250,10 @@ export default function About() {
           }
         }, undefined, 18.2);
 
+        // Add a 100vh scroll hold at the end of the document animation (duration 6.1 units)
+        // to pin the fully rendered resume before entering the contact section circular reveal.
+        tl.to({}, { duration: 6.1 }, 18.2);
+
       });
     };
 
@@ -262,7 +278,7 @@ export default function About() {
     <section
       id="about"
       ref={containerRef}
-      className="relative w-full h-[300vh] bg-transparent pointer-events-none z-20"
+      className="relative w-full h-[400vh] bg-transparent pointer-events-none z-20"
     >
       <div className="fixed inset-0 w-full h-screen overflow-hidden pointer-events-none">
         

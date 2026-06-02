@@ -164,4 +164,16 @@ body.carousel-hovered .global-custom-cursor {
   transition: opacity 0.2s ease;
 }
 
+/* Inline preloader active rule to prevent content flash during SSR hydration */
+html.preloader-active #app-main-content {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Hide preloader immediately on refresh to prevent black screen flash */
+html.preloader-played .preloader-container {
+  display: none !important;
+}
+
 
