@@ -118,6 +118,17 @@ export default function About() {
           0
         );
 
+        // Slowly animate background gradient vertical position on scroll
+        tl.fromTo(redBgRef.current,
+          { backgroundPositionY: "100%" },
+          { 
+            backgroundPositionY: "0%", 
+            duration: 24.3, 
+            ease: "none" 
+          },
+          0
+        );
+
         // Stage 2 (time 4.5 to 8.0): Signature physically draws over time (scrubbed)
         const sigProxy = { val: 0 };
         tl.to(sigProxy, {
@@ -284,8 +295,13 @@ export default function About() {
         
         <div
           ref={redBgRef}
-          className="absolute inset-0 w-full h-full bg-[#AB1509] flex items-center justify-center overflow-hidden z-30 pointer-events-auto"
-          style={{ transform: "translateY(100%)" }}
+          className="about-red-bg absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden z-30 pointer-events-auto"
+          style={{ 
+            transform: "translateY(100%)",
+            background: "linear-gradient(to bottom, #000000 0%, #150100 35%, #b80d00 75%, #ff1500 100%)",
+            backgroundSize: "100% 200%",
+            backgroundPositionY: "100%"
+          }}
         >
           <div
             ref={signatureWrapRef}
@@ -304,7 +320,7 @@ export default function About() {
 
           <div
             ref={docWrapRef}
-            className="absolute left-1/2 w-[90vw] h-screen md:w-[78vh] md:h-screen lg:w-[82vh] lg:h-screen bg-[#fff7d3] border-l border-r border-[#AB1509] shadow-[0_30px_70px_rgba(0,0,0,0.7)] z-50 overflow-visible select-none"
+            className="about-doc-wrap absolute left-1/2 w-[90vw] h-screen md:w-[78vh] md:h-screen lg:w-[82vh] lg:h-screen bg-[#fff7d3] border-l border-r border-[#AB1509] shadow-[0_30px_70px_rgba(0,0,0,0.7)] z-50 overflow-visible select-none"
             style={{ 
               transform: "translate(-50%, -150%)", 
               willChange: "transform"

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – Contact Section Circular Reveal`
+- **Phase:** `Feature Development – Contact Section Phone Number Link`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-03`
 
@@ -15,18 +15,15 @@
 ## Last Session Work
 
 ### Summary
-Fixed and polished the `<Contact />` section circular reveal transition to ensure it is visible and performs beautifully when scrolling past the `<About />` section:
-1. **Stacking Context Correction**: Added `z-[60]` to the `<Contact />` container to place it on top of `<About />`'s fixed overlay elements (`z-30`/`z-50`).
-2. **Fixed Viewport clipPath Circle**: Changed the container to a viewport-fixed (`fixed inset-0`) element with `clipPath: circle(R% at 50% 100%)` animation, preventing parent scroll container clipping and maintaining a perfect circular curve at the bottom of the screen.
-3. **Slowed Scroll Speed**: Increased the section height to `h-[200vh]` to double the scroll scrub duration, making the circular reveal transition expand much slower and more elegantly.
-4. **Resume Pause / Hold**: Increased `<About />` height to `h-[400vh]` and added a `100vh` scroll hold (6.1 units) at the end of its timeline, pinning the fully-rendered resume on screen for a full viewport scroll before the circular background transition begins.
-5. **Editorial Title Reveal**: Added a giant bold "CONTACT" heading (`font-tusker-standard text-[12vw] md:text-[15vw]`) inside the fixed circle container so that it is naturally revealed by the circular mask.
+Added phone number link to the `<Contact />` section with responsive animations:
+1. **Interactive Roll-Swap Link**: Added `+91 8867145921` below the email. When hovered, it transitions to "call me" with a phone SVG icon.
+2. **Details Flex Layout**: Wrapped both email and phone links inside an absolute flex stack (`gap-1.5 md:gap-3`) to maintain responsive alignment below the heading.
+3. **Sequential Stagger Entrance**: Configured the GSAP timeline to stagger the entrance wipes of the email and phone elements (`stagger: 0.08`), creating a clean, editorial layout reveal.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`    | Modified    | Switched to fixed viewport clip-path circle expander and nested title reveal |
-| `components/About.tsx`      | Modified    | Increased height to 400vh and added scroll hold at the end of the timeline |
+| `components/Contact.tsx`    | Modified    | Wrapped email and new phone link in flex container; updated GSAP transition to stagger entrance |
 
 ---
 
@@ -49,12 +46,27 @@ Fixed and polished the `<Contact />` section circular reveal transition to ensur
 | 13| Block-Render Script for Preloader     | Executing a script at the top of the body before layout paints guarantees that fresh sessions are instantly hidden, preventing hero flash | 2026-06-02 |
 | 14| Instant Glow & Canvas Fade-in         | Uses an SSR-ready radial gradient glow for immediate visual feedback and fades in the WebGL canvas dynamically to prevent canvas snap | 2026-06-02 |
 | 15| Use scale over clipPath for circle    | GPU-accelerated scaling transforms on a circular div are more performant and cross-browser stable than complex CSS clip-path interpolation on large screens (Replaced by Decision 18) | 2026-06-02 |
-| 16| Raise Contact z-index to z-[60]      | Allows the contact section to stack on top of the fixed z-30/z-50 elements in the preceding About section as it scrolls up, enabling the transparent overlap reveal | 2026-06-02 |
-| 17| Wipe reveal for CONTACT heading       | Synchronizes the bold title entrance with the final 40% of the scroll timeline, ensuring high-contrast visibility only after the black background covers the screen | 2026-06-02 |
+| 16| Raise Contact z-index to z-[60]      | Allows the contact section to stack on top of the fixed z-30/z-50 elements in the preceding About section as it scrolls up, enabling the transparent overlap reveal | 2026-06-03 |
+| 17| Wipe reveal for CONTACT heading       | Synchronizes the bold title entrance with the final 40% of the scroll timeline, ensuring high-contrast visibility only after the black background covers the screen | 2026-06-03 |
 | 18| Fixed Viewport clipPath circle reveal | Using a fixed inset-0 viewport container with clip-path: circle(R at 50% 100%) prevents the circle from being clipped by the parent scrolling section and ensures a perfect, centered circle curve | 2026-06-03 |
-| 19| Increased Contact height to h-[200vh] | Doubles the scroll distance of the scrub, letting the circular background reveal expand slowly and elegantly instead of snapping instantly | 2026-06-03 |
+| 19| Increased Contact height to h-[200vh] | Doubles the scroll distance of the scrub, letting the circular background reveal expand slowly and elegantly instead of snapping instantly (Replaced by Decision 22) | 2026-06-03 |
 | 20| Pin resume longer via About hold    | Increased About section height to h-[400vh] and added a 100vh scroll hold (6.1 units) at the end of the timeline. This keeps the fully-rendered resume pinned stationary before entering the contact section circular reveal | 2026-06-03 |
 | 21| Reduce line drawing delay by 1.5s    | Adjusted blueprint grid lines drawing delay from 3.5s to 2.0s in About.tsx to trigger line drafting faster after text elements settle | 2026-06-03 |
+| 22| Fluid catch-up with scrub: 2 & 300vh  | Slows down the circle background reveal on scroll and adds a smooth 2-second lag catch-up for luxurious fluid feel | 2026-06-03 |
+| 23| Two-stage Contact title translation   | Animates title from bottom (y: 50vh) to center (y: 0) as circle expands, then translates it left (x: -24vw) in the final 40% of scroll | 2026-06-03 |
+| 24| Double parallax for About section     | Animates doc wrapper up by yPercent: -130 and red background by yPercent: -80 during circle expansion to create a strong layered depth | 2026-06-03 |
+| 25| Change Contact title & scale down     | Replaced CONTACT with HAVE AN IDEA?, reduced size to text-[8vw] md:text-[10vw], and set left translate to x: -14vw to keep text on-screen | 2026-06-03 |
+| 26| Pivot to absolute position layout     | Positioned heading top-left (2px margins) using CSS, and animated from center using negative xPercent/yPercent and window width/height multipliers to guarantee perfect margin-of-2 alignment at completion | 2026-06-03 |
+| 27| Add email and bottom-left text        | Added aliahmedyus@gmail.com and a custom editorial statement using CSS absolute positions and GSAP physical clip-path mask reveals | 2026-06-03 |
+| 28| Sequential transition timing schedule | Re-scheduled GSAP timelines to stage reveals sequentially (0-0.5 for header centering, 0.5-0.75 for header top-left slide, 0.75-1.0 for email and statement reveals) | 2026-06-03 |
+| 29| Email roll-swap hover interaction     | Implemented high-fidelity text rolling swap on hover using CSS translation and snapping SVG arrow slide-in | 2026-06-03 |
+| 30| Fixed document component visibility    | Raised circle container z-index to z-[60] and used GSAP timeline set() to hide the preceding .about-red-bg panel (containing the document) at progress 0.5 to prevent visual bleed and stacking leakage | 2026-06-03 |
+| 31| Red/Black Saturated Gradient          | Gradient blend of black (#000000) and highly saturated red (#ff1500) | 2026-06-03 |
+| 32| Removed Noise Overlay                 | Removed the SVG noise overlay per user preference to focus on pure, high-saturation color gradient blend | 2026-06-03 |
+| 33| Scroll-Linked Gradient Shift          | Animated backgroundPositionY from 100% to 0% linearly over the entire GSAP timeline to slowly move the gradient on user scroll | 2026-06-03 |
+| 34| Phone Link Interaction                | Implemented +91 8867145921 link that rolls to "call me" with custom phone SVG icon on hover | 2026-06-03 |
+| 35| Unified Details Wrapper               | Groups email and phone links inside vertical flex container below the header to preserve modular responsive layout | 2026-06-03 |
+| 36| Staggered Contact Reveals             | Staggers the entrance animations of email and phone links via GSAP array target stagger | 2026-06-03 |
 
 ---
 
