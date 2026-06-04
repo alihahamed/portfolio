@@ -15,12 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Refined Contact section tall images entry path and parallax scroll effects. Configured Project A to enter from the top and Project B from the bottom, both stopping in the center of the viewport sequentially on user scroll. Configured matching scroll-down inner parallax translations for both images and scaled them to 1.35x to avoid edge rendering gaps.
+Added a vertical list of social profile links (GitHub, LinkedIn, Instagram, X) stacked line by line below the contact phone link. Styled links in red smaller font, complete with interactive rolling hovers that flip to white, and integrated them into the GSAP staggered shutter-wipe entrance animation.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`    | Modified    | Configured sequential slide-in entries from top/bottom and inner-image scroll-down parallax |
+| `components/Contact.tsx`    | Modified    | Added social links vertical stack and integrated them into the GSAP reveal stagger target |
 
 ---
 
@@ -79,6 +79,10 @@ Refined Contact section tall images entry path and parallax scroll effects. Conf
 | 49| Dynamic display toggle on About overlay| Set display: none on .about-red-bg during onLeave and onLeaveBack, and display: "" on onEnter and onEnterBack. This prevents the red background from overlaying and clipping the Selected Work section during scrollback and initial load | 2026-06-04 |
 | 50| 9:16 borderless Contact images         | Set aspect ratio to 9:16, removed borders, and sourced images to where-you-going.png and you-consumed-enough.png using Next.js Image for a premium borderless layout | 2026-06-04 |
 | 51| Contact sequential image entry & parallax| Programmed Project A frame to enter from top (progress 0.45-0.70) and Project B frame from bottom (progress 0.70-0.95), with both inner images animating scroll-down parallax (yPercent: -12 to 12) scaled to 1.35x to avoid edge gaps | 2026-06-04 |
+| 52| Absolute status badge centering fix     | Positioned status badge absolute at left-[calc(100%+16px)] so it does not add to the width of the heading container. This makes GSAP center "have an idea?" text perfectly in the viewport | 2026-06-04 |
+| 53| Single larger Project B image card     | Removed Project A image card, enlarged Project B card to w-[18vw] with a matching aspect ratio of 9:16, and shifted its entry animation to trigger after all information has revealed at progress 0.80. Managed scale: 1.15 in GSAP to prevent style conflicts and text cropping | 2026-06-04 |
+| 54| Eased image entrance scroll timing     | Updated slide-in ease to "power2.inOut" to prevent sudden velocity transitions and make the entrance feel smoother, keeping duration at 0.20 of the scroll trigger | 2026-06-04 |
+| 55| Red social links stack below phone     | Added GitHub, LinkedIn, Instagram, and X links vertically stacked below the phone number, styled in red (#AB1509) smaller font (text-[12px] md:text-[1.8vw]) with rolling hovers to white (#fff7d3). Integrated them into the GSAP staggered wipe-down timeline | 2026-06-04 |
 
 ---
 

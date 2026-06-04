@@ -99,12 +99,12 @@ export default function Contact() {
           ease: "power2.inOut",
           duration: 0.25,
         },
-        0.5
+        0.45
       );
 
-      // Email and phone links wipe down under the title when it reaches the top-left
+      // Email, phone and social links wipe down under the title when it reaches the top-left
       tl.fromTo(
-        [".reveal-contact-email", ".reveal-contact-phone"],
+        [".reveal-contact-email", ".reveal-contact-phone", ".reveal-contact-social"],
         {
           y: -20,
           clipPath: "inset(0% 0% 100% 0%)",
@@ -113,10 +113,10 @@ export default function Contact() {
           y: 0,
           clipPath: "inset(0% 0% 0% 0%)",
           ease: "power2.out",
-          duration: 0.25,
-          stagger: 0.08,
+          duration: 0.10,
+          stagger: 0.02,
         },
-        0.75
+        0.70
       );
 
       // Status text reveal after heading sits in the corner
@@ -130,9 +130,9 @@ export default function Contact() {
           opacity: 1,
           y: 0,
           ease: "power2.out",
-          duration: 0.25,
+          duration: 0.10,
         },
-        0.75
+        0.70
       );
 
       // Bottom-left message reveal
@@ -146,54 +146,33 @@ export default function Contact() {
           y: 0,
           clipPath: "inset(0% 0% 0% 0%)",
           ease: "power2.out",
-          duration: 0.25,
+          duration: 0.10,
         },
-        0.75
+        0.70
       );
 
-      // Parallax for tall images on the right: Project A from top, Project B from bottom, both stop in middle with inner-image parallax
-      tl.fromTo(
-        ".reveal-contact-image-1",
-        { y: "-100vh" },
-        {
-          y: "0vh",
-          ease: "power2.out",
-          duration: 0.25,
-        },
-        0.45
-      );
-
-      tl.fromTo(
-        ".reveal-img-inner-1",
-        { yPercent: -12 },
-        {
-          yPercent: 12,
-          ease: "none",
-          duration: 0.55,
-        },
-        0.45
-      );
-
+      // Parallax for single tall image on the right: Project B from bottom, stops in middle with inner-image parallax
       tl.fromTo(
         ".reveal-contact-image-2",
         { y: "100vh" },
         {
           y: "0vh",
-          ease: "power2.out",
-          duration: 0.25,
+          ease: "power2.inOut",
+          duration: 0.20,
         },
-        0.70
+        0.80
       );
 
       tl.fromTo(
         ".reveal-img-inner-2",
-        { yPercent: -12 },
+        { yPercent: -6, scale: 1.15 },
         {
-          yPercent: 12,
+          yPercent: 6,
+          scale: 1.15,
           ease: "none",
-          duration: 0.30,
+          duration: 0.20,
         },
-        0.70
+        0.80
       );
     }, containerRef);
 
@@ -215,13 +194,12 @@ export default function Contact() {
           willChange: "clip-path",
         }}
       >
-        {/* Giant Contact Heading (revealed as the circle covers the screen) */}
-        <div className="reveal-contact-title absolute top-[6px] left-[4px] flex items-start gap-4 md:gap-6 select-none pointer-events-auto whitespace-nowrap">
-          <h2 className="font-tusker-standard text-[8vw] md:text-[11vw] font-medium uppercase tracking-tighter leading-none text-[#fff7d3]">
+        <div className="reveal-contact-title absolute top-[6px] left-[4px] select-none pointer-events-auto whitespace-nowrap">
+          <h2 className="font-tusker-standard text-[8vw] md:text-[11vw] font-medium uppercase tracking-tighter leading-none text-[#fff7d3] inline-block">
             have an idea?
           </h2>
           <span 
-            className="reveal-contact-status font-montreal font-normal text-[#AB1509] text-[10px] md:text-sm tracking-normal mt-[0.8vw] md:mt-[0.3vw] inline-block opacity-0"
+            className="reveal-contact-status absolute left-[calc(100%+16px)] md:left-[calc(100%+24px)] top-[0.8vw] md:top-[0.3vw] font-montreal font-normal text-[#AB1509] text-[10px] md:text-sm tracking-normal inline-block opacity-0"
             style={{ willChange: "transform, opacity" }}
           >
             Available for Projects
@@ -230,7 +208,7 @@ export default function Contact() {
 
         {/* Large contact links (Email & Phone) revealed below the heading */}
         <div 
-          className="absolute left-[6px] top-[calc(8vw+16px)] md:top-[calc(11vw+24px)] flex flex-col gap-1.5 md:gap-3 pointer-events-auto z-[70]"
+          className="absolute left-[6px] top-[calc(8vw+16px)] md:top-[calc(11vw+24px)] flex flex-col gap-1.5 md:gap-1 pointer-events-auto z-[70]"
         >
           {/* Email link */}
           <a 
@@ -287,6 +265,78 @@ export default function Contact() {
               </span>
             </span>
           </a>
+
+          {/* Social links below phone link */}
+          <div className="flex flex-col gap-1.5 md:gap-1 mt-4 md:mt-0">
+            {/* Github */}
+            <a 
+              href="https://github.com/alihahamed" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
+              style={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            >
+              <span className="social-roll-wrapper block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
+                <span className="social-line-normal block h-[1.35em] leading-[1.35] text-[#AB1509] group-hover:text-[#fff7d3] transition-colors duration-300">
+                  github ↗
+                </span>
+                <span className="social-line-hover block h-[1.35em] leading-[1.35] text-[#fff7d3] transition-colors duration-300">
+                  github ↗
+                </span>
+              </span>
+            </a>
+            {/* LinkedIn */}
+            <a 
+              href="https://linkedin.com/in/alihahamed" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
+              style={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            >
+              <span className="social-roll-wrapper block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
+                <span className="social-line-normal block h-[1.35em] leading-[1.35] text-[#AB1509] group-hover:text-[#fff7d3] transition-colors duration-300">
+                  linkedin ↗
+                </span>
+                <span className="social-line-hover block h-[1.35em] leading-[1.35] text-[#fff7d3] transition-colors duration-300">
+                  linkedin ↗
+                </span>
+              </span>
+            </a>
+            {/* Instagram */}
+            <a 
+              href="https://instagram.com/alihahamed" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
+              style={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            >
+              <span className="social-roll-wrapper block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
+                <span className="social-line-normal block h-[1.35em] leading-[1.35] text-[#AB1509] group-hover:text-[#fff7d3] transition-colors duration-300">
+                  instagram ↗
+                </span>
+                <span className="social-line-hover block h-[1.35em] leading-[1.35] text-[#fff7d3] transition-colors duration-300">
+                  instagram ↗
+                </span>
+              </span>
+            </a>
+            {/* X */}
+            <a 
+              href="https://x.com/alihahamed" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
+              style={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            >
+              <span className="social-roll-wrapper block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
+                <span className="social-line-normal block h-[1.35em] leading-[1.35] text-[#AB1509] group-hover:text-[#fff7d3] transition-colors duration-300">
+                  x ↗
+                </span>
+                <span className="social-line-hover block h-[1.35em] leading-[1.35] text-[#fff7d3] transition-colors duration-300">
+                  x ↗
+                </span>
+              </span>
+            </a>
+          </div>
         </div>
 
         {/* Dynamic editorial bottom-left message */}
@@ -304,31 +354,18 @@ export default function Contact() {
           </p>
         </div>
 
-        {/* Tall parallax images on the right (Vertically centered) */}
-        <div className="absolute right-[6%] top-1/2 -translate-y-1/2 flex gap-6 md:gap-8 items-center select-none pointer-events-none hidden md:flex z-50">
+        {/* Tall parallax image on the right (Vertically centered) */}
+        <div className="absolute right-[10%] top-1/2 -translate-y-1/2 select-none pointer-events-none hidden md:block z-50">
           <div 
-            className="reveal-contact-image-1 w-[13vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
-            style={{ willChange: "transform" }}
-          >
-            <Image
-              src="/where-you-going.png"
-              alt="Where you going"
-              fill
-              className="reveal-img-inner-1 object-cover scale-[1.35]"
-              sizes="13vw"
-              priority
-            />
-          </div>
-          <div 
-            className="reveal-contact-image-2 w-[13vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
+            className="reveal-contact-image-2 w-[18vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
             style={{ willChange: "transform" }}
           >
             <Image
               src="/you-consumed-enough.png"
               alt="You consumed enough"
               fill
-              className="reveal-img-inner-2 object-cover scale-[1.35]"
-              sizes="13vw"
+              className="reveal-img-inner-2 object-cover"
+              sizes="18vw"
               priority
             />
           </div>
