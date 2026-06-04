@@ -45,23 +45,23 @@ export default function Contact() {
         0
       );
 
-      // Strong parallax: Slide the CV document up very fast
+      // Strong parallax: Slide the CV document up a little
       tl.fromTo(
         ".about-doc-wrap",
         { yPercent: 0 },
         {
-          yPercent: -130,
+          yPercent: -35,
           ease: "none",
         },
         0
       );
 
-      // Slower parallax: Slide the red background up moderately
+      // Slower parallax: Slide the red background up a very little
       tl.fromTo(
         ".about-red-bg",
         { yPercent: 0 },
         {
-          yPercent: -80,
+          yPercent: -15,
           ease: "none",
         },
         0
@@ -132,6 +132,27 @@ export default function Contact() {
           duration: 0.25,
         },
         0.75
+      );
+
+      // Parallax for tall images on the right
+      tl.fromTo(
+        ".reveal-contact-image-1",
+        { yPercent: 60 },
+        {
+          yPercent: -15,
+          ease: "none",
+        },
+        0
+      );
+
+      tl.fromTo(
+        ".reveal-contact-image-2",
+        { yPercent: 100 },
+        {
+          yPercent: -25,
+          ease: "none",
+        },
+        0
       );
     }, containerRef);
 
@@ -220,12 +241,39 @@ export default function Contact() {
         </div>
 
         {/* Dynamic editorial bottom-left message */}
-        <p 
-          className="reveal-contact-message absolute bottom-6 left-6 md:bottom-8 md:left-4 max-w-[280px] md:max-w-[360px] font-montreal font-normal text-white/90 text-[15px] monitor:text-[15px] leading-[1.2] select-none pointer-events-auto"
+        <div 
+          className="reveal-contact-message absolute bottom-6 left-6 md:bottom-8 md:left-4 flex flex-col md:flex-row gap-6 md:gap-16 max-w-[90vw] md:max-w-[800px] items-start pointer-events-auto"
           style={{ clipPath: "inset(100% 0% 0% 0%)" }}
         >
-          I build for people who think settling for good enough is the problem. Founders, brands, agencies — if you've got something worth building and you want it done right, not just done fast, let's make something people can't stop looking at.
-        </p>
+          <p className="max-w-[280px] md:max-w-[340px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] leading-[1.3] select-none">
+            I build for people who think settling for good enough is the problem. Founders, brands, agencies — if you've got something worth building and you want it done right, not just done fast, let's make something people can't stop looking at.
+          </p>
+          <p className="max-w-[280px] md:max-w-[320px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] leading-[1.3] select-none whitespace-pre-line">
+            If you want generic templates,{"\n"}
+            rushed timelines, or high volume,{"\n"}
+            Ali is the wrong choice.
+          </p>
+        </div>
+
+        {/* Tall parallax images on the right */}
+        <div className="absolute right-[6%] bottom-[8vh] flex gap-6 md:gap-8 items-end select-none pointer-events-none hidden md:flex z-50">
+          <div 
+            className="reveal-contact-image-1 w-[13vw] aspect-[3/4] bg-neutral-900 border border-white/10 relative overflow-hidden"
+            style={{ willChange: "transform" }}
+          >
+            <div className="absolute inset-0 flex items-center justify-center text-white/20 font-montreal text-xs uppercase tracking-widest">
+              [ Project A ]
+            </div>
+          </div>
+          <div 
+            className="reveal-contact-image-2 w-[13vw] aspect-[3/4] bg-neutral-900 border border-white/10 relative overflow-hidden mb-[8vh]"
+            style={{ willChange: "transform" }}
+          >
+            <div className="absolute inset-0 flex items-center justify-center text-white/20 font-montreal text-xs uppercase tracking-widest">
+              [ Project B ]
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

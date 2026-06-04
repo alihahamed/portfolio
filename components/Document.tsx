@@ -325,7 +325,7 @@ function DraggableSkill({ skill }: { skill: SkillItem }) {
   return (
     <div
       ref={elRef}
-      className="reveal-skill-item opacity-0 absolute cursor-grab active:cursor-grabbing select-none"
+      className="reveal-skill-item absolute cursor-grab active:cursor-grabbing select-none"
       style={{
         left,
         top,
@@ -541,7 +541,7 @@ function DraggableInterest({ interest }: { interest: InterestItem }) {
   return (
     <div
       ref={elRef}
-      className="reveal-interest-item opacity-0 absolute cursor-grab active:cursor-grabbing select-none"
+      className="reveal-interest-item absolute cursor-grab active:cursor-grabbing select-none"
       style={{
         left,
         top,
@@ -769,7 +769,7 @@ export default function Document() {
       {/* FOOTER QUOTE (At the bottom right, below 89% horizontal line) */}
       <div 
         id="contact"
-        className="reveal-footer absolute z-10 flex flex-col justify-center text-[#AB1509]" 
+        className="reveal-footer opacity-0 absolute z-10 flex flex-col justify-center text-[#AB1509]" 
         style={{ left: "53%", width: "40%", bottom: "2%", height: "8%" }}
       >
         <div className="w-full flex flex-col select-none">

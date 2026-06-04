@@ -58,18 +58,14 @@ export default function About() {
         // Ensure signature is hidden initially
         if (sigRef.current) sigRef.current.setProgress(0);
 
-        // Set initial positions for entrance reveal animations
+        // Set initial positions for entrance reveal animations (folder image badge remains static)
         gsap.set(".reveal-line-v", { opacity: 1, scaleY: 0, transformOrigin: "50% 0%" });
         gsap.set(".reveal-line-h", { opacity: 1, scaleX: 0, transformOrigin: "0% 50%" });
-        gsap.set(".reveal-footer", { opacity: 1, y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-footer", { opacity: 0, y: 20 });
         gsap.set(".reveal-interests-title", { opacity: 1, x: -20, clipPath: "inset(0% 100% 0% 0%)" });
-        gsap.set(".reveal-interest-item", { opacity: 1, scale: 0 });
-        gsap.set(".reveal-folder", { opacity: 1, y: 150 });
         gsap.set(".reveal-skills-title", { opacity: 1, x: -20, clipPath: "inset(0% 100% 0% 0%)" });
-        gsap.set(".reveal-skill-item", { opacity: 1, scale: 0 });
         gsap.set(".reveal-profile", { opacity: 1, y: 30, clipPath: "inset(100% 0% 0% 0%)" });
         gsap.set(".reveal-education", { opacity: 1, y: 30, clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set(".reveal-photo", { opacity: 1, y: 40, clipPath: "inset(100% 0% 0% 0%)" });
         gsap.set(".reveal-header", { opacity: 1, y: -20, clipPath: "inset(0% 0% 100% 0%)" });
 
         const tl = gsap.timeline({
@@ -79,14 +75,8 @@ export default function About() {
             end: "bottom bottom",          
             pin: "#work",
             pinSpacing: false,
-            scrub: 1,                      
-            onUpdate: (self) => {
-              if (self.progress === 0) {
-                gsap.set(workInnerEl, { scale: 1, z: 0, opacity: 1, rotateX: 0, y: 0 });
-              }
-            },
+            scrub: 2,                      
             onLeaveBack: () => {
-              gsap.set(workInnerEl, { scale: 1, z: 0, opacity: 1, rotateX: 0, y: 0 });
               if (sigRef.current) sigRef.current.setProgress(0);
             }
           }
@@ -94,7 +84,7 @@ export default function About() {
 
         // We use an arbitrary total duration of 10 to easily map scroll percentages.
 
-        // Stage 1 (time 0 to 4.5): 3D recede #work-inner + red panel slides up
+        // Stage 1 (time 0 to 7.0): 3D recede #work-inner + red panel slides up (duration extended for slower entry/exit)
         tl.fromTo(workInnerEl,
           { scale: 1, z: 0, opacity: 1, rotateX: 0 },
           { 
@@ -102,8 +92,8 @@ export default function About() {
             z: -450, 
             opacity: 0, 
             rotateX: 12, 
-            duration: 4.5, 
-            ease: "power2.inOut" 
+            duration: 7.0, 
+            ease: "power1.inOut" 
           },
           0
         );
@@ -112,8 +102,8 @@ export default function About() {
           { yPercent: 100 },
           { 
             yPercent: 0, 
-            duration: 4.5, 
-            ease: "power2.inOut" 
+            duration: 7.0, 
+            ease: "power1.inOut" 
           },
           0
         );
@@ -123,147 +113,110 @@ export default function About() {
           { backgroundPositionY: "100%" },
           { 
             backgroundPositionY: "0%", 
-            duration: 24.3, 
+            duration: 30.5, 
             ease: "none" 
           },
           0
         );
 
-        // Stage 2 (time 4.5 to 8.0): Signature physically draws over time (scrubbed)
+        // Stage 2 (time 7.0 to 11.0): Signature physically draws over time (scrubbed)
         const sigProxy = { val: 0 };
         tl.to(sigProxy, {
           val: 1,
-          duration: 3.5,
+          duration: 4.0,
           ease: "none",
           onUpdate: () => {
             if (sigRef.current) sigRef.current.setProgress(sigProxy.val);
           }
-        }, 4.5);
+        }, 7.0);
 
-        // Stage 3 (time 8.0 to 8.5): Brief hold/buffer
-        tl.to({}, { duration: 0.5 }, 8.0);
+        // Stage 3 (time 11.0 to 11.5): Brief hold/buffer
+        tl.to({}, { duration: 0.5 }, 11.0);
 
-        // Stage 4 (time 8.5 to 13.5): Signature physically zooms out (scales up massively) to cover the screen
+        // Stage 4 (time 11.5 to 16.5): Signature physically zooms out (scales up massively) to cover the screen
         tl.to(signatureWrapRef.current, {
           scale: 120,
           duration: 5,
           ease: "power2.in"
-        }, 8.5);
+        }, 11.5);
 
-        // Stage 5 (time 13.5 to 18.5): Document lowers into position — NO fade, pure scroll-driven descent
+        // Stage 5 (time 16.5 to 24.5): Document lowers into position — NO fade, pure scroll-driven descent (duration extended to 8)
         tl.fromTo(docWrapRef.current,
           { yPercent: -150 },
           {
             yPercent: 0,
-            duration: 5,
+            duration: 8,
             ease: "none" // Linear mapping makes it feel 1:1 physically controlled by the scroll wheel
           },
-          13.5
+          16.5
+        );
+
+        // Subtle gravity pendulum swing anchored at the top center (50% 0%) of the document
+        tl.fromTo(docWrapRef.current,
+          { rotate: 0, transformOrigin: "50% 0%" },
+          { rotate: 3.5, duration: 2, ease: "power1.inOut" },
+          16.5
+        );
+        tl.to(docWrapRef.current,
+          { rotate: -2.8, duration: 2, ease: "power1.inOut" },
+          18.5
+        );
+        tl.to(docWrapRef.current,
+          { rotate: 1.8, duration: 2, ease: "power1.inOut" },
+          20.5
+        );
+        tl.to(docWrapRef.current,
+          { rotate: -0.8, duration: 1.5, ease: "power1.inOut" },
+          22.5
+        );
+        tl.to(docWrapRef.current,
+          { rotate: 0, duration: 1.5, ease: "power2.out" },
+          24.0
         );
 
         // --- PREPARE INITIAL STATES FOR EDITORIAL REVEALS (Replacing opacity-0 fade-ins) ---
         gsap.set(".reveal-line-v", { scaleY: 0, transformOrigin: "top" });
         gsap.set(".reveal-line-h", { scaleX: 0, transformOrigin: "left" });
-        gsap.set(".reveal-footer", { y: 30, clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set(".reveal-footer", { opacity: 0, y: 20 });
         gsap.set(".reveal-interests-title, .reveal-skills-title", { x: -20, clipPath: "inset(0% 100% 0% 0%)" });
-        gsap.set(".reveal-interest-item, .reveal-skill-item", { scale: 0 });
-        gsap.set(".reveal-folder", { y: 150 });
         gsap.set(".reveal-profile, .reveal-education", { y: 30, clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set(".reveal-photo", { y: 40, clipPath: "inset(100% 0% 0% 0%)" });
         gsap.set(".reveal-header", { y: -20, clipPath: "inset(0% 0% 100% 0%)" });
         // -------------------------------------------------------------------------------------
 
-        // Staggered callbacks to trigger entrance reveals during document descent
-        // 1. Grid Lines and Footer Reveal (Time 14.2)
+        // Define a unified, real-time sequential entrance timeline for the document contents
+        const entranceTimeline = gsap.timeline({ paused: true });
+
+        // Step 1: Grid lines draw immediately (no delay) + footer quote reveal (fade + slide up)
+        entranceTimeline.to(".reveal-line-v", { scaleY: 1, duration: 1.2, stagger: 0.08, ease: "power4.inOut" }, 0)
+          .to(".reveal-line-h", { scaleX: 1, duration: 1.2, stagger: 0.08, ease: "power4.inOut" }, 0)
+          .to(".reveal-footer", { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }, 0);
+
+        // Step 2: Interests title reveal (exactly 0.3s after Step 1, folder image badge is static)
+        entranceTimeline.to(".reveal-interests-title", { x: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out" }, 0.3);
+
+        // Step 3: Skills title & profile reveal (exactly 0.3s after Step 2)
+        entranceTimeline.to(".reveal-skills-title", { x: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out" }, 0.6)
+          .to(".reveal-profile", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: "power4.out" }, 0.6);
+
+        // Step 4: Education reveal (exactly 0.3s after Step 3)
+        entranceTimeline.to(".reveal-education", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: "power4.out" }, 0.9);
+
+        // Step 5: Header reveal (exactly 0.3s after Step 4)
+        entranceTimeline.to(".reveal-header", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, stagger: 0.1, ease: "power4.out" }, 1.2);
+
+        // Trigger the sequential entrance reveals on scroll (redacts instantly on scroll back up)
         tl.call(() => {
           const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
           if (isForward) {
-            // Blueprint grid drafting lines draw themselves in with a massive delay so they appear after everything else
-            gsap.to(".reveal-line-v", { scaleY: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto", delay: 2.0 });
-            gsap.to(".reveal-line-h", { scaleX: 1, duration: 1.5, stagger: 0.1, ease: "power4.inOut", overwrite: "auto", delay: 2.0 });
-            // Editorial reveal footer container via high-performance clipPath wipe
-            gsap.to(".reveal-footer", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
+            entranceTimeline.play();
           } else {
-            gsap.to(".reveal-line-v", { scaleY: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-line-h", { scaleX: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-footer", { y: 30, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
+            entranceTimeline.pause(0); // Seek to 0 and pause (redact)
           }
-        }, undefined, 14.2);
+        }, undefined, 18.5);
 
-        // 2. Interests & Folder Reveal (Time 15.2)
-        tl.call(() => {
-          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
-          if (isForward) {
-            // Editorial reveal interests title
-            gsap.to(".reveal-interests-title", { x: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out", overwrite: "auto" });
-            // Smooth pop-out scale up for interests icons (from scale 0 to 1, no opacity fade)
-            gsap.to(".reveal-interest-item", { 
-              scale: 1, 
-              duration: 1.4, 
-              stagger: 0.08, 
-              ease: "power4.out", 
-              overwrite: "auto" 
-            });
-            // Elegant vertical slide for folder component
-            gsap.to(".reveal-folder", { y: 0, duration: 2.0, ease: "power4.out", overwrite: "auto" });
-          } else {
-            gsap.to(".reveal-interests-title", { x: -20, clipPath: "inset(0% 100% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-folder", { y: 150, duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-interest-item", { scale: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
-          }
-        }, undefined, 15.2);
-
-        // 3. Profile & Skills Reveal (Time 16.2)
-        tl.call(() => {
-          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
-          if (isForward) {
-            // Editorial reveal skills title
-            gsap.to(".reveal-skills-title", { x: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power4.out", overwrite: "auto" });
-            // Smooth pop-out scale up for skills icons (from scale 0 to 1, no opacity fade)
-            gsap.to(".reveal-skill-item", { 
-              scale: 1, 
-              duration: 1.4, 
-              stagger: 0.08, 
-              ease: "power4.out", 
-              overwrite: "auto" 
-            });
-            // Editorial reveal profile container via high-performance clipPath wipe
-            gsap.to(".reveal-profile", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
-          } else {
-            gsap.to(".reveal-skills-title", { x: -20, clipPath: "inset(0% 100% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-profile", { y: 30, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-skill-item", { scale: 0, duration: 0.6, ease: "power2.in", overwrite: "auto" });
-          }
-        }, undefined, 16.2);
-
-        // 4. Initials & Education Reveal (Time 17.2)
-        tl.call(() => {
-          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
-          if (isForward) {
-            // Editorial reveal education container via high-performance clipPath wipe
-            gsap.to(".reveal-education", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "power4.out", overwrite: "auto" });
-          } else {
-            gsap.to(".reveal-education", { y: 30, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
-          }
-        }, undefined, 17.2);
-
-        // 5. Photo & Header Reveal (Time 18.2)
-        tl.call(() => {
-          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
-          if (isForward) {
-            // Editorial vertical sliding clipping mask for portrait photo
-            gsap.to(".reveal-photo", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 2.0, ease: "power4.out", overwrite: "auto" });
-            // Editorial reveal header elements
-            gsap.to(".reveal-header", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, stagger: 0.15, ease: "power4.out", overwrite: "auto" });
-          } else {
-            gsap.to(".reveal-photo", { y: 40, clipPath: "inset(100% 0% 0% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
-            gsap.to(".reveal-header", { y: -20, clipPath: "inset(0% 0% 100% 0%)", duration: 0.6, ease: "power2.in", overwrite: "auto" });
-          }
-        }, undefined, 18.2);
-
-        // Add a 100vh scroll hold at the end of the document animation (duration 6.1 units)
+        // Add a 100vh scroll hold at the end of the document animation (duration 6.0 units)
         // to pin the fully rendered resume before entering the contact section circular reveal.
-        tl.to({}, { duration: 6.1 }, 18.2);
+        tl.to({}, { duration: 6.0 }, 24.5);
 
       });
     };

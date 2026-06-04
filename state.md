@@ -6,24 +6,21 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – Contact Section Phone Number Link`
+- **Phase:** `Feature Development – About Document Physics & Timings`
 - **Status:** `Complete`
-- **Last Updated:** `2026-06-03`
+- **Last Updated:** `2026-06-04`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Added phone number link to the `<Contact />` section with responsive animations:
-1. **Interactive Roll-Swap Link**: Added `+91 8867145921` below the email. When hovered, it transitions to "call me" with a phone SVG icon.
-2. **Details Flex Layout**: Wrapped both email and phone links inside an absolute flex stack (`gap-1.5 md:gap-3`) to maintain responsive alignment below the heading.
-3. **Sequential Stagger Entrance**: Configured the GSAP timeline to stagger the entrance wipes of the email and phone elements (`stagger: 0.08`), creating a clean, editorial layout reveal.
+Fine-tuned the parallax speeds of the About section's document wrapper and red background during the Contact circular reveal, mapping their translations to subtle vertical ascents to maximize depth and polish the transition feel.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`    | Modified    | Wrapped email and new phone link in flex container; updated GSAP transition to stagger entrance |
+| `components/Contact.tsx`    | Modified    | Adjusted target translations of .about-doc-wrap and .about-red-bg for subtle vertical parallax |
 
 ---
 
@@ -67,6 +64,16 @@ Added phone number link to the `<Contact />` section with responsive animations:
 | 34| Phone Link Interaction                | Implemented +91 8867145921 link that rolls to "call me" with custom phone SVG icon on hover | 2026-06-03 |
 | 35| Unified Details Wrapper               | Groups email and phone links inside vertical flex container below the header to preserve modular responsive layout | 2026-06-03 |
 | 36| Staggered Contact Reveals             | Staggers the entrance animations of email and phone links via GSAP array target stagger | 2026-06-03 |
+| 37| Remove Image Entrance Animations      | Removed entrance animations for skills, interests, and portrait images to keep them static from mount | 2026-06-04 |
+| 38| Unified Real-Time Sequential Reveals  | Created a single sequential timeline (entranceTimeline) for text/grid reveals that plays in real-time with a 0.3s delay between steps | 2026-06-04 |
+| 39| Reduced Grid Line Delay               | Removed the 2-second delay from grid line draws to animate them immediately on trigger | 2026-06-04 |
+| 40| Instant Animation Redaction           | Configured entranceTimeline to seek to time 0 and pause instantly when user scrolls back up, keeping the layout clean and snappy | 2026-06-04 |
+| 41| Static Folder Component               | Removed entrance animation from the folder (image badge) to keep all document image-like assets static on load | 2026-06-04 |
+| 42| Quote Slide-Up & Fade Entrance        | Replaced clipPath wipe with a clean slide-up + fade entrance for the Bertrand Russell quote | 2026-06-04 |
+| 43| Slowed Document Descent               | Extended document drop duration from 5 to 7 units in scroll timeline to slow down descent speed | 2026-06-04 |
+| 44| Document Pendulum Swing               | Implemented keyframe-like Z-axis rotation swing sequence on the document container anchored at the top-center (transformOrigin: 50% 0%) to simulate realistic gravity physics (rotation widened to 3.5° max for prominence) | 2026-06-04 |
+| 45| Remove ScrollTrigger boundary snaps   | Removed instant `gsap.set` in ScrollTrigger callbacks to let scrub catch-up handle transition boundaries smoothly and prevent sudden exit snap | 2026-06-04 |
+| 46| Fine-tune Contact parallax speeds      | Reduced target translations of .about-doc-wrap (yPercent: -35) and .about-red-bg (yPercent: -15) to make them ascend slowly under the expanding contact circle, creating visible depth | 2026-06-04 |
 
 ---
 
