@@ -6,21 +6,23 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – Contact Section Scroll Effects`
+- **Phase:** `Feature Development – Sticky Footer Reveal`
 - **Status:** `Complete`
-- **Last Updated:** `2026-06-04`
+- **Last Updated:** `2026-06-05`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Added a vertical list of social profile links (GitHub, LinkedIn, Instagram, X) stacked line by line below the contact phone link. Styled links in red smaller font, complete with interactive rolling hovers that flip to white, and integrated them into the GSAP staggered shutter-wipe entrance animation.
+Created a separate `Footer.tsx` component representing a blank, full-viewport brand red (`#AB1509`) sticky footer. Integrated retraction/retraction timeline phases in `Contact.tsx` (progress 1.00 to 1.25) to slide the entire contact container up by `yPercent: -100` and pull the text and image elements off-screen with distinct parallax retract offsets (`yPercent: -35` and `-120`).
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`    | Modified    | Added social links vertical stack and integrated them into the GSAP reveal stagger target |
+| `components/Footer.tsx`     | Created     | Blank full-viewport sticky footer styled in brand red (#AB1509) |
+| `components/Contact.tsx`    | Modified    | Added retraction animation stage to translate the circle wrapper and layout elements up |
+| `app/page.tsx`              | Modified    | Imported and rendered Footer below Contact |
 
 ---
 
@@ -83,6 +85,10 @@ Added a vertical list of social profile links (GitHub, LinkedIn, Instagram, X) s
 | 53| Single larger Project B image card     | Removed Project A image card, enlarged Project B card to w-[18vw] with a matching aspect ratio of 9:16, and shifted its entry animation to trigger after all information has revealed at progress 0.80. Managed scale: 1.15 in GSAP to prevent style conflicts and text cropping | 2026-06-04 |
 | 54| Eased image entrance scroll timing     | Updated slide-in ease to "power2.inOut" to prevent sudden velocity transitions and make the entrance feel smoother, keeping duration at 0.20 of the scroll trigger | 2026-06-04 |
 | 55| Red social links stack below phone     | Added GitHub, LinkedIn, Instagram, and X links vertically stacked below the phone number, styled in red (#AB1509) smaller font (text-[12px] md:text-[1.8vw]) with rolling hovers to white (#fff7d3). Integrated them into the GSAP staggered wipe-down timeline | 2026-06-04 |
+| 56| Dynamically center signature zoom origin| Calculated transformOrigin in pixels based on screen size, centering the offset so large monitors zoom directly into the signature stroke instead of empty space | 2026-06-05 |
+| 57| Isolate signature base scale to inner container| Wrapped signature in a `.signature-scale-container` that scales around its center. Keeps parent wrapper at `scale: 1` initially to prevent layout shift of centered element before zoom starts | 2026-06-05 |
+| 58| Dynamic percentage-based transform origin| Replaced pixel-based units with screen percentages, explicitly defined it in the context/timeline tween, and removed Tailwind's `origin-center` class from the JSX container to prevent styling overrides | 2026-06-05 |
+| 59| Sticky Footer Reveal & Redaction Timeline| Created a separate empty brand-red sticky Footer component (`h-screen`) and configured contact GSAP timeline (1.00 to 1.25) to slide the fixed wrapper off-screen and retract text/image elements with distinct parallax speeds | 2026-06-05 |
 
 ---
 

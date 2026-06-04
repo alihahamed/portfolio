@@ -65,7 +65,7 @@ const neueMontreal = localFont({
 
 import SilkBackground from "@/components/SilkBackground";
 import SmoothScroll from "@/components/SmoothScroll";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import TrailingCursor from "@/components/ui/trailing-cursor";
 import { PageTransitionProvider } from "@/components/PageTransition";
 
 export const metadata: Metadata = {
@@ -88,7 +88,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#050505] text-white relative">
+      <body className="min-h-full flex flex-col bg-[#050505] text-white relative" style={{ cursor: 'none' }}>
         {/* Inline script to prevent preloader flash on fresh sessions */}
         <script
           dangerouslySetInnerHTML={{
@@ -110,8 +110,8 @@ export default function RootLayout({
           {/* Global WebGL Background Canvas */}
           <SilkBackground />
           
-          {/* Custom fluid cursor follower */}
-          <SmoothCursor />
+          {/* Trailing particle cursor */}
+          <TrailingCursor />
           
           {/* Butter-Smooth Lenis Scrolling Wrapper */}
           <div id="app-main-content" className="w-full min-h-full flex flex-col">

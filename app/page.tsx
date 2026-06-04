@@ -10,6 +10,7 @@ import { TransitionLink, useTransitionContext } from "@/components/PageTransitio
 import SelectedWork from "@/components/SelectedWork";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const context = useTransitionContext();
@@ -385,6 +386,9 @@ export default function Home() {
 
       {/* FINAL CONTACT SECTION WITH CIRCULAR REVEAL */}
       <Contact />
+
+      {/* STICKY FOOTER UNDER CONTACT */}
+      <Footer />
     </div>
   );
 }

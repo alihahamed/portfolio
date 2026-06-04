@@ -13,8 +13,8 @@ export default function SilkBackground() {
       <Silk
         color="#AB1509"
         scale={0.9}
-        noiseIntensity={2.9}
-        rotation={1.66}
+        noiseIntensity={2.5}
+        rotation={1.3}
         speed={5}
       />
     </div>

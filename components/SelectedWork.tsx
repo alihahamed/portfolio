@@ -861,7 +861,7 @@ export default function SelectedWork() {
             <div className={`absolute z-20 pointer-events-none left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[10%] lg:left-4 lg:right-auto lg:bottom-65 monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft  tracking-normal text-[12px] md:text-[29px] monitor:!text-[40px]  text-left">
+              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft/90  tracking-normal text-[12px] md:text-[29px] monitor:!text-[40px]  text-left">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
@@ -879,7 +879,7 @@ export default function SelectedWork() {
             </div>
 
             {/* Bottom-right Project Description (styled with Tailwind CSS directly for manual edits) */}
-            <p className={`work-scene-desc-new absolute m-0 pointer-events-none font-montreal font-normal text-yellow-soft/80 z-20 text-[10px] md:text-[15px] monitor:text-[17px] leading-[1.2] text-left left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[4%] lg:left-auto lg:right-10 lg:bottom-[4%] lg:text-right lg:w-[420px] monitor:w-[470px] transition-opacity duration-500 ease-in-out ${
+            <p className={`work-scene-desc-new absolute m-0 pointer-events-none font-montreal font-normal text-yellow-soft/90 z-20 text-[10px] md:text-[15px] monitor:text-[17px] leading-[1.2] text-left left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[4%] lg:left-auto lg:right-10 lg:bottom-[4%] lg:text-right lg:w-[420px] monitor:w-[470px] transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-25" : "opacity-100"
             }`}>
               {descChars.map((char, charIndex) => (

@@ -15,7 +15,6 @@ export default function About() {
   const signatureWrapRef = useRef<HTMLDivElement>(null);
   const docWrapRef = useRef<HTMLDivElement>(null);
   
-  // Ref to directly control Signature draw progress via GSAP without React re-renders
   const sigRef = useRef<SignatureRef>(null);
 
   useEffect(() => {
@@ -40,9 +39,35 @@ export default function About() {
         transformOrigin: "50% 100%" 
       });
 
+      // Scale proportionally to viewport so signature fills screen on all monitor sizes
+      // Base: 1x at 1440px, scales up on larger screens
+      const sigBaseScale = Math.max(1, window.innerWidth / 1440);
+      
+      // Scale the inner signature container to sigBaseScale around its center
+      const innerContainer = signatureWrapRef.current?.querySelector(".signature-scale-container");
+      if (innerContainer) {
+        gsap.set(innerContainer, {
+          scale: sigBaseScale,
+          transformOrigin: "center center"
+        });
+      }
+
+      // Calculate percentage-based transform origin relative to screen center.
+      // On 1440x900 viewport, "42% 52%" corresponds to:
+      // X = 1440 * 0.42 = 604.8px (offset from center: -115.2px)
+      // Y = 900 * 0.52 = 468px (offset from center: 18px)
+      // We scale these offsets by sigBaseScale to match signature sizing.
+      const originX = window.innerWidth / 2 - 115.2 * sigBaseScale;
+      const originY = window.innerHeight / 2 + 18 * sigBaseScale;
+
+      const pctX = (originX / window.innerWidth) * 100;
+      const pctY = (originY / window.innerHeight) * 100;
+
       // Set transform origin of signature wrapper to zoom directly into a letter stroke
+      // Starts at scale: 1 to avoid initial layout shifts
       gsap.set(signatureWrapRef.current, { 
-        transformOrigin: "45% 55%" 
+        transformOrigin: `${pctX}% ${pctY}%`,
+        scale: 1
       });
 
       ctx = gsap.context(() => {
@@ -54,7 +79,11 @@ export default function About() {
         gsap.set(redBgRef.current, { yPercent: 100 });
         if (redBgRef.current) redBgRef.current.style.display = "none";
         gsap.set(docWrapRef.current, { xPercent: -50, yPercent: -150 });
-        gsap.set(signatureWrapRef.current, { scale: 1, opacity: 1 });
+        gsap.set(signatureWrapRef.current, { 
+          transformOrigin: `${pctX}% ${pctY}%`,
+          scale: 1, 
+          opacity: 1 
+        });
         
         // Ensure signature is hidden initially
         if (sigRef.current) sigRef.current.setProgress(0);
@@ -76,7 +105,7 @@ export default function About() {
             end: "bottom bottom",          
             pin: "#work",
             pinSpacing: false,
-            scrub: 2,                      
+            scrub: 3,                      
             onEnter: () => {
               if (redBgRef.current) redBgRef.current.style.display = "";
             },
@@ -131,27 +160,38 @@ export default function About() {
         );
 
         // Stage 2 (time 7.0 to 11.0): Signature physically draws over time (scrubbed)
+        // Gentle ease makes the draw feel more organic
         const sigProxy = { val: 0 };
         tl.to(sigProxy, {
           val: 1,
           duration: 4.0,
-          ease: "none",
+          ease: "power1.inOut",
           onUpdate: () => {
             if (sigRef.current) sigRef.current.setProgress(sigProxy.val);
           }
         }, 7.0);
 
-        // Stage 3 (time 11.0 to 11.5): Brief hold/buffer
-        tl.to({}, { duration: 0.5 }, 11.0);
+        // Stage 2b: Subtle vertical parallax drift on the signature during drawing
+        tl.fromTo(signatureWrapRef.current,
+          { y: 8 },
+          { y: -8, duration: 4.0, ease: "power1.inOut" },
+          7.0
+        );
 
-        // Stage 4 (time 11.5 to 16.5): Signature physically zooms out (scales up massively) to cover the screen
+        // Stage 3 (time 11.0 to 12.5): Hold/buffer — lets the viewer absorb the signature
+        tl.to({}, { duration: 1.5 }, 11.0);
+
+        // Stage 4 (time 12.5 to 19.5): Signature zooms out with cinematic expo ease
+        // expo.inOut prevents the abrupt snap — slow start, smooth acceleration, soft landing
         tl.to(signatureWrapRef.current, {
           scale: 120,
-          duration: 5,
-          ease: "power2.in"
-        }, 11.5);
+          y: 0,
+          transformOrigin: `${pctX}% ${pctY}%`,
+          duration: 7,
+          ease: "expo.inOut"
+        }, 12.5);
 
-        // Stage 5 (time 16.5 to 24.5): Document lowers into position — NO fade, pure scroll-driven descent (duration extended to 8)
+        // Stage 5 (time 19.5 to 27.5): Document lowers into position — NO fade, pure scroll-driven descent (duration extended to 8)
         tl.fromTo(docWrapRef.current,
           { yPercent: -150 },
           {
@@ -159,30 +199,30 @@ export default function About() {
             duration: 8,
             ease: "none" // Linear mapping makes it feel 1:1 physically controlled by the scroll wheel
           },
-          16.5
+          19.5
         );
 
         // Subtle gravity pendulum swing anchored at the top center (50% 0%) of the document
         tl.fromTo(docWrapRef.current,
           { rotate: 0, transformOrigin: "50% 0%" },
           { rotate: 3.5, duration: 2, ease: "power1.inOut" },
-          16.5
+          19.5
         );
         tl.to(docWrapRef.current,
           { rotate: -2.8, duration: 2, ease: "power1.inOut" },
-          18.5
+          21.5
         );
         tl.to(docWrapRef.current,
           { rotate: 1.8, duration: 2, ease: "power1.inOut" },
-          20.5
+          23.5
         );
         tl.to(docWrapRef.current,
           { rotate: -0.8, duration: 1.5, ease: "power1.inOut" },
-          22.5
+          25.5
         );
         tl.to(docWrapRef.current,
           { rotate: 0, duration: 1.5, ease: "power2.out" },
-          24.0
+          27.0
         );
 
         // --- PREPARE INITIAL STATES FOR EDITORIAL REVEALS (Replacing opacity-0 fade-ins) ---
@@ -223,11 +263,11 @@ export default function About() {
           } else {
             entranceTimeline.pause(0); // Seek to 0 and pause (redact)
           }
-        }, undefined, 18.5);
+        }, undefined, 21.5);
 
         // Add a 100vh scroll hold at the end of the document animation (duration 6.0 units)
         // to pin the fully rendered resume before entering the contact section circular reveal.
-        tl.to({}, { duration: 6.0 }, 24.5);
+        tl.to({}, { duration: 6.0 }, 27.5);
 
       });
     };
@@ -253,7 +293,7 @@ export default function About() {
     <section
       id="about"
       ref={containerRef}
-      className="relative w-full h-[400vh] bg-transparent pointer-events-none z-20"
+      className="relative w-full h-[450vh] bg-transparent pointer-events-none z-20"
     >
       <div className="fixed inset-0 w-full h-screen overflow-hidden pointer-events-none">
         
@@ -269,17 +309,19 @@ export default function About() {
         >
           <div
             ref={signatureWrapRef}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none transform origin-center z-40"
+            className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none transform z-40"
           >
-            {/* Mounted immediately so Opentype can load the font, but drawn via GSAP scrub */}
-            <Signature
-              ref={sigRef}
-              text="Ali Ahmed"
-              color="#fff7d3"
-              fontSize={50}
-              inView={false}
-              once={true}
-            />
+            <div className="signature-scale-container flex items-center justify-center">
+              {/* Mounted immediately so Opentype can load the font, but drawn via GSAP scrub */}
+              <Signature
+                ref={sigRef}
+                text="Ali Ahmed"
+                color="#fff7d3"
+                fontSize={50}
+                inView={false}
+                once={true}
+              />
+            </div>
           </div>
 
           <div

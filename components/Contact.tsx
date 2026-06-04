@@ -174,6 +174,47 @@ export default function Contact() {
         },
         0.80
       );
+
+      // --- RETRACTION STAGE (1.00 to 1.25) ---
+      // 1. Slide the entire fixed viewport circle wrapper up to reveal the sticky footer
+      tl.to(
+        circleRef.current,
+        {
+          yPercent: -100,
+          ease: "none",
+          duration: 0.25,
+        },
+        1.00
+      );
+
+      // 2. Parallax retract for Image B (slide up faster than container)
+      tl.to(
+        ".reveal-contact-image-2",
+        {
+          yPercent: -35,
+          ease: "none",
+          duration: 0.25,
+        },
+        1.00
+      );
+
+      // 3. Staggered parallax retract for title, links and text elements
+      tl.to(
+        [
+          ".reveal-contact-title", 
+          ".reveal-contact-email", 
+          ".reveal-contact-phone", 
+          ".reveal-contact-social", 
+          ".reveal-contact-message"
+        ],
+        {
+          yPercent: -120,
+          ease: "none",
+          duration: 0.25,
+          stagger: 0.015,
+        },
+        1.00
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -287,7 +328,7 @@ export default function Contact() {
             </a>
             {/* LinkedIn */}
             <a 
-              href="https://linkedin.com/in/alihahamed" 
+              href="https://www.linkedin.com/in/ali-ahmed-83613b271/" 
               target="_blank"
               rel="noopener noreferrer"
               className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
@@ -304,7 +345,7 @@ export default function Contact() {
             </a>
             {/* Instagram */}
             <a 
-              href="https://instagram.com/alihahamed" 
+              href="https://www.instagram.com/aliahmd.25/" 
               target="_blank"
               rel="noopener noreferrer"
               className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
@@ -321,7 +362,7 @@ export default function Contact() {
             </a>
             {/* X */}
             <a 
-              href="https://x.com/alihahamed" 
+              href="https://x.com/AhmedAli8177" 
               target="_blank"
               rel="noopener noreferrer"
               className="reveal-contact-social font-montreal font-normal text-[#AB1509] text-[12px] md:text-[1.8vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block w-max group"
@@ -341,13 +382,13 @@ export default function Contact() {
 
         {/* Dynamic editorial bottom-left message */}
         <div 
-          className="reveal-contact-message absolute bottom-6 left-6 md:bottom-8 md:left-4 flex flex-col md:flex-row gap-6 md:gap-16 max-w-[90vw] md:max-w-[800px] items-start pointer-events-auto"
+          className="reveal-contact-message absolute bottom-6 left-6 md:bottom-1 md:left-2 flex flex-col md:flex-row gap-6 md:gap-16 max-w-[90vw] md:max-w-[800px] items-start pointer-events-auto"
           style={{ clipPath: "inset(100% 0% 0% 0%)" }}
         >
-          <p className="max-w-[280px] md:max-w-[340px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] leading-[1.3] select-none">
+          <p className="max-w-[280px] md:max-w-[340px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] monitor:text-[17.5px] leading-[1.3] select-none">
             I build for people who think settling for good enough is the problem. Founders, brands, agencies — if you've got something worth building and you want it done right, not just done fast, let's make something people can't stop looking at.
           </p>
-          <p className="max-w-[280px] md:max-w-[320px] font-montreal font-normal text-[#AB1509] text-[14px] md:text-[15px] leading-[1.3] select-none whitespace-pre-line">
+          <p className="max-w-[280px] md:max-w-[320px] font-montreal font-normal text-[#AB1509] text-[14px] md:text-[15px] monitor:text-[17.5px] leading-[1.3] select-none whitespace-pre-line">
             If you want generic templates,{"\n"}
             rushed timelines, or high volume,{"\n"}
             Ali is the wrong choice.
@@ -357,7 +398,7 @@ export default function Contact() {
         {/* Tall parallax image on the right (Vertically centered) */}
         <div className="absolute right-[10%] top-1/2 -translate-y-1/2 select-none pointer-events-none hidden md:block z-50">
           <div 
-            className="reveal-contact-image-2 w-[18vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
+            className="reveal-contact-image-2 w-[20vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
             style={{ willChange: "transform" }}
           >
             <Image
