@@ -52,6 +52,7 @@ export default function About() {
 
         // Set initial positions
         gsap.set(redBgRef.current, { yPercent: 100 });
+        if (redBgRef.current) redBgRef.current.style.display = "none";
         gsap.set(docWrapRef.current, { xPercent: -50, yPercent: -150 });
         gsap.set(signatureWrapRef.current, { scale: 1, opacity: 1 });
         
@@ -76,7 +77,17 @@ export default function About() {
             pin: "#work",
             pinSpacing: false,
             scrub: 2,                      
+            onEnter: () => {
+              if (redBgRef.current) redBgRef.current.style.display = "";
+            },
+            onEnterBack: () => {
+              if (redBgRef.current) redBgRef.current.style.display = "";
+            },
+            onLeave: () => {
+              if (redBgRef.current) redBgRef.current.style.display = "none";
+            },
             onLeaveBack: () => {
+              if (redBgRef.current) redBgRef.current.style.display = "none";
               if (sigRef.current) sigRef.current.setProgress(0);
             }
           }

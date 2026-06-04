@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – About Document Physics & Timings`
+- **Phase:** `Feature Development – Contact Section Scroll Effects`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-04`
 
@@ -15,12 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Fine-tuned the parallax speeds of the About section's document wrapper and red background during the Contact circular reveal, mapping their translations to subtle vertical ascents to maximize depth and polish the transition feel.
+Refined Contact section tall images entry path and parallax scroll effects. Configured Project A to enter from the top and Project B from the bottom, both stopping in the center of the viewport sequentially on user scroll. Configured matching scroll-down inner parallax translations for both images and scaled them to 1.35x to avoid edge rendering gaps.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`    | Modified    | Adjusted target translations of .about-doc-wrap and .about-red-bg for subtle vertical parallax |
+| `components/Contact.tsx`    | Modified    | Configured sequential slide-in entries from top/bottom and inner-image scroll-down parallax |
 
 ---
 
@@ -74,6 +74,11 @@ Fine-tuned the parallax speeds of the About section's document wrapper and red b
 | 44| Document Pendulum Swing               | Implemented keyframe-like Z-axis rotation swing sequence on the document container anchored at the top-center (transformOrigin: 50% 0%) to simulate realistic gravity physics (rotation widened to 3.5° max for prominence) | 2026-06-04 |
 | 45| Remove ScrollTrigger boundary snaps   | Removed instant `gsap.set` in ScrollTrigger callbacks to let scrub catch-up handle transition boundaries smoothly and prevent sudden exit snap | 2026-06-04 |
 | 46| Fine-tune Contact parallax speeds      | Reduced target translations of .about-doc-wrap (yPercent: -35) and .about-red-bg (yPercent: -15) to make them ascend slowly under the expanding contact circle, creating visible depth | 2026-06-04 |
+| 47| Animated status badge on header         | Wrapped contact header in flex container to host status badge, keeping it hidden (opacity: 0) during transit and revealing (fade/slide) at progress 0.75 | 2026-06-04 |
+| 48| Increased contact link heights        | Swapped h-[1.2em] leading-none with h-[1.35em] leading-[1.35] on contact links to give font descenders enough vertical space and prevent clipping | 2026-06-04 |
+| 49| Dynamic display toggle on About overlay| Set display: none on .about-red-bg during onLeave and onLeaveBack, and display: "" on onEnter and onEnterBack. This prevents the red background from overlaying and clipping the Selected Work section during scrollback and initial load | 2026-06-04 |
+| 50| 9:16 borderless Contact images         | Set aspect ratio to 9:16, removed borders, and sourced images to where-you-going.png and you-consumed-enough.png using Next.js Image for a premium borderless layout | 2026-06-04 |
+| 51| Contact sequential image entry & parallax| Programmed Project A frame to enter from top (progress 0.45-0.70) and Project B frame from bottom (progress 0.70-0.95), with both inner images animating scroll-down parallax (yPercent: -12 to 12) scaled to 1.35x to avoid edge gaps | 2026-06-04 |
 
 ---
 

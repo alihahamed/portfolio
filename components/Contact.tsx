@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -118,6 +119,22 @@ export default function Contact() {
         0.75
       );
 
+      // Status text reveal after heading sits in the corner
+      tl.fromTo(
+        ".reveal-contact-status",
+        {
+          opacity: 0,
+          y: -10,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          ease: "power2.out",
+          duration: 0.25,
+        },
+        0.75
+      );
+
       // Bottom-left message reveal
       tl.fromTo(
         ".reveal-contact-message",
@@ -134,25 +151,49 @@ export default function Contact() {
         0.75
       );
 
-      // Parallax for tall images on the right
+      // Parallax for tall images on the right: Project A from top, Project B from bottom, both stop in middle with inner-image parallax
       tl.fromTo(
         ".reveal-contact-image-1",
-        { yPercent: 60 },
+        { y: "-100vh" },
         {
-          yPercent: -15,
-          ease: "none",
+          y: "0vh",
+          ease: "power2.out",
+          duration: 0.25,
         },
-        0
+        0.45
+      );
+
+      tl.fromTo(
+        ".reveal-img-inner-1",
+        { yPercent: -12 },
+        {
+          yPercent: 12,
+          ease: "none",
+          duration: 0.55,
+        },
+        0.45
       );
 
       tl.fromTo(
         ".reveal-contact-image-2",
-        { yPercent: 100 },
+        { y: "100vh" },
         {
-          yPercent: -25,
-          ease: "none",
+          y: "0vh",
+          ease: "power2.out",
+          duration: 0.25,
         },
-        0
+        0.70
+      );
+
+      tl.fromTo(
+        ".reveal-img-inner-2",
+        { yPercent: -12 },
+        {
+          yPercent: 12,
+          ease: "none",
+          duration: 0.30,
+        },
+        0.70
       );
     }, containerRef);
 
@@ -175,9 +216,17 @@ export default function Contact() {
         }}
       >
         {/* Giant Contact Heading (revealed as the circle covers the screen) */}
-        <h2 className="reveal-contact-title absolute top-[6px] left-[4px] font-tusker-standard text-[8vw] md:text-[11vw] font-medium uppercase tracking-tighter leading-none text-[#fff7d3] select-none pointer-events-auto whitespace-nowrap">
-          have an idea?
-        </h2>
+        <div className="reveal-contact-title absolute top-[6px] left-[4px] flex items-start gap-4 md:gap-6 select-none pointer-events-auto whitespace-nowrap">
+          <h2 className="font-tusker-standard text-[8vw] md:text-[11vw] font-medium uppercase tracking-tighter leading-none text-[#fff7d3]">
+            have an idea?
+          </h2>
+          <span 
+            className="reveal-contact-status font-montreal font-normal text-[#AB1509] text-[10px] md:text-sm tracking-normal mt-[0.8vw] md:mt-[0.3vw] inline-block opacity-0"
+            style={{ willChange: "transform, opacity" }}
+          >
+            Available for Projects
+          </span>
+        </div>
 
         {/* Large contact links (Email & Phone) revealed below the heading */}
         <div 
@@ -186,16 +235,16 @@ export default function Contact() {
           {/* Email link */}
           <a 
             href="mailto:aliahmedyus@gmail.com" 
-            className="reveal-contact-email font-montreal font-medium text-[#fff7d3] text-[3.5vw] md:text-[4vw] tracking-normal leading-none overflow-hidden h-[1.2em] block group"
+            className="reveal-contact-email font-montreal font-medium text-[#fff7d3] text-[3.5vw] md:text-[4vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block group"
             style={{ clipPath: "inset(0% 0% 100% 0%)" }}
           >
             <span className="email-roll-wrapper block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
               {/* Normal State */}
-              <span className="email-line-normal block h-[1.2em] leading-none text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300">
+              <span className="email-line-normal block h-[1.35em] leading-[1.35] text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300">
                 aliahmedyus@gmail.com
               </span>
               {/* Hover State */}
-              <span className="email-line-hover block h-[1.2em] leading-none text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300 flex items-center">
+              <span className="email-line-hover block h-[1.35em] leading-[1.35] text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300 flex items-center">
                 send mail 
                 <svg 
                   className="inline-block w-[0.85em] h-[0.85em] translate-x-[-12px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 ease-out ml-3 align-middle"
@@ -214,16 +263,16 @@ export default function Contact() {
           {/* Phone link */}
           <a 
             href="tel:+918867145921" 
-            className="reveal-contact-phone font-montreal font-medium text-[#fff7d3] text-[3.5vw] md:text-[4vw] tracking-normal leading-none overflow-hidden h-[1.2em] block group"
+            className="reveal-contact-phone font-montreal font-medium text-[#fff7d3] text-[3.5vw] md:text-[4vw] tracking-normal leading-[1.35] overflow-hidden h-[1.35em] block group"
             style={{ clipPath: "inset(0% 0% 100% 0%)" }}
           >
             <span className="phone-roll-wrapper block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
               {/* Normal State */}
-              <span className="phone-line-normal block h-[1.2em] leading-none text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300">
+              <span className="phone-line-normal block h-[1.35em] leading-[1.35] text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300">
                 +91 8867145921
               </span>
               {/* Hover State */}
-              <span className="phone-line-hover block h-[1.2em] leading-none text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300 flex items-center">
+              <span className="phone-line-hover block h-[1.35em] leading-[1.35] text-[#fff7d3] group-hover:text-[#AB1509] transition-colors duration-300 flex items-center">
                 call me
                 <svg 
                   className="inline-block w-[0.85em] h-[0.85em] translate-x-[-12px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 ease-out ml-3 align-middle"
@@ -248,30 +297,40 @@ export default function Contact() {
           <p className="max-w-[280px] md:max-w-[340px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] leading-[1.3] select-none">
             I build for people who think settling for good enough is the problem. Founders, brands, agencies — if you've got something worth building and you want it done right, not just done fast, let's make something people can't stop looking at.
           </p>
-          <p className="max-w-[280px] md:max-w-[320px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] leading-[1.3] select-none whitespace-pre-line">
+          <p className="max-w-[280px] md:max-w-[320px] font-montreal font-normal text-[#AB1509] text-[14px] md:text-[15px] leading-[1.3] select-none whitespace-pre-line">
             If you want generic templates,{"\n"}
             rushed timelines, or high volume,{"\n"}
             Ali is the wrong choice.
           </p>
         </div>
 
-        {/* Tall parallax images on the right */}
-        <div className="absolute right-[6%] bottom-[8vh] flex gap-6 md:gap-8 items-end select-none pointer-events-none hidden md:flex z-50">
+        {/* Tall parallax images on the right (Vertically centered) */}
+        <div className="absolute right-[6%] top-1/2 -translate-y-1/2 flex gap-6 md:gap-8 items-center select-none pointer-events-none hidden md:flex z-50">
           <div 
-            className="reveal-contact-image-1 w-[13vw] aspect-[3/4] bg-neutral-900 border border-white/10 relative overflow-hidden"
+            className="reveal-contact-image-1 w-[13vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
             style={{ willChange: "transform" }}
           >
-            <div className="absolute inset-0 flex items-center justify-center text-white/20 font-montreal text-xs uppercase tracking-widest">
-              [ Project A ]
-            </div>
+            <Image
+              src="/where-you-going.png"
+              alt="Where you going"
+              fill
+              className="reveal-img-inner-1 object-cover scale-[1.35]"
+              sizes="13vw"
+              priority
+            />
           </div>
           <div 
-            className="reveal-contact-image-2 w-[13vw] aspect-[3/4] bg-neutral-900 border border-white/10 relative overflow-hidden mb-[8vh]"
+            className="reveal-contact-image-2 w-[13vw] aspect-[9/16] bg-neutral-900 relative overflow-hidden"
             style={{ willChange: "transform" }}
           >
-            <div className="absolute inset-0 flex items-center justify-center text-white/20 font-montreal text-xs uppercase tracking-widest">
-              [ Project B ]
-            </div>
+            <Image
+              src="/you-consumed-enough.png"
+              alt="You consumed enough"
+              fill
+              className="reveal-img-inner-2 object-cover scale-[1.35]"
+              sizes="13vw"
+              priority
+            />
           </div>
         </div>
       </div>
