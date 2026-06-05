@@ -6,6 +6,9 @@ import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { CustomEase } from "gsap/CustomEase";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Register GSAP plugins
 import Preloader from "./Preloader";
@@ -26,6 +29,20 @@ export const useTransitionContext = () => {
     throw new Error("useTransitionContext must be used within a PageTransitionProvider");
   }
   return context;
+};
+
+const getWipeText = (href: string) => {
+  const [_, targetHash] = href.split("#");
+  const destination = targetHash || "home";
+
+  const WIPE_TEXTS: { [key: string]: string } = {
+    home: "back to the grid",
+    about: "meet the developer",
+    work: "we're going to work",
+    contact: "let's build something real"
+  };
+
+  return WIPE_TEXTS[destination] || WIPE_TEXTS.home;
 };
 
 export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -78,11 +95,7 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
       if (customTitle) {
         title.innerHTML = customTitle;
       } else {
-        // Extract destination route name
-        const pathSegments = nextHref.split("/").filter(Boolean);
-        const nextDestination = pathSegments[pathSegments.length - 1] || "home";
-        // Setup destination title text
-        title.innerHTML = `we're going to ${nextDestination}`;
+        title.innerHTML = getWipeText(nextHref);
       }
 
       // Reset and trigger SplitText words slicing
@@ -213,40 +226,70 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
     if (isCurrentPage) {
       // Determine dynamic custom title
-      const destination = targetHash || "home";
-      const customTitle = `we're going to ${destination}`;
+      const customTitle = getWipeText(href);
 
       // A: Leave Phase
       await playLeaveAnimation(href, customTitle);
 
       // B: Position viewport instantly while screen is fully covered
-      if (targetHash === "about" || targetHash === "contact") {
-        // Scroll fully to the bottom so the document is completely rendered down
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "instant"
-        });
-      } else if (targetHash) {
+      if (targetHash) {
         const el = document.getElementById(targetHash);
         if (el) {
           // If the element is pinned by GSAP, target its pin-spacer to find the original top scroll position
           const spacer = el.closest(".pin-spacer") as HTMLElement || el;
-          const targetY = spacer.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({
-            top: targetY,
-            behavior: "instant"
-          });
+          let targetY = spacer.getBoundingClientRect().top + window.pageYOffset;
+
+          if (targetHash === "about") {
+            // Scroll to the document reveal phase of the About timeline (progress ~0.85)
+            targetY += window.innerHeight * 2.85;
+          } else if (targetHash === "contact") {
+            // Scroll to the fully loaded contact details phase (progress ~0.58)
+            targetY += window.innerHeight * 0.75;
+          }
+
+          if ((window as any).lenis) {
+            (window as any).lenis.scrollTo(targetY, { immediate: true });
+          } else {
+            window.scrollTo({
+              top: targetY,
+              behavior: "instant"
+            });
+          }
         }
       } else {
         // No hash: scroll to the top of the page (Home)
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "instant"
-        });
+        if ((window as any).lenis) {
+          (window as any).lenis.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant"
+          });
+        }
       }
 
-      // Notify Lenis and ScrollTrigger to synchronize their scroll metrics instantly
+      // Force ScrollTrigger to update layout metrics immediately and synchronously for new scroll position
+      (ScrollTrigger.update as any)(true);
+
+      // Instantly synchronize all scrub animations to target progress (bypasses scrub lag)
+      ScrollTrigger.getAll().forEach((t) => {
+        if (t.animation) {
+          const isScrub = t.vars.scrub !== undefined && t.vars.scrub !== false;
+          if (isScrub) {
+            t.animation.progress(t.progress);
+          } else {
+            // For non-scrub animations, if the trigger is active (scrolled past start)
+            if (t.progress > 0) {
+              t.animation.progress(1);
+            } else {
+              t.animation.progress(0);
+            }
+          }
+        }
+      });
+
+      // Notify Lenis and window listeners
       window.dispatchEvent(new Event("scroll"));
 
       // C: Enter Phase

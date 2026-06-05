@@ -59,7 +59,7 @@ export default function Contact() {
         {
           clipPath: "circle(150% at 50% 100%)",
           ease: "none",
-          duration: 1.5,
+          duration: 1.7,
         },
         0
       );
@@ -72,9 +72,9 @@ export default function Contact() {
         ".about-doc-wrap",
         { yPercent: 0 },
         {
-          yPercent: -45,
+          yPercent: -75,
           ease: "none",
-          duration: 1.5,
+          duration: 1,
         },
         0
       );
@@ -106,7 +106,7 @@ export default function Contact() {
           y: () => window.innerHeight / 2 - 6,
           yPercent: -50,
           ease: "power1.out",
-          duration: 0.8,
+          duration: 1,
         },
         0
       );
@@ -136,10 +136,10 @@ export default function Contact() {
           y: 0,
           clipPath: "inset(0% 0% 0% 0%)",
           ease: "power2.out",
-          duration: 0.5,
+          duration: 0.7,
           stagger: 0.05,
         },
-        1.3
+        1.8
       );
 
       // Status text reveal after heading sits in the corner
@@ -153,9 +153,9 @@ export default function Contact() {
           opacity: 1,
           y: 0,
           ease: "power2.out",
-          duration: 0.5,
+          duration: 0.7,
         },
-        1.3
+        1.8
       );
 
       // Bottom-left message reveal
@@ -169,9 +169,9 @@ export default function Contact() {
           y: 0,
           clipPath: "inset(0% 0% 0% 0%)",
           ease: "power2.out",
-          duration: 0.5,
+          duration: 0.7,
         },
-        1.3
+        1.8
       );
 
       // Parallax for single tall image on the right: Project B from bottom, stops in middle with inner-image parallax
@@ -181,9 +181,9 @@ export default function Contact() {
         {
           y: "0vh",
           ease: "power2.inOut",
-          duration: 1.2,
+          duration: 1,
         },
-        1.5
+        1.8
       );
 
       tl.fromTo(
@@ -193,14 +193,13 @@ export default function Contact() {
           yPercent: 6,
           scale: 1.15,
           ease: "none",
-          duration: 0.5,
+          duration: 1,
         },
-        1.5
+        1.8
       );
 
-      // --- RETRACTION STAGE (2.60 to 3.90 with a SCROLL HOLD from 2.00 to 2.60) ---
-      // The timeline total duration will be 3.90. The retraction takes 1.30 (1/3 of the timeline).
-      // Since the scroll distance is 300vh, 1/3 of the scroll is exactly 100vh.
+      // --- RETRACTION STAGE (3.00 to 4.80 with a SCROLL HOLD from 2.40 to 3.00) ---
+      // The timeline total duration will be 4.80. The retraction takes 1.80 (approx 37.5% of the timeline).
       // With ease: "none", this creates a PERFECT 1:1 map to native scrolling!
       
       // 1. Slide the entire fixed viewport circle wrapper up to reveal the sticky footer
@@ -211,7 +210,7 @@ export default function Contact() {
           ease: "none", // Must be linear for native scroll illusion
           duration: 1.3,
         },
-        2.6
+        3.0
       );
 
       // 2. Animate border-radius from sharp (0px) to rounded (24px/8px) as it slides up
@@ -225,9 +224,9 @@ export default function Contact() {
           borderBottomLeftRadius: () => window.innerWidth > 768 ? "20px" : "8px",
           borderBottomRightRadius: () => window.innerWidth > 768 ? "20px" : "8px",
           ease: "power1.out",
-          duration: 0.3,
+          duration: 0.4,
         },
-        2.6
+        3.0
       );
 
       // 3. Parallax retract for Image B (slide up faster than container for strong reveal effect)
@@ -236,9 +235,9 @@ export default function Contact() {
         {
           yPercent: -75,
           ease: "none",
-          duration: 1.3,
+          duration: 1.8,
         },
-        2.6
+        3.0
       );
 
       // 4. Staggered parallax retract for title, links and text elements (sweeps up off-screen strongly)
@@ -253,12 +252,12 @@ export default function Contact() {
         {
           yPercent: -140, // Strong retraction sweep (exceeds container's -100%)
           ease: "none",
-          duration: 1.3,
+          duration: 1.8,
           stagger: {
             amount: 0.4,
           },
         },
-        2.6
+        3.0
       );
     }, containerRef);
 
@@ -268,7 +267,7 @@ export default function Contact() {
   return (
     <section 
       ref={containerRef} 
-      id="contact-section"
+      id="contact"
       className="relative w-full h-[300vh] z-[60] pointer-events-none"
     >
       {/* Viewport-fixed background wrapper with clip-path reveal */}
@@ -428,7 +427,7 @@ export default function Contact() {
 
         {/* Dynamic editorial bottom-left message */}
         <div 
-          className="reveal-contact-message absolute bottom-6 left-6 md:bottom-1 md:left-2 flex flex-col md:flex-row gap-6 md:gap-16 max-w-[90vw] md:max-w-[800px] items-start pointer-events-auto"
+          className="reveal-contact-message absolute bottom-6 left-6 md:bottom-1 md:left-4 flex flex-col md:flex-row gap-6 md:gap-16 max-w-[90vw] md:max-w-[800px] items-start pointer-events-auto"
           style={{ clipPath: "inset(100% 0% 0% 0%)" }}
         >
           <p className="max-w-[280px] md:max-w-[340px] font-montreal font-normal text-white/90 text-[14px] md:text-[15px] monitor:text-[17.5px] leading-[1.3] select-none">

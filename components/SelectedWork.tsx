@@ -599,14 +599,14 @@ export default function SelectedWork() {
 
           const tl = gsap.timeline({
             defaults: { ease: "sine.inOut" },
+            onUpdate: () => {
+              updateCarouselRotation();
+            },
             scrollTrigger: {
               trigger: scene,
               start: "top bottom",
               end: "bottom top",
               scrub: 0.8,
-              onUpdate: () => {
-                updateCarouselRotation();
-              }
             },
           });
 
@@ -861,7 +861,7 @@ export default function SelectedWork() {
             <div className={`absolute z-20 pointer-events-none left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[10%] lg:left-4 lg:right-auto lg:bottom-65 monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft/90  tracking-normal text-[12px] md:text-[29px] monitor:!text-[40px]  text-left">
+              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft/90  tracking-normal text-[12px] md:text-[32px] monitor:!text-[45px]  text-left">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
@@ -872,10 +872,10 @@ export default function SelectedWork() {
                 ))}
               </h2>
               {/* Draw-out Underline */}
-              <div
+              {/* <div
                 className="work-title-underline h-[1.5px] bg-white/50 mt-1.5 origin-left w-[120px] md:w-[200px]"
                 style={{ transform: "scaleX(0)" }}
-              />
+              /> */}
             </div>
 
             {/* Bottom-right Project Description (styled with Tailwind CSS directly for manual edits) */}

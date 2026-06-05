@@ -13,7 +13,7 @@ export default function Footer() {
   const redBlockContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const contactSection = document.getElementById("contact-section");
+    const contactSection = document.getElementById("contact");
     if (!contactSection) return;
 
     const ctx = gsap.context(() => {
@@ -27,11 +27,11 @@ export default function Footer() {
         }
       });
 
-      // Match the total timeline duration of Contact (3.9)
-      tl.to({}, { duration: 3.9 }, 0);
+      // Match the total timeline duration of Contact (4.8)
+      tl.to({}, { duration: 5.8 }, 0);
 
       // Footer name text and red block content entrance animation
-      // Starts exactly when retraction starts (2.6) and runs for full retraction duration (1.3)
+      // Starts exactly when retraction starts (3.0) and runs for full retraction duration (1.8)
       tl.fromTo(
         [nameRef.current, redBlockContentRef.current],
         {
@@ -39,10 +39,10 @@ export default function Footer() {
         },
         {
           yPercent: 0,
-          ease: "power2.out",
+          ease: "power3.out",
           duration: 1.3,
         },
-        2.6
+        4.0
       );
     }, footerRef);
 
@@ -59,7 +59,7 @@ export default function Footer() {
       }}
     >
       {/* Top typographic section (Soft yellow background with giant red text) */}
-      <div className="relative w-full flex-1 flex flex-col justify-end items-center bg-[#fff7d3]">
+      <div className="relative w-full flex-1 flex flex-col justify-end items-center bg-[#fff7d3] z-10">
         {/* Outer clipping container */}
         <div className="footer-name-outer w-full overflow-hidden flex flex-col justify-end items-center origin-bottom pt-[12vw] pb-0">
           {/* Inner translated wrapper */}
@@ -90,7 +90,7 @@ export default function Footer() {
         >
           {/* Col 1: Tech Stack */}
           <div className="flex flex-col gap-3 items-start text-left">
-            <span className="opacity-50 uppercase tracking-wider text-[10px] md:text-xs">site built using</span>
+            <span className="opacity-70 uppercase tracking-wider text-[10px] md:text-xs">site built using</span>
             <ul className="flex flex-col gap-1.5 list-none p-0 m-0 font-medium text-white">
               <li>next.js</li>
               <li>gsap</li>
@@ -100,8 +100,8 @@ export default function Footer() {
           </div>
 
           {/* Col 2: Navigation Links */}
-          <div className="flex flex-col gap-3 items-center text-center b-30 relative bottom-15">
-            <span className="opacity-50 uppercase tracking-wider text-[10px] md:text-xs">links</span>
+          <div className="flex flex-col gap-3 items-center text-center -mt-6 md:-mt-[72px]">
+            <span className="opacity-70 uppercase tracking-wider text-[10px] md:text-xs">links</span>
             <ul className="flex flex-col gap-1.5 list-none p-0 m-0 font-medium">
               <li>
                 <TransitionLink href="/" className="hover:text-[#fff7d3] transition-colors duration-300 no-underline">
@@ -128,15 +128,15 @@ export default function Footer() {
             {/* CTA Button */}
             <a 
               href="mailto:aliahmedyus@gmail.com"
-              className="mt-5 md:mt-5 overflow-hidden h-[1.95em] block group pointer-events-auto no-underline text-[#fff7d3]"
+              className="mt-6 overflow-hidden h-[36px] md:h-[50px] block group pointer-events-auto no-underline text-[#fff7d3]"
             >
               <span className="block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
                 {/* Normal State */}
-                <span className="block h-[1.35em] leading-[1.35] font-montreal font-medium text-sm md:text-[22px] text-[#fff7d3] select-none uppercase tracking-tight">
+                <span className="block h-[36px] md:h-[50px] flex items-center justify-center font-tusker-standard font-medium text-[20px] md:text-[36px] leading-none text-[#fff7d3] select-none uppercase tracking-tight">
                   lets work
                 </span>
                 {/* Hover State */}
-                <span className="block h-[1.35em] leading-[1.35] font-montreal font-medium text-sm md:text-[22px] text-[#fff7d3] select-none uppercase tracking-tight">
+                <span className="block h-[36px] md:h-[50px] flex items-center justify-center font-tusker-standard font-medium text-[20px] md:text-[36px] leading-none text-[#fff7d3] select-none uppercase tracking-tight">
                   or settle for average
                 </span>
               </span>
@@ -145,7 +145,7 @@ export default function Footer() {
 
           {/* Col 3: Social Links */}
           <div className="flex flex-col gap-3 items-end text-right">
-            <span className="opacity-50 uppercase tracking-wider text-[10px] md:text-xs">socials</span>
+            <span className="opacity-70 uppercase tracking-wider text-[10px] md:text-xs">socials</span>
             <ul className="flex flex-col gap-1.5 list-none p-0 m-0 font-medium">
               <li>
                 <a href="https://github.com/alihahamed" target="_blank" rel="noopener noreferrer" className="hover:text-[#fff7d3] transition-colors duration-300 no-underline">

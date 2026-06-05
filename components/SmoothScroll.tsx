@@ -17,6 +17,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       smoothWheel: true,
     });
 
+    (window as any).lenis = lenis;
+
     // Bridge Lenis virtual scroll → GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -27,6 +29,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.ticker.lagSmoothing(0); // Prevent GSAP from throttling during heavy frames
 
     return () => {
+      (window as any).lenis = undefined;
       lenis.destroy();
       gsap.ticker.remove(lenis.raf as unknown as gsap.TickerCallback);
     };

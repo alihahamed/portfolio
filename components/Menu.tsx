@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 import { TransitionLink, useTransitionContext } from "@/components/PageTransition";
 
-export default function Menu() {
+export default function Menu({ delay = 0.3 }: { delay?: number }) {
   const { showPreloader } = useTransitionContext();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -38,11 +38,11 @@ export default function Menu() {
           scale: 1,
           duration: 1.2,
           ease: "power4.out",
-          delay: 0.3, // Perfect alignment with hero intro
+          delay: delay, // Perfect alignment with hero intro
         }
       );
     }
-  }, [mounted, showPreloader]);
+  }, [mounted, showPreloader, delay]);
 
   useEffect(() => {
     gsap.registerPlugin(CustomEase);
@@ -148,21 +148,21 @@ export default function Menu() {
       {/* Sliding Curved Menu Panel */}
       <nav
         ref={menuRef}
-        className="absolute top-0 right-0 bottom-0 w-full md:w-[35rem] h-full flex flex-col justify-between items-start pt-24 md:pt-28 pb-8 rounded-l-[1rem] md:rounded-l-[1rem] overflow-hidden pointer-events-auto hidden"
+        className="absolute top-0 right-0 bottom-0 w-full md:w-[28rem] monitor:w-[35rem] h-full flex flex-col justify-between items-start pt-20 monitor:pt-28 pb-8 rounded-l-[1rem] monitor:rounded-l-[1rem] overflow-hidden pointer-events-auto hidden"
         style={{ zIndex: 1 }}
       >
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
           <div
             ref={(el) => { if (el) bgPanelsRef.current[0] = el; }}
-            className="absolute inset-0 bg-accent rounded-l-[2rem] md:rounded-l-[2rem]"
+            className="absolute inset-0 bg-accent rounded-l-[2rem] monitor:rounded-l-[2rem]"
           ></div>
           <div
             ref={(el) => { if (el) bgPanelsRef.current[1] = el; }}
-            className="absolute inset-0 bg-[#fff7d3] rounded-l-[2rem] md:rounded-l-[2rem]"
+            className="absolute inset-0 bg-[#fff7d3] rounded-l-[2rem] monitor:rounded-l-[2rem]"
           ></div>
           <div
             ref={(el) => { if (el) bgPanelsRef.current[2] = el; }}
-            className="absolute inset-0 bg-[#050505] rounded-l-[2rem] md:rounded-l-[2rem]"
+            className="absolute inset-0 bg-[#050505] rounded-l-[2rem] monitor:rounded-l-[2rem]"
           ></div>
         </div>
 
@@ -178,12 +178,12 @@ export default function Menu() {
                 <TransitionLink
                   href={item.href}
                   onClick={closeMenu}
-                  className="menu-link relative flex items-baseline gap-3 py-5 md:py-6 px-6 md:px-10 w-full no-underline group/link select-none"
+                  className="menu-link relative flex items-baseline gap-3 py-3 md:py-3.5 monitor:py-6 px-6 md:px-8 monitor:px-10 w-full no-underline group/link select-none"
                 >
                   {/* Text roll hover via text-shadow trick */}
                   <div className="menu-link-heading-wrap relative overflow-hidden pt-2">
                     <span
-                      className="block font-tusker-standard text-[2.75rem] md:text-[7rem] font-medium uppercase leading-[0.85] tracking-tight whitespace-nowrap text-[#fff7d3] transition-transform duration-500 ease-out group-hover/link:-translate-y-[1em] select-none"
+                      className="block font-tusker-standard text-[2.75rem] md:text-[5.5rem] monitor:text-[7rem] font-medium uppercase leading-[0.85] tracking-tight whitespace-nowrap text-[#fff7d3] transition-transform duration-500 ease-out group-hover/link:-translate-y-[1em] select-none"
                       style={{ textShadow: "0px 1em 0px #AB1509" }}
                     >
                       {item.label}
@@ -203,10 +203,10 @@ export default function Menu() {
           </ul>
 
           {/* Socials */}
-          <div className="flex flex-col gap-3 px-6 md:px-10 w-full">
+          <div className="flex flex-col gap-3 px-6 md:px-8 monitor:px-10 w-full">
             <p
               ref={(el) => { if (el) fadeTargetsRef.current[0] = el; }}
-              className="text-[16px] uppercase tracking-widest text-white/40 font-light"
+              className="text-[16px] uppercase tracking-normal text-white/40 font-normal font-montreal"
               data-menu-fade=""
             >
               Socials
@@ -221,7 +221,7 @@ export default function Menu() {
                   key={social.label}
                   href={social.href}
                   onClick={closeMenu}
-                  className="relative py-1 text-[10px] uppercase tracking-widest whitespace-nowrap font-light text-white/50 hover:text-[#fff7d3] transition-colors duration-300 group/social"
+                  className="relative py-1 text-[12px] uppercase tracking-normal whitespace-nowrap font-normal font-montreal text-white/50 hover:text-[#fff7d3] transition-colors duration-300 group/social"
                 >
                   {social.label}
                   <span className="absolute bottom-0 left-0 w-full h-[1px] bg-accent origin-right scale-x-0 group-hover/social:scale-x-100 group-hover/social:origin-left transition-transform duration-300"></span>

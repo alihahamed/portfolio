@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 import Menu from "@/components/Menu";
-import { Signature } from "@/components/ui/signature";
+import { Signature, SignatureRef } from "@/components/ui/signature";
 import ScrollArrow from "@/components/ScrollArrow";
 import { TransitionLink, useTransitionContext } from "@/components/PageTransition";
 import SilkBackground from "@/components/SilkBackground";
@@ -13,92 +13,11 @@ export default function Hero() {
   const context = useTransitionContext();
   const showPreloader = context?.showPreloader;
   const containerRef = useRef<HTMLDivElement>(null);
-  const drumRef = useRef<HTMLSpanElement>(null);
+  const signatureRef = useRef<SignatureRef>(null);
   const projectsRef = useRef<HTMLSpanElement>(null);
   const yearsRef = useRef<HTMLSpanElement>(null);
   const scoreRef = useRef<HTMLSpanElement>(null);
 
-  const [isIntroFinished, setIsIntroFinished] = useState(false);
-  const [virtualIndex, setVirtualIndex] = useState(0);
-  const activeIndex = virtualIndex % 4;
-  const [wordWidths, setWordWidths] = useState<number[]>([]);
-  const words = ["Websites", "Experiences", "Interfaces", "Products", "Websites"]; // Extended with duplicate for infinite forward scroll
-
-  // 1. Measure responsive widths of all words dynamically on mount and window resize
-  useEffect(() => {
-    const measure = () => {
-      const widths = words.map((_, i) => {
-        const el = document.getElementById(`word-measure-${i}`);
-        return el ? el.getBoundingClientRect().width : 0;
-      });
-      setWordWidths(widths);
-    };
-
-    // Tiny delay to ensure font resources are parsed and rendered by browser
-    const timeout = setTimeout(measure, 100);
-    window.addEventListener("resize", measure);
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
-  // 2. Odometer & Vertical Sliding Cycling Timer (Only starts AFTER the intro has fully finished!)
-  useEffect(() => {
-    if (!isIntroFinished) return;
-    const interval = setInterval(() => {
-      setVirtualIndex((prev) => prev + 1);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [isIntroFinished]);
-
-  // 3. Vertical sliding track width and motion-blur offset timeline
-  useEffect(() => {
-    if (wordWidths.length === 0) return;
-
-    const activeWordIndex = virtualIndex % 4;
-    const targetWidth = wordWidths[activeWordIndex];
-
-    // Keep track static, flat, and at initial word width during the intro animation
-    if (!isIntroFinished || (virtualIndex === 0 && !drumRef.current?.style.width)) {
-      gsap.set(drumRef.current, { width: wordWidths[0] });
-      gsap.set(".sliding-track", { yPercent: 0 });
-      return;
-    }
-
-    const tl = gsap.timeline();
-
-    // Smoothly transition container width in sync with slide
-    tl.to(drumRef.current, {
-      width: targetWidth,
-      duration: 0.6,
-      ease: "power2.out"
-    }, 0);
-
-    // Dynamic slot-machine downward vertical slide with motion blur and spring bounce!
-    const targetY = -virtualIndex * 20;
-
-    tl.fromTo(".sliding-track",
-      { filter: "blur(0px)" },
-      {
-        yPercent: targetY,
-        filter: "blur(1.5px)",
-        duration: 0.8,
-        ease: "back.out(1.8)",
-        onComplete: () => {
-          gsap.set(".sliding-track", { filter: "blur(0px)" });
-          
-          // If we reach the duplicate "Websites" at the bottom (index 4), reset instantly to top
-          if (virtualIndex > 0 && virtualIndex % 4 === 0) {
-            gsap.set(".sliding-track", { yPercent: 0 });
-            setVirtualIndex(0);
-          }
-        }
-      },
-      0
-    );
-
-  }, [virtualIndex, wordWidths, isIntroFinished]);
 
   // 4. Master Creative Intro Animation Timeline on Load
   useEffect(() => {
@@ -114,12 +33,8 @@ export default function Hero() {
 
       const tl = gsap.timeline({ delay: 0.2 });
 
-      // Trigger isIntroFinished = true when the timeline has fully completed playing
-      tl.eventCallback("onComplete", () => {
-        setIsIntroFinished(true);
-      });
-
       // Step 1: Clean, untilted mask reveal sliding straight up with dramatic custom ease
+      // Length: starts at 0.1, duration 1.8, stagger 0.18 -> completes at 0.1 + 0.18 + 1.8 = 2.08
       tl.fromTo(".text-reveal", 
         { yPercent: 110, opacity: 0 },
         {
@@ -132,7 +47,45 @@ export default function Hero() {
         0.1
       );
 
-      // Step 2: Odometer counts for the stats numbers
+      // Step 2: About description with 0.1s of gap (starts at 2.08 + 0.1 = 2.18)
+      // Length: duration 1.4 -> completes at 2.18 + 1.4 = 3.58
+      tl.fromTo(".about-label-reveal",
+        { opacity: 0, x: -25 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1.2,
+          ease: "power3.out"
+        },
+        2.18
+      );
+
+      tl.fromTo(".about-para-reveal",
+        { clipPath: "inset(0% 0% 100% 0%)", y: 20 },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          y: 0,
+          duration: 1.4,
+          ease: "power3.inOut"
+        },
+        2.18
+      );
+
+      // Step 3: Lines, signature, and statistics with 0.1s of gap (starts at 3.58 + 0.1 = 3.68)
+      // Both stats connector lines (top & bottom)
+      tl.to("#stat-connector-line", {
+        scaleX: 1,
+        duration: 1.5,
+        ease: "power3.inOut",
+      }, 3.68);
+
+      tl.to("#top-stat-connector-line", {
+        scaleX: 1,
+        duration: 1.5,
+        ease: "power3.inOut",
+      }, 3.68);
+
+      // Odometer counts for the stats numbers
       tl.to(projectsObj, {
         value: 50,
         duration: 1.6,
@@ -142,7 +95,7 @@ export default function Hero() {
             projectsRef.current.innerText = Math.round(projectsObj.value).toString();
           }
         }
-      }, 0.6);
+      }, 3.68);
 
       tl.to(yearsObj, {
         value: 6,
@@ -153,7 +106,7 @@ export default function Hero() {
             yearsRef.current.innerText = Math.round(yearsObj.value).toString();
           }
         }
-      }, 0.7);
+      }, 3.68);
 
       tl.to(scoreObj, {
         value: 98.9,
@@ -164,9 +117,9 @@ export default function Hero() {
             scoreRef.current.innerText = scoreObj.value.toFixed(1);
           }
         }
-      }, 0.5);
+      }, 3.68);
 
-      // Step 3: Fade and translate secondary stats container frames in
+      // Fade and translate secondary stats container frames in
       tl.fromTo(".fade-in-item", 
         { opacity: 0, y: 15 },
         { 
@@ -175,45 +128,21 @@ export default function Hero() {
           duration: 1.0, 
           ease: "power3.out" 
         }, 
-        0.8
+        3.68
       );
 
-      // Step 4: Expand both stats connector lines (top & bottom) once numbers are counting
-      tl.to("#stat-connector-line", {
-        scaleX: 1,
-        duration: 1.5,
-        ease: "power3.inOut",
-      }, 1.0);
-
-      tl.to("#top-stat-connector-line", {
-        scaleX: 1,
-        duration: 1.5,
-        ease: "power3.inOut",
-      }, 1.0);
-
-      // Step 5: Horizontal slide-out for the About column label
-      tl.fromTo(".about-label-reveal",
-        { opacity: 0, x: -25 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1.2,
-          ease: "power3.out"
-        },
-        0.9
-      );
-
-      // Step 6: Vertical SVG-style clip wipe for the About paragraph block
-      tl.fromTo(".about-para-reveal",
-        { clipPath: "inset(0% 0% 100% 0%)", y: 20 },
-        {
-          clipPath: "inset(0% 0% 0% 0%)",
-          y: 0,
-          duration: 1.4,
-          ease: "power3.inOut"
-        },
-        1.0
-      );
+      // Draw signature stroke dynamically in sync with timeline
+      const sigObj = { progress: 0 };
+      tl.to(sigObj, {
+        progress: 1,
+        duration: 1.8,
+        ease: "power2.out",
+        onUpdate: () => {
+          if (signatureRef.current) {
+            signatureRef.current.setProgress(sigObj.progress);
+          }
+        }
+      }, 3.68);
 
     }, containerRef);
 
@@ -225,18 +154,7 @@ export default function Hero() {
       ref={containerRef}
       className="relative flex flex-col w-full selection:bg-white selection:text-black font-sans antialiased text-white"
     >
-      {/* Hidden measuring nodes to read viewport-relative text widths dynamically */}
-      <div className="absolute opacity-0 pointer-events-none select-none invisible whitespace-nowrap" aria-hidden="true">
-        {words.map((w, i) => (
-          <span
-            key={`measure-${w}-${i}`}
-            id={`word-measure-${i}`}
-            className="font-tusker-standard text-[8.5vw] md:text-[10vw] font-medium uppercase tracking-tight"
-          >
-            {w}
-          </span>
-        ))}
-      </div>
+
 
       {/* HERO SECTION CONTAINER (Fills exactly 100vh, transparent background to reveal WebGL) */}
       <div className="relative w-full h-screen min-h-[650px] flex flex-col justify-between overflow-hidden pb-6">
@@ -248,13 +166,13 @@ export default function Hero() {
           <div className="flex justify-between items-center w-full">
             {/* Logo - Handwritten Cursive Signature */}
             {!showPreloader ? (
-              <Signature text="Ali Ahmed" color="#fff7d3" fontSize={12} />
+              <Signature ref={signatureRef} text="Ali Ahmed" color="#fff7d3" fontSize={12} />
             ) : (
               <div />
             )}
 
             {/* Stylized ME/NU Stacked Menu Component */}
-            <Menu />
+            <Menu delay={3.88} />
           </div>
         </header>
 
@@ -280,38 +198,11 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Line 1: Sliding Odometer Track */}
+            {/* Line 1: Static Heading */}
             <div className="overflow-hidden w-full py-1">
               <h1 className="text-reveal font-tusker-standard text-[8.5vw] md:text-[10vw] font-medium uppercase leading-[0.85] tracking-tight w-full text-left pb-2 flex flex-wrap items-baseline gap-x-[0.25em] text-[#fff7d3]">
                 <span className="heading-gradient">I Build</span>
-                
-                <span 
-                  ref={drumRef} 
-                  className="relative inline-flex h-[0.85em] overflow-hidden align-baseline select-none" 
-                  style={{ 
-                    verticalAlign: "baseline",
-                    willChange: "width"
-                  }}
-                >
-                  <span className="opacity-0 select-none pointer-events-none heading-gradient">
-                    {words[0]}
-                  </span>
-                  
-                  <span 
-                    className="sliding-track absolute left-0 top-0 flex flex-col w-full h-[500%] justify-start"
-                    style={{ willChange: "transform, filter" }}
-                  >
-                    {words.map((w, i) => (
-                      <span 
-                        key={`${w}-${i}`} 
-                        className="h-1/5 flex items-center justify-start heading-gradient whitespace-nowrap"
-                      >
-                        {w}
-                      </span>
-                    ))}
-                  </span>
-                </span>
-
+                <span className="heading-gradient">Websites</span>
                 <span className="heading-gradient">That</span>
               </h1>
             </div>
@@ -342,7 +233,7 @@ export default function Hero() {
               About
             </div>
 
-            <div className="about-para-reveal md:col-span-2 md:pl-1 flex flex-col gap-3 text-xs md:text-sm font-medium font-montreal text-white/80 leading-[1.2] normal-case max-w-xl">
+            <div className="about-para-reveal md:col-span-2 md:pl-1 flex flex-col gap-3 text-xs md:text-sm monitor:text-[16px] font-medium font-montreal text-white/80 leading-[1.2] normal-case max-w-xl">
               <p className="text-white/90">
                 I'm Ali. I spend way too much time thinking about why some websites make you stay and others make you leave. Then I build the kind that make you stay. Fast, sharp, and designed like someone actually gave a damn. That's the only way I know how to build.
               </p>

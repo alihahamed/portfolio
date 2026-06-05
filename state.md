@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Brutalist Typographic Footer Redesign`
+- **Phase:** `Transition & Navigation Synchronization`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-05`
 
@@ -15,13 +15,17 @@
 ## Last Session Work
 
 ### Summary
-Redesigned the "lets work" CTA button in the footer to be text-only, soft yellow (`#fff7d3`), and styled in Neue Montreal medium. Removed the arrow icon and square background box. Implemented a vertical text-rolling hover transition (matching the email/phone links in `Contact.tsx`) that rolls "lets work" to the humorous phrase "or settle for average" when hovered. Preserved all other manual spacing and alignment adjustments made by the user.
+Resolved navigation jump glitches, stuck 3D carousels, and half-loaded components during transitions. Implemented route-specific wipe texts, shifted contact element entrances to trigger only after the title settles, restored the footer's rolling text swap CTA using the bold `font-tusker-standard` typography, slowed the footer 'ALI AHMED' rise for a more prominent visual reveal, fixed CTA button text clipping using explicit pixel heights (36px/50px) with flex-center and leading-none, restored the red block to 38dvh with pt-12 md:pt-30, and pulled Col 2 up via negative margins to sit higher while Col 1 and 3 stay down.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Footer.tsx`     | Modified    | Overhauled the "lets work" CTA to be text-only soft yellow with rolling text hover animation |
-| `state.md`                  | Modified    | Updated decisions log and last session work summary |
+| `components/SmoothScroll.tsx` | Modified    | Exposed Lenis instance globally on window.lenis |
+| `components/PageTransition.tsx` | Modified    | Implemented window.lenis.scrollTo checks, adjusted about/contact offsets, forced synchronous ScrollTrigger update, forced correct progress on triggers, and added route-specific custom wipe texts |
+| `components/SelectedWork.tsx` | Modified    | Synchronized 3D carousel rotations via timeline onUpdate |
+| `components/About.tsx`      | Modified    | Converted signature zoom to fromTo, locked scroll offsets, and forced entrance timeline progress synchronously during page transitions |
+| `components/Contact.tsx`    | Modified    | Adjusted details/image entrances to start at 1.8 and slowed retraction duration to 1.8 starting at 3.0 |
+| `components/Footer.tsx`     | Modified    | Restored rolling text swap CTA button with explicit pixel heights (36px/50px) and flex vertical centering, restored red block height (38dvh) and padding (pt-12 md:pt-30), and shifted Col 2 up using negative margins |
 
 ---
 
@@ -113,6 +117,26 @@ Redesigned the "lets work" CTA button in the footer to be text-only, soft yellow
 | 82| 3-Column Footer Grid Layout                | Replaced the empty red panel with a top-aligned, three-column column grid (tech stack, site transition links, socials) styled in Neue Montreal medium to unify typography | 2026-06-05 |
 | 83| Footer links wipe reveal & lets work CTA  | Added lets work text + square background arrow button below navigation column, and synced bottom block contents to rise up together with "ALI AHMED" typography | 2026-06-05 |
 | 84| Redesigned Text-Only Rolling Footer CTA    | Changed footer CTA to a text-only, soft yellow rolling transition (from "lets work" to "or settle for average" on hover) to match contact section style and portfolio tone | 2026-06-05 |
+| 86| Remove arcade 3D word swap in Hero         | Removed cycling timer, measuring nodes, and slot-machine track markup to display static "Websites" in the entrance timeline | 2026-06-05 |
+| 87| Sequential Hero Entrance with 0.1s Gaps    | Ordered entrance timeline to play Hero text, About description, and stats/lines/signature/menu button in sequence with 0.1s offsets | 2026-06-05 |
+| 88| Prevent Footer Column Squishing            | Swapped grid-cols-3 with flex justify-between, explicit percentage widths, and shrink-0 to lock column widths during GSAP translation | 2026-06-05 |
+| 89| Reduced Content Translate & Padding        | Changed content yPercent from 100 to 30, and padding on monitor from pt-30 (120px) to pt-20 (80px) to prevent vertical overflow clipping | 2026-06-05 |
+| 90| Dynamic Footer Visibility                  | Set footer visibility based on progress > 0.66 in Contact scroll timeline to prevent it showing behind transparent preceding sections | 2026-06-05 |
+| 91| Laptop Menu Fit Adjustments                | Moved oversized menu link/panel sizes from md: to monitor:, and reduced md: values (text-[4.5rem], pt-20, py-3.5) to fit laptop viewports without scrolling | 2026-06-05 |
+| 92| Solid Red Block z-index Over Text          | Added z-10 to top footer section and z-30 to bottom red block to ensure bottom block covers the base of 'ALI AHMED' text | 2026-06-05 |
+| 93| Correct Navigation Hash Scroll             | Removed scroll-to-bottom override for #about and #contact in PageTransition.tsx to scroll elements to viewport top and prevent footer bleed | 2026-06-05 |
+| 94| Smooth Signature Reverse Zoom              | Converted signature zoom from to() to fromTo() tween in About.tsx to lock initial transforms and prevent layout popping on scroll-back | 2026-06-05 |
+| 95| Fixed Contact Navigation Target ID         | Renamed duplicate id='contact' in Document.tsx to 'about-quote' and updated Contact section container to use 'contact' to align with menu links | 2026-06-05 |
+| 96| About Navigation Scroll Offset             | Added window.innerHeight * 3.84 offset to #about scroll position in PageTransition.tsx to jump directly to the revealed resume document | 2026-06-05 |
+| 97| Expose Lenis globally on window            | Allows immediate virtual scroll updates during programmatic jumps to prevent bounce-backs | 2026-06-05 |
+| 98| Move carousel rotation to timeline onUpdate | Forces cylinder rotation to render synchronously when timeline progress is set | 2026-06-05 |
+| 99| Adjust About scroll offset to 2.85         | Land early in hold zone to maximize distance from the contact circle trigger | 2026-06-05 |
+| 100| Instant transition completion on triggers  | Combined transition check class and ScrollTrigger onUpdate to bypass entrance playing delays during jumps | 2026-06-05 |
+| 101| Accelerate contact Image B entrance        | Completes image entrance before the scroll hold begins so it is fully visible upon jump | 2026-06-05 |
+| 102| Dynamic route-specific wipe texts          | Configured map and helper function to show unique wipe text for Home, About, Work, and Contact | 2026-06-05 |
+| 103| Shift contact animations to 1.8            | Starts link, message, and image entrances only after the heading finishes corner transition at 1.8, aligning retraction symmetrically | 2026-06-05 |
+| 104| Rolling text CTA button with Tusker font   | Restored original rolling text CTA style in the footer, styled it with font-tusker-standard, increased size to 36px, and aligned height/line-height to 1.8em to prevent clipping | 2026-06-05 |
+| 105| Prominent footer name rise                 | Slowed down Contact retraction and Footer content rise to duration 1.8s starting at 3.0, using power3.out ease | 2026-06-05 |
 
 ---
 

@@ -768,7 +768,7 @@ export default function Document() {
 
       {/* FOOTER QUOTE (At the bottom right, below 89% horizontal line) */}
       <div 
-        id="contact"
+        id="about-quote"
         className="reveal-footer opacity-0 absolute z-10 flex flex-col justify-center text-[#AB1509]" 
         style={{ left: "53%", width: "40%", bottom: "2%", height: "8%" }}
       >

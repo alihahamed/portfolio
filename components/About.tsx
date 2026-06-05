@@ -75,6 +75,8 @@ export default function About() {
         if (redBgRef.current) redBgRef.current.style.transform = "";
         if (docWrapRef.current) docWrapRef.current.style.transform = "";
 
+        let entranceTimeline: gsap.core.Timeline;
+
         // Set initial positions
         gsap.set(redBgRef.current, { yPercent: 100 });
         if (redBgRef.current) redBgRef.current.style.display = "none";
@@ -118,6 +120,21 @@ export default function About() {
             onLeaveBack: () => {
               if (redBgRef.current) redBgRef.current.style.display = "none";
               if (sigRef.current) sigRef.current.setProgress(0);
+            },
+            onUpdate: (self) => {
+              const isTransitioning = document.body.classList.contains("is__transitioning");
+              if (self.progress > 0.65) {
+                if (isTransitioning) {
+                  entranceTimeline.progress(1);
+                } else {
+                  const isForward = self.direction > 0;
+                  if (isForward && entranceTimeline.progress() < 1) {
+                    entranceTimeline.play();
+                  }
+                }
+              } else {
+                entranceTimeline.pause(0);
+              }
             }
           }
         });
@@ -183,14 +200,23 @@ export default function About() {
 
         // Stage 4 (time 13.0 to 25.0): Signature zooms with long scroll span and deep parallax drift
         // power1.inOut avoids the fast expo middle while keeping a smooth acceleration curve
-        tl.to(signatureWrapRef.current, {
-          scale: 120,
-          x: () => -window.innerWidth * 0.06,
-          y: () => -window.innerHeight * 0.18,
-          transformOrigin: `${pctX}% ${pctY}%`,
-          duration: 12,
-          ease: "power1.inOut"
-        }, 13.0);
+        tl.fromTo(signatureWrapRef.current,
+          {
+            scale: 1,
+            x: 0,
+            y: -8,
+            transformOrigin: `${pctX}% ${pctY}%`
+          },
+          {
+            scale: 120,
+            x: () => -window.innerWidth * 0.06,
+            y: () => -window.innerHeight * 0.18,
+            transformOrigin: `${pctX}% ${pctY}%`,
+            duration: 12,
+            ease: "power1.inOut"
+          },
+          13.0
+        );
 
         // Stage 5 (time 25.0 to 35.0): Document lowers into position — NO fade, pure scroll-driven descent
         tl.fromTo(docWrapRef.current,
@@ -236,7 +262,7 @@ export default function About() {
         // -------------------------------------------------------------------------------------
 
         // Define a unified, real-time sequential entrance timeline for the document contents
-        const entranceTimeline = gsap.timeline({ paused: true });
+        entranceTimeline = gsap.timeline({ paused: true });
 
         // Step 1: Grid lines draw immediately (no delay) + footer quote reveal (fade + slide up)
         entranceTimeline.to(".reveal-line-v", { scaleY: 1, duration: 1.2, stagger: 0.08, ease: "power4.inOut" }, 0)
@@ -256,15 +282,7 @@ export default function About() {
         // Step 5: Header reveal (exactly 0.3s after Step 4)
         entranceTimeline.to(".reveal-header", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, stagger: 0.1, ease: "power4.out" }, 1.2);
 
-        // Trigger the sequential entrance reveals on scroll (redacts instantly on scroll back up)
-        tl.call(() => {
-          const isForward = tl.scrollTrigger ? tl.scrollTrigger.direction > 0 : true;
-          if (isForward) {
-            entranceTimeline.play();
-          } else {
-            entranceTimeline.pause(0); // Seek to 0 and pause (redact)
-          }
-        }, undefined, 27.5);
+
 
         // Add a 100vh scroll hold at the end of the document animation (duration 6.0 units)
         // to pin the fully rendered resume before entering the contact section circular reveal.
