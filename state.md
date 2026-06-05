@@ -15,13 +15,13 @@
 ## Last Session Work
 
 ### Summary
-Redesigned the footer to match the Zettlor reference layout's color scheme (soft yellow main background `#fff7d3` and solid brand-red `#AB1509` bottom block). Replaced footer typography with massive uppercase **"ALI AHMED"** text using `font-tusker-standard` and `font-bold` at `22vw` with horizontal scale (`scaleX(1.20)`) to stretch it to fill the screen width exactly. Applied an aggressive downward translation (`translateY(14%)`) and vertical scale (`scaleY(1.25)`) to bury the baseline of the letters deep into the red bottom block for a seamless typographic merge. Removed tagline, tech stack texts, email bar, and socials links.
+Redesigned the "lets work" CTA button in the footer to be text-only, soft yellow (`#fff7d3`), and styled in Neue Montreal medium. Removed the arrow icon and square background box. Implemented a vertical text-rolling hover transition (matching the email/phone links in `Contact.tsx`) that rolls "lets work" to the humorous phrase "or settle for average" when hovered. Preserved all other manual spacing and alignment adjustments made by the user.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Footer.tsx`     | Modified    | Redesigned layout with soft yellow background, solid red bottom block, and bold full-width typography buried deep in the red seam |
-| `state.md`                  | Modified    | Updated current phase, last session work, and decisions |
+| `components/Footer.tsx`     | Modified    | Overhauled the "lets work" CTA to be text-only soft yellow with rolling text hover animation |
+| `state.md`                  | Modified    | Updated decisions log and last session work summary |
 
 ---
 
@@ -106,6 +106,13 @@ Redesigned the footer to match the Zettlor reference layout's color scheme (soft
 | 75| Subtle Contact Corner Rounding            | Reduced contact bottom border radius animation target from 100px (desktop) / 10px (mobile) to 24px (desktop) / 8px (mobile) to keep bottom corners only slightly rounded | 2026-06-05 |
 | 76| Brutalist Oversized Typographic Footer   | Redesigned footer with a soft yellow background (#fff7d3), solid red bottom block, and giant red 'ALI AHMED' text in Tusker Standard Bold at 22vw with scaleX(1.20) stretching | 2026-06-05 |
 | 77| Aggressive Footer Typographic Bury        | Shifted text down by translateY(14%) and scaled vertically to bury the baseline deeply into the red panel | 2026-06-05 |
+| 78| Scroll-Driven Footer Text Animation        | Implemented double-wrapper layout (.footer-name-outer and .footer-name-inner) with overflow-hidden and pt-[12vw], animating yPercent (100% to 0%) starting at 2.9 (ease power2.out) via document.querySelector to bypass GSAP scoped context and make the text rise up from behind the red panel | 2026-06-05 |
+| 79| Refactor Footer rise to refs               | Registers ScrollTrigger timeline inside Footer.tsx using refs to ensure robust DOM targeting post-hydration/remount | 2026-06-05 |
+| 80| Slower synchronized footer text rise       | Increased rise duration from 0.9 to 1.3 and aligned start to 2.6 to stretch animation across the full curtain retraction | 2026-06-05 |
+| 81| Clear clipPath to allow shadow bleed       | Setting clipPath to none at time 1.5 allows the new thick viewport-fixed box-shadow to bleed outside the element boundary during slide-up retraction | 2026-06-05 |
+| 82| 3-Column Footer Grid Layout                | Replaced the empty red panel with a top-aligned, three-column column grid (tech stack, site transition links, socials) styled in Neue Montreal medium to unify typography | 2026-06-05 |
+| 83| Footer links wipe reveal & lets work CTA  | Added lets work text + square background arrow button below navigation column, and synced bottom block contents to rise up together with "ALI AHMED" typography | 2026-06-05 |
+| 84| Redesigned Text-Only Rolling Footer CTA    | Changed footer CTA to a text-only, soft yellow rolling transition (from "lets work" to "or settle for average" on hover) to match contact section style and portfolio tone | 2026-06-05 |
 
 ---
 

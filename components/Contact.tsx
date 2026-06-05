@@ -64,6 +64,9 @@ export default function Contact() {
         0
       );
 
+      // Clear clip path after circle expands to allow shadow to overflow
+      tl.set(circleRef.current, { clipPath: "none" }, 1.5);
+
       // Strong parallax: Slide the CV document up a little
       tl.fromTo(
         ".about-doc-wrap",
@@ -274,7 +277,8 @@ export default function Contact() {
         className="fixed inset-0 w-full h-screen bg-[#050505] z-[60] pointer-events-none overflow-hidden"
         style={{
           clipPath: "circle(0% at 50% 100%)",
-          willChange: "clip-path",
+          willChange: "clip-path, transform",
+          boxShadow: "0 30px 100px rgba(0, 0, 0, 0.95)",
         }}
       >
         <div className="reveal-contact-title absolute top-[6px] left-[4px] select-none pointer-events-auto whitespace-nowrap">
