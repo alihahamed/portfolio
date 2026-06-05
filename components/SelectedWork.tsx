@@ -421,7 +421,7 @@ export default function SelectedWork() {
             trigger: containerRef.current,
             start: "top 95%",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: 0.8,
           },
         });
 
@@ -603,7 +603,7 @@ export default function SelectedWork() {
               trigger: scene,
               start: "top bottom",
               end: "bottom top",
-              scrub: true,
+              scrub: 0.8,
               onUpdate: () => {
                 updateCarouselRotation();
               }

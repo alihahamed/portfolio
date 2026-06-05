@@ -18,9 +18,26 @@ export default function Contact() {
           trigger: containerRef.current,
           start: "top bottom",
           end: "bottom bottom",
-          scrub: 2,
+          scrub: 0.8,
           invalidateOnRefresh: true,
+          onEnter: () => {
+            const footer = document.querySelector<HTMLElement>('footer');
+            if (footer) footer.style.visibility = 'visible';
+          },
+          onEnterBack: () => {
+            const footer = document.querySelector<HTMLElement>('footer');
+            if (footer) footer.style.visibility = 'visible';
+          },
+          onLeaveBack: () => {
+            const footer = document.querySelector<HTMLElement>('footer');
+            if (footer) footer.style.visibility = 'hidden';
+          },
           onUpdate: (self) => {
+            const footer = document.querySelector<HTMLElement>('footer');
+            if (footer) {
+              footer.style.visibility = 'visible';
+            }
+
             // Instantly kill the About section DOM rendering once circle covers viewport
             // This fires on every scroll frame with ZERO delay (bypasses scrub lag)
             const aboutRedBg = document.querySelector<HTMLElement>('.about-red-bg');
@@ -42,6 +59,7 @@ export default function Contact() {
         {
           clipPath: "circle(150% at 50% 100%)",
           ease: "none",
+          duration: 1.5,
         },
         0
       );
@@ -51,8 +69,9 @@ export default function Contact() {
         ".about-doc-wrap",
         { yPercent: 0 },
         {
-          yPercent: -35,
+          yPercent: -45,
           ease: "none",
+          duration: 1.5,
         },
         0
       );
@@ -64,6 +83,7 @@ export default function Contact() {
         {
           yPercent: -15,
           ease: "none",
+          duration: 1.5,
         },
         0
       );
@@ -83,7 +103,7 @@ export default function Contact() {
           y: () => window.innerHeight / 2 - 6,
           yPercent: -50,
           ease: "power1.out",
-          duration: 0.5,
+          duration: 0.8,
         },
         0
       );
@@ -97,9 +117,9 @@ export default function Contact() {
           y: 0,
           yPercent: 0,
           ease: "power2.inOut",
-          duration: 0.25,
+          duration: 1,
         },
-        0.45
+        0.8
       );
 
       // Email, phone and social links wipe down under the title when it reaches the top-left
@@ -113,10 +133,10 @@ export default function Contact() {
           y: 0,
           clipPath: "inset(0% 0% 0% 0%)",
           ease: "power2.out",
-          duration: 0.10,
-          stagger: 0.02,
+          duration: 0.5,
+          stagger: 0.05,
         },
-        0.70
+        1.3
       );
 
       // Status text reveal after heading sits in the corner
@@ -130,9 +150,9 @@ export default function Contact() {
           opacity: 1,
           y: 0,
           ease: "power2.out",
-          duration: 0.10,
+          duration: 0.5,
         },
-        0.70
+        1.3
       );
 
       // Bottom-left message reveal
@@ -146,9 +166,9 @@ export default function Contact() {
           y: 0,
           clipPath: "inset(0% 0% 0% 0%)",
           ease: "power2.out",
-          duration: 0.10,
+          duration: 0.5,
         },
-        0.70
+        1.3
       );
 
       // Parallax for single tall image on the right: Project B from bottom, stops in middle with inner-image parallax
@@ -158,9 +178,9 @@ export default function Contact() {
         {
           y: "0vh",
           ease: "power2.inOut",
-          duration: 0.20,
+          duration: 1.2,
         },
-        0.80
+        1.5
       );
 
       tl.fromTo(
@@ -170,35 +190,55 @@ export default function Contact() {
           yPercent: 6,
           scale: 1.15,
           ease: "none",
-          duration: 0.20,
+          duration: 0.5,
         },
-        0.80
+        1.5
       );
 
-      // --- RETRACTION STAGE (1.00 to 1.25) ---
+      // --- RETRACTION STAGE (2.60 to 3.90 with a SCROLL HOLD from 2.00 to 2.60) ---
+      // The timeline total duration will be 3.90. The retraction takes 1.30 (1/3 of the timeline).
+      // Since the scroll distance is 300vh, 1/3 of the scroll is exactly 100vh.
+      // With ease: "none", this creates a PERFECT 1:1 map to native scrolling!
+      
       // 1. Slide the entire fixed viewport circle wrapper up to reveal the sticky footer
       tl.to(
         circleRef.current,
         {
           yPercent: -100,
-          ease: "none",
-          duration: 0.25,
+          ease: "none", // Must be linear for native scroll illusion
+          duration: 1.3,
         },
-        1.00
+        2.6
       );
 
-      // 2. Parallax retract for Image B (slide up faster than container)
+      // 2. Animate border-radius from sharp (0px) to rounded (24px/8px) as it slides up
+      tl.fromTo(
+        circleRef.current,
+        {
+          borderBottomLeftRadius: "0px",
+          borderBottomRightRadius: "0px",
+        },
+        {
+          borderBottomLeftRadius: () => window.innerWidth > 768 ? "20px" : "8px",
+          borderBottomRightRadius: () => window.innerWidth > 768 ? "20px" : "8px",
+          ease: "power1.out",
+          duration: 0.3,
+        },
+        2.6
+      );
+
+      // 3. Parallax retract for Image B (slide up faster than container for strong reveal effect)
       tl.to(
         ".reveal-contact-image-2",
         {
-          yPercent: -35,
+          yPercent: -75,
           ease: "none",
-          duration: 0.25,
+          duration: 1.3,
         },
-        1.00
+        2.6
       );
 
-      // 3. Staggered parallax retract for title, links and text elements
+      // 4. Staggered parallax retract for title, links and text elements (sweeps up off-screen strongly)
       tl.to(
         [
           ".reveal-contact-title", 
@@ -208,12 +248,14 @@ export default function Contact() {
           ".reveal-contact-message"
         ],
         {
-          yPercent: -120,
+          yPercent: -140, // Strong retraction sweep (exceeds container's -100%)
           ease: "none",
-          duration: 0.25,
-          stagger: 0.015,
+          duration: 1.3,
+          stagger: {
+            amount: 0.4,
+          },
         },
-        1.00
+        2.6
       );
     }, containerRef);
 
@@ -229,7 +271,7 @@ export default function Contact() {
       {/* Viewport-fixed background wrapper with clip-path reveal */}
       <div 
         ref={circleRef}
-        className="fixed inset-0 w-full h-screen bg-[#050505] z-[60] pointer-events-none"
+        className="fixed inset-0 w-full h-screen bg-[#050505] z-[60] pointer-events-none overflow-hidden"
         style={{
           clipPath: "circle(0% at 50% 100%)",
           willChange: "clip-path",

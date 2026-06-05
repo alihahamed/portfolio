@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – Sticky Footer Reveal`
+- **Phase:** `Contact Rounded Corners Refinement`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-05`
 
@@ -15,14 +15,13 @@
 ## Last Session Work
 
 ### Summary
-Created a separate `Footer.tsx` component representing a blank, full-viewport brand red (`#AB1509`) sticky footer. Integrated retraction/retraction timeline phases in `Contact.tsx` (progress 1.00 to 1.25) to slide the entire contact container up by `yPercent: -100` and pull the text and image elements off-screen with distinct parallax retract offsets (`yPercent: -35` and `-120`).
+Reduced the bottom border radius animation of the contact section from 100px (desktop) / 10px (mobile) to 24px (desktop) / 8px (mobile) as it slides up during retraction. This makes the bottom edges only slightly rounded for a more refined, premium look.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Footer.tsx`     | Created     | Blank full-viewport sticky footer styled in brand red (#AB1509) |
-| `components/Contact.tsx`    | Modified    | Added retraction animation stage to translate the circle wrapper and layout elements up |
-| `app/page.tsx`              | Modified    | Imported and rendered Footer below Contact |
+| `components/Contact.tsx`    | Modified    | Reduced contact bottom border-radius to 24px (desktop) and 8px (mobile) |
+| `state.md`                  | Modified    | Updated current phase, last session work, and decisions |
 
 ---
 
@@ -89,6 +88,22 @@ Created a separate `Footer.tsx` component representing a blank, full-viewport br
 | 57| Isolate signature base scale to inner container| Wrapped signature in a `.signature-scale-container` that scales around its center. Keeps parent wrapper at `scale: 1` initially to prevent layout shift of centered element before zoom starts | 2026-06-05 |
 | 58| Dynamic percentage-based transform origin| Replaced pixel-based units with screen percentages, explicitly defined it in the context/timeline tween, and removed Tailwind's `origin-center` class from the JSX container to prevent styling overrides | 2026-06-05 |
 | 59| Sticky Footer Reveal & Redaction Timeline| Created a separate empty brand-red sticky Footer component (`h-screen`) and configured contact GSAP timeline (1.00 to 1.25) to slide the fixed wrapper off-screen and retract text/image elements with distinct parallax speeds | 2026-06-05 |
+| 60| Fixed Footer Reveal with Visibility Toggles| Swapped `display: none`/`flex` with `visibility: hidden`/`visible` to prevent painting latency and eliminate background WebGL canvas flash | 2026-06-05 |
+| 61| Full Viewport Sticky Footer Reveal        | Sliding up the contact section `circleRef` by `yPercent: -100` and setting the footer height to `100dvh` creates a seamless full-page reveal without showing the WebGL canvas backdrop | 2026-06-05 |
+| 62| Brutalist Editorial Footer Layout         | Implemented huge Tusker Grotesk typography and small responsive tech stack texts aligned in a two-row responsive flex container on a solid brand-red background | 2026-06-05 |
+| 63| Scroll Ease and Scrub Tuning              | Configured retraction tweens with `ease: "none"` and scaled duration perfectly to `0.50` (1/3 of a 300vh scroll) to create a perfect 1:1 native scroll illusion without any jarring acceleration gaps | 2026-06-05 |
+| 64| Slowed Contact Section Animations         | Extended Contact section timeline to 3.0, slowing down circle expansion, heading movement, sub-info entrance, and retraction | 2026-06-05 |
+| 65| Global Scrub Lag Standardization          | Set scrub catch-up lag to 0.8 across About, SelectedWork, and Contact sections to unify scrolling momentum feel | 2026-06-05 |
+| 66| Dynamic Corner Rounding on Contact Section | Removed static Tailwind rounding and animated borderBottomLeftRadius/RightRadius dynamically from 0px to 100px/40px (at time 2.6 to 2.9) only as the retraction slide-up starts | 2026-06-05 |
+| 67| Contact Scroll Hold and Deferred Footer   | Added a scroll hold (time 2.0 to 2.6) where the fully revealed Contact section sits static with sharp corners, and deferred footer visibility to progress > 0.66 | 2026-06-05 |
+| 68| Strengthened Contact Elements Retraction  | Increased retraction yPercent values to -75 for Image B and -120 for text/links, using a staggered timeline amount of 0.15 to sweep them off-screen strongly | 2026-06-05 |
+| 69| Retraction Matching for Scroll Hold       | Stretched retraction duration to 1.30 and total timeline to 3.90 to maintain exactly 1/3 ratio, guaranteeing 1:1 speed alignment with native scroll | 2026-06-05 |
+| 70| Localize SilkBackground to Hero Section   | Moved SilkBackground from global layout.tsx to the relative-positioned components/Hero.tsx container, changing its CSS position from fixed to absolute to scroll away naturally with scroll momentum | 2026-06-05 |
+| 71| Hero Section Componentization             | Refactored Hero state, timers, custom entrance timelines, and layouts into a standalone Hero component to simplify page.tsx and improve bundle isolation | 2026-06-05 |
+| 72| Footer Visible Behind Contact Seam        | Keeps the red fixed footer visible during contact covered range so scrub lag cannot expose the app background between contact and footer | 2026-06-05 |
+| 73| Full Contact Trigger Footer Backing       | Keeps the footer visible for the entire active contact trigger so reverse scroll never crosses a hidden-footer threshold | 2026-06-05 |
+| 74| Slower Signature Zoom Parallax            | Extends signature zoom duration and adds viewport-based drift so zoom in/out feels smoother and deeper instead of snapping through the signature | 2026-06-05 |
+| 75| Subtle Contact Corner Rounding            | Reduced contact bottom border radius animation target from 100px (desktop) / 10px (mobile) to 24px (desktop) / 8px (mobile) to keep bottom corners only slightly rounded | 2026-06-05 |
 
 ---
 
@@ -107,7 +122,3 @@ Created a separate `Footer.tsx` component representing a blank, full-viewport br
 - Both skills and interests now use the high-sharpness nested layout structure
 - Live Indian Standard Time (IST) clock updates dynamically on mount and runs on a 1-second interval
 - Staggered entry utilizes container timelines (14.2s to 18.2s) mapped to the linear sliding coordinates
-
-
-
-

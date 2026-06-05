@@ -63,7 +63,6 @@ const neueMontreal = localFont({
   display: "swap",
 });
 
-import SilkBackground from "@/components/SilkBackground";
 import SmoothScroll from "@/components/SmoothScroll";
 import TrailingCursor from "@/components/ui/trailing-cursor";
 import { PageTransitionProvider } from "@/components/PageTransition";
@@ -107,9 +106,6 @@ export default function RootLayout({
           }}
         />
         <PageTransitionProvider>
-          {/* Global WebGL Background Canvas */}
-          <SilkBackground />
-          
           {/* Trailing particle cursor */}
           <TrailingCursor />
           

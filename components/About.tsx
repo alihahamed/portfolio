@@ -105,7 +105,7 @@ export default function About() {
             end: "bottom bottom",          
             pin: "#work",
             pinSpacing: false,
-            scrub: 3,                      
+            scrub: 0.8,                      
             onEnter: () => {
               if (redBgRef.current) redBgRef.current.style.display = "";
             },
@@ -178,51 +178,52 @@ export default function About() {
           7.0
         );
 
-        // Stage 3 (time 11.0 to 12.5): Hold/buffer — lets the viewer absorb the signature
-        tl.to({}, { duration: 1.5 }, 11.0);
+        // Stage 3 (time 11.0 to 13.0): Hold/buffer — lets the viewer absorb the signature
+        tl.to({}, { duration: 2.0 }, 11.0);
 
-        // Stage 4 (time 12.5 to 19.5): Signature zooms out with cinematic expo ease
-        // expo.inOut prevents the abrupt snap — slow start, smooth acceleration, soft landing
+        // Stage 4 (time 13.0 to 25.0): Signature zooms with long scroll span and deep parallax drift
+        // power1.inOut avoids the fast expo middle while keeping a smooth acceleration curve
         tl.to(signatureWrapRef.current, {
           scale: 120,
-          y: 0,
+          x: () => -window.innerWidth * 0.06,
+          y: () => -window.innerHeight * 0.18,
           transformOrigin: `${pctX}% ${pctY}%`,
-          duration: 7,
-          ease: "expo.inOut"
-        }, 12.5);
+          duration: 12,
+          ease: "power1.inOut"
+        }, 13.0);
 
-        // Stage 5 (time 19.5 to 27.5): Document lowers into position — NO fade, pure scroll-driven descent (duration extended to 8)
+        // Stage 5 (time 25.0 to 35.0): Document lowers into position — NO fade, pure scroll-driven descent
         tl.fromTo(docWrapRef.current,
           { yPercent: -150 },
           {
             yPercent: 0,
-            duration: 8,
+            duration: 10,
             ease: "none" // Linear mapping makes it feel 1:1 physically controlled by the scroll wheel
           },
-          19.5
+          25.0
         );
 
         // Subtle gravity pendulum swing anchored at the top center (50% 0%) of the document
         tl.fromTo(docWrapRef.current,
           { rotate: 0, transformOrigin: "50% 0%" },
-          { rotate: 3.5, duration: 2, ease: "power1.inOut" },
-          19.5
+          { rotate: 3.5, duration: 2.5, ease: "power1.inOut" },
+          25.0
         );
         tl.to(docWrapRef.current,
-          { rotate: -2.8, duration: 2, ease: "power1.inOut" },
-          21.5
+          { rotate: -2.8, duration: 2.5, ease: "power1.inOut" },
+          27.5
         );
         tl.to(docWrapRef.current,
-          { rotate: 1.8, duration: 2, ease: "power1.inOut" },
-          23.5
+          { rotate: 1.8, duration: 2.5, ease: "power1.inOut" },
+          30.0
         );
         tl.to(docWrapRef.current,
-          { rotate: -0.8, duration: 1.5, ease: "power1.inOut" },
-          25.5
+          { rotate: -0.8, duration: 2, ease: "power1.inOut" },
+          32.5
         );
         tl.to(docWrapRef.current,
           { rotate: 0, duration: 1.5, ease: "power2.out" },
-          27.0
+          34.5
         );
 
         // --- PREPARE INITIAL STATES FOR EDITORIAL REVEALS (Replacing opacity-0 fade-ins) ---
@@ -263,11 +264,11 @@ export default function About() {
           } else {
             entranceTimeline.pause(0); // Seek to 0 and pause (redact)
           }
-        }, undefined, 21.5);
+        }, undefined, 27.5);
 
         // Add a 100vh scroll hold at the end of the document animation (duration 6.0 units)
         // to pin the fully rendered resume before entering the contact section circular reveal.
-        tl.to({}, { duration: 6.0 }, 27.5);
+        tl.to({}, { duration: 6.0 }, 35.0);
 
       });
     };
