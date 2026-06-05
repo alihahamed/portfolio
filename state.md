@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Contact Rounded Corners Refinement`
+- **Phase:** `Brutalist Typographic Footer Redesign`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-05`
 
@@ -15,12 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Reduced the bottom border radius animation of the contact section from 100px (desktop) / 10px (mobile) to 24px (desktop) / 8px (mobile) as it slides up during retraction. This makes the bottom edges only slightly rounded for a more refined, premium look.
+Redesigned the footer to match the Zettlor reference layout's color scheme (soft yellow main background `#fff7d3` and solid brand-red `#AB1509` bottom block). Replaced footer typography with massive uppercase **"ALI AHMED"** text using `font-tusker-standard` and `font-bold` at `22vw` with horizontal scale (`scaleX(1.20)`) to stretch it to fill the screen width exactly. Applied an aggressive downward translation (`translateY(14%)`) and vertical scale (`scaleY(1.25)`) to bury the baseline of the letters deep into the red bottom block for a seamless typographic merge. Removed tagline, tech stack texts, email bar, and socials links.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`    | Modified    | Reduced contact bottom border-radius to 24px (desktop) and 8px (mobile) |
+| `components/Footer.tsx`     | Modified    | Redesigned layout with soft yellow background, solid red bottom block, and bold full-width typography buried deep in the red seam |
 | `state.md`                  | Modified    | Updated current phase, last session work, and decisions |
 
 ---
@@ -104,6 +104,8 @@ Reduced the bottom border radius animation of the contact section from 100px (de
 | 73| Full Contact Trigger Footer Backing       | Keeps the footer visible for the entire active contact trigger so reverse scroll never crosses a hidden-footer threshold | 2026-06-05 |
 | 74| Slower Signature Zoom Parallax            | Extends signature zoom duration and adds viewport-based drift so zoom in/out feels smoother and deeper instead of snapping through the signature | 2026-06-05 |
 | 75| Subtle Contact Corner Rounding            | Reduced contact bottom border radius animation target from 100px (desktop) / 10px (mobile) to 24px (desktop) / 8px (mobile) to keep bottom corners only slightly rounded | 2026-06-05 |
+| 76| Brutalist Oversized Typographic Footer   | Redesigned footer with a soft yellow background (#fff7d3), solid red bottom block, and giant red 'ALI AHMED' text in Tusker Standard Bold at 22vw with scaleX(1.20) stretching | 2026-06-05 |
+| 77| Aggressive Footer Typographic Bury        | Shifted text down by translateY(14%) and scaled vertically to bury the baseline deeply into the red panel | 2026-06-05 |
 
 ---
 
