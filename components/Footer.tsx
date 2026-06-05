@@ -132,11 +132,11 @@ export default function Footer() {
             >
               <span className="block transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1/2">
                 {/* Normal State */}
-                <span className="block h-[1.35em] leading-[1.35] font-montreal font-medium text-sm md:text-[22px] text-[#fff7d3] select-none uppercase tracking-wider">
+                <span className="block h-[1.35em] leading-[1.35] font-montreal font-medium text-sm md:text-[22px] text-[#fff7d3] select-none uppercase tracking-tight">
                   lets work
                 </span>
                 {/* Hover State */}
-                <span className="block h-[1.35em] leading-[1.35] font-montreal font-medium text-sm md:text-[22px] text-[#fff7d3] select-none uppercase tracking-wider">
+                <span className="block h-[1.35em] leading-[1.35] font-montreal font-medium text-sm md:text-[22px] text-[#fff7d3] select-none uppercase tracking-tight">
                   or settle for average
                 </span>
               </span>
