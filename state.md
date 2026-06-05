@@ -15,7 +15,7 @@
 ## Last Session Work
 
 ### Summary
-Resolved navigation jump glitches, stuck 3D carousels, and half-loaded components during transitions. Implemented route-specific wipe texts, shifted contact element entrances to trigger only after the title settles, restored the footer's rolling text swap CTA using the bold `font-tusker-standard` typography, slowed the footer 'ALI AHMED' rise for a more prominent visual reveal, fixed CTA button text clipping using explicit pixel heights (36px/50px) with flex-center and leading-none, restored the red block to 38dvh with pt-12 md:pt-30, and pulled Col 2 up via negative margins to sit higher while Col 1 and 3 stay down.
+Resolved navigation jump glitches, stuck 3D carousels, and half-loaded components during transitions. Implemented route-specific wipe texts, shifted contact element entrances to trigger only after the title settles, restored the footer's rolling text swap CTA using the bold `font-tusker-standard` typography, slowed the footer 'ALI AHMED' rise for a more prominent visual reveal, restored parent red block layout to 38dvh with original top padding, shifted Col 2 upwards using a negative margin to prevent bottom clipping, and applied font size classes directly to the CTA wrapper to resolve inheritance clipping.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
@@ -25,7 +25,7 @@ Resolved navigation jump glitches, stuck 3D carousels, and half-loaded component
 | `components/SelectedWork.tsx` | Modified    | Synchronized 3D carousel rotations via timeline onUpdate |
 | `components/About.tsx`      | Modified    | Converted signature zoom to fromTo, locked scroll offsets, and forced entrance timeline progress synchronously during page transitions |
 | `components/Contact.tsx`    | Modified    | Adjusted details/image entrances to start at 1.8 and slowed retraction duration to 1.8 starting at 3.0 |
-| `components/Footer.tsx`     | Modified    | Restored rolling text swap CTA button with explicit pixel heights (36px/50px) and flex vertical centering, restored red block height (38dvh) and padding (pt-12 md:pt-30), and shifted Col 2 up using negative margins |
+| `components/Footer.tsx`     | Modified    | Restored rolling text swap CTA button, adjusted heights to 1.8em with font size classes to prevent clipping, and shifted Col 2 upwards with negative top margin |
 
 ---
 
