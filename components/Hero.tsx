@@ -87,7 +87,7 @@ export default function Hero() {
 
       // Odometer counts for the stats numbers
       tl.to(projectsObj, {
-        value: 50,
+        value: 10,
         duration: 1.6,
         ease: "power3.out",
         onUpdate: () => {
@@ -98,7 +98,7 @@ export default function Hero() {
       }, 3.68);
 
       tl.to(yearsObj, {
-        value: 6,
+        value: 2,
         duration: 1.4,
         ease: "power3.out",
         onUpdate: () => {
