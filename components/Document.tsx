@@ -4,6 +4,8 @@ import { ImagesBadge } from "./ui/images-badge";
 import { motion } from "motion/react";
 import gsap from "gsap";
 
+const me = "/me.ppg"
+
 const skills = [
   {
     name: "GSAP",
@@ -735,12 +737,12 @@ export default function Document() {
         <div>
           <div className="reveal-photo relative w-full aspect-[4/3] border border-[#AB1509] overflow-hidden">
             <Image
-              src="/developer_portrait.png"
+              src="/meee.png"
               alt="Ali Ahmed Portrait"
               fill
               sizes="(max-width: 768px) 35vw, 10vw"
               priority
-              className="object-cover grayscale contrast-125 brightness-95"
+              className="object-cover contrast-125 brightness-95"
             />
           </div>
  
