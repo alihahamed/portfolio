@@ -39,23 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-Tusker.Grotesk
-NeueMontreal-Light.otf
-NeueMontreal-LightItalic.otf
-NeueMontreal-Medium.otf
-NeueMontreal-MediumItalic.otf
-NeueMontreal-Bold.otf
-NeueMontreal-BoldItalic.otf
-TuskerGrotesk-2500Medium.ttf
-TuskerGrotesk-2600Semibold.ttf
-TuskerGrotesk-2700Bold.ttf
-TuskerGrotesk-2800Super.ttf
-TuskerGrotesk-4500Medium.ttf
-TuskerGrotesk-4600Semibold.ttf
-TuskerGrotesk-4700Bold.ttf
-TuskerGrotesk-4800Super.ttf
-TuskerGrotesk-6500Medium.ttf
-TuskerGrotesk-6600Semibold.ttf
-TuskerGrotesk-6700Bold.ttf
-TuskerGrotesk-6800Super.ttf
-NeueMontreal.pdf

@@ -68,8 +68,8 @@ import TrailingCursor from "@/components/ui/trailing-cursor";
 import { PageTransitionProvider } from "@/components/PageTransition";
 
 export const metadata: Metadata = {
-  title: "Tusker Grotesk - Portfolio",
-  description: "High-craft portfolio designed with Tusker Grotesk",
+  title: "Ali Ahmed",
+  description: "High-craft portfolio",
 };
 
 export default function RootLayout({

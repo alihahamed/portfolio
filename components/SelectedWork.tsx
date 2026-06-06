@@ -791,7 +791,7 @@ export default function SelectedWork() {
                   </a>
                 </div>
 
-                {/* Floating Video Preview Card (Sibling of clip-path block to prevent clipping) */}
+                {/* Floating Video Preview Card — commented out until R2 videos are ready
                 <div className="absolute top-full mt-4 w-[380px]  border border-[#AB1509] rounded-none overflow-hidden bg-black shadow-[0_20px_50px_rgba(0,0,0,0.8)] opacity-0 scale-95 -translate-y-2 pointer-events-none group-hover/link:opacity-100 group-hover/link:scale-100 group-hover/link:translate-y-0 transition-all duration-300 ease-out origin-top-right z-50">
                   <div className="w-full h-full relative">
                     <video
@@ -802,10 +802,10 @@ export default function SelectedWork() {
                       playsInline
                       className="w-full h-full object-cover"
                     />
-                    {/* Subtle red tint overlay to match the branding */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#AB1509]/15 via-transparent to-transparent pointer-events-none" />
                   </div>
                 </div>
+                */}
               </div>
 
               {/* BOTTOM LEFT: Approach Block */}
