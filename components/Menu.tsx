@@ -203,7 +203,7 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
           </ul>
 
           {/* Socials */}
-          <div className="flex flex-col gap-3 px-6 md:px-8 monitor:px-10 w-full">
+          {/* <div className="flex flex-col gap-3 px-6 md:px-8 monitor:px-10 w-full">
             <p
               ref={(el) => { if (el) fadeTargetsRef.current[0] = el; }}
               className="text-[16px] uppercase tracking-normal text-white/40 font-normal font-montreal"
@@ -228,7 +228,7 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
                 </a>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </nav>
 
