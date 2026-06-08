@@ -742,7 +742,7 @@ export default function Document() {
               fill
               sizes="(max-width: 768px) 35vw, 10vw"
               priority
-              className="object-cover contrast-125 brightness-95"
+              className="object-cover contrast-125 brightness-100"
             />
           </div>
  
