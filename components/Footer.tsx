@@ -71,7 +71,7 @@ export default function Footer() {
             <h1 
               className="font-tusker-standard text-[21vw] md:text-[22vw] font-bold uppercase leading-[0.72] tracking-normal text-[#AB1509] select-none origin-bottom whitespace-nowrap text-center"
               style={{ 
-                transform: "translateY(5.6%) scaleY(1.15) scaleX(1.20)",
+                transform: "translateY(0%) scaleY(1.15) scaleX(1.20)",
                 willChange: "transform" 
               }}
             >
