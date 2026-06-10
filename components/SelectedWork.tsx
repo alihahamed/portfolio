@@ -504,12 +504,14 @@ export default function SelectedWork() {
           let dragVelocity = 0;
           let lastMoveTime = 0;
 
+          const isDesktop = typeof window !== "undefined" && window.innerWidth > 1024;
+
           // Proxy object to store GSAP animated values for combined rendering
           const rotationProxy = {
             scrollRotationY: 0,
-            rotationZ: 4,
-            rotationX: 4,
-            cardsRotationZ: 8
+            rotationZ: isDesktop ? 4 : 0,
+            rotationX: isDesktop ? 4 : 0,
+            cardsRotationZ: isDesktop ? 8 : 0
           };
 
           const updateCarouselRotation = () => {
@@ -727,7 +729,6 @@ export default function SelectedWork() {
           // Initialize rotation values
           updateCarouselRotation();
 
-          const isDesktop = typeof window !== "undefined" && window.innerWidth > 1024;
           let tl: gsap.core.Timeline | null = null;
 
           if (isDesktop) {
