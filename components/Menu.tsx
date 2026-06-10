@@ -148,7 +148,7 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
       {/* Sliding Curved Menu Panel */}
       <nav
         ref={menuRef}
-        className="absolute top-0 right-0 bottom-0 w-full md:w-[28rem] monitor:w-[35rem] h-full flex flex-col justify-between items-start pt-20 monitor:pt-28 pb-8 rounded-l-[1rem] monitor:rounded-l-[1rem] overflow-hidden pointer-events-auto hidden"
+        className="absolute top-0 right-0 bottom-0 w-[50vw] min-w-[260px] md:w-[28rem] monitor:w-[35rem] h-full flex flex-col justify-between items-start pt-20 monitor:pt-28 pb-8 rounded-l-[1rem] monitor:rounded-l-[1rem] overflow-hidden pointer-events-auto hidden"
         style={{ zIndex: 1 }}
       >
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
@@ -178,12 +178,12 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
                 <TransitionLink
                   href={item.href}
                   onClick={closeMenu}
-                  className="menu-link relative flex items-baseline gap-3 py-3 md:py-3.5 monitor:py-6 px-6 md:px-8 monitor:px-10 w-full no-underline group/link select-none"
+                  className="menu-link relative flex items-baseline gap-3 py-3 md:py-3.5 monitor:py-6 px-4 sm:px-8 monitor:px-10 w-full no-underline group/link select-none"
                 >
                   {/* Text roll hover via text-shadow trick */}
                   <div className="menu-link-heading-wrap relative overflow-hidden pt-2">
                     <span
-                      className="block font-tusker-standard text-[2.75rem] md:text-[5.5rem] monitor:text-[7rem] font-medium uppercase leading-[0.85] tracking-tight whitespace-nowrap text-[#fff7d3] transition-transform duration-500 ease-out group-hover/link:-translate-y-[1em] select-none"
+                      className="block font-tusker-standard text-[8vw] sm:text-[6vw] md:text-[5.5rem] monitor:text-[7rem] font-medium uppercase leading-[0.85] tracking-tight whitespace-nowrap text-[#fff7d3] transition-transform duration-500 ease-out group-hover/link:-translate-y-[1em] select-none"
                       style={{ textShadow: "0px 1em 0px #AB1509" }}
                     >
                       {item.label}
@@ -242,7 +242,7 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
         aria-label={isOpen ? "Close Menu" : "Open Menu"}
       >
         {/* ME/NU Text - animates away when open */}
-        <div className={`absolute flex flex-col items-start font-tusker-standard text-[2.2rem] md:text-[2rem] font-medium leading-[0.75] mt-10 tracking-tighter text-white hover:text-yellow-soft transition-all duration-500 ease-out origin-center ${isOpen ? "opacity-0 scale-75 rotate-90 pointer-events-none" : "opacity-100 scale-100 rotate-0"
+        <div className={`absolute flex flex-col items-start font-tusker-standard text-[1.5rem] md:text-[2rem] font-medium leading-[0.75] mt-10 tracking-tighter text-white hover:text-yellow-soft transition-all duration-500 ease-out origin-center ${isOpen ? "opacity-0 scale-75 rotate-90 pointer-events-none" : "opacity-100 scale-100 rotate-0"
           }`}>
           <span className="block font-tusker-standard leading-[0.75] group-hover:translate-x-1 transition-transform duration-300 pb-2">ME</span>
           <span className="block font-tusker-standard leading-[0.75] pb-1 group-hover:-translate-x-1 transition-transform duration-300">NU</span>

@@ -6,26 +6,22 @@
 
 ## Current Phase
 
-- **Phase:** `Transition & Navigation Synchronization`
+- **Phase:** `Mobile & Tablet Responsiveness`
 - **Status:** `Complete`
-- **Last Updated:** `2026-06-05`
+- **Last Updated:** `2026-06-10`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Resolved navigation jump glitches, stuck 3D carousels, and half-loaded components during transitions. Implemented route-specific wipe texts, shifted contact element entrances to trigger only after the title settles, restored the footer's rolling text swap CTA using the bold `font-tusker-standard` typography, slowed the footer 'ALI AHMED' rise for a more prominent visual reveal, restored parent red block layout to 38dvh with original top padding, shifted Col 2 upwards using a negative margin to prevent bottom clipping, and applied font size classes directly to the CTA wrapper to resolve inheritance clipping.
+Enhanced layout responsiveness for mobile/tablet screen sizes in Hero and Menu components. Constrained hero container height using h-dvh and min-h-[500px] to lock components inside a single viewport height. Configured flex order on mobile/tablet to stack title and statistics logically, with absolute positioning preserved on desktop. Split desktop and mobile title headings to render "I BUILD WEBSITES" and "THAT HIT DIFFERENT" cleanly without duplicates, scaling them up to `13.5vw`/`12vw` to span edge-to-edge. Used `whitespace-nowrap` and `tracking-tighter` on Line 2 mobile to keep it on a single line. Added `pt-3` top padding to prevent character clipping, centered stats and headings, and compressed vertical gaps using `justify-center gap-6`. Centered the About section content, title, and buttons on mobile, and scaled down the hamburger menu text size to `1.5rem`.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/SmoothScroll.tsx` | Modified    | Exposed Lenis instance globally on window.lenis |
-| `components/PageTransition.tsx` | Modified    | Implemented window.lenis.scrollTo checks, adjusted about/contact offsets, forced synchronous ScrollTrigger update, forced correct progress on triggers, and added route-specific custom wipe texts |
-| `components/SelectedWork.tsx` | Modified    | Synchronized 3D carousel rotations via timeline onUpdate |
-| `components/About.tsx`      | Modified    | Converted signature zoom to fromTo, locked scroll offsets, and forced entrance timeline progress synchronously during page transitions |
-| `components/Contact.tsx`    | Modified    | Adjusted details/image entrances to start at 1.8 and slowed retraction duration to 1.8 starting at 3.0 |
-| `components/Footer.tsx`     | Modified    | Restored rolling text swap CTA button, adjusted heights to 1.8em with font size classes to prevent clipping, and shifted Col 2 upwards with negative top margin |
+| `components/Hero.tsx`       | Modified    | Split titles, centered About section, fixed character clipping, forced single-line headings. |
+| `components/Menu.tsx`       | Modified    | Mobile overlay constrained to 50vw, reduced menu button text size on mobile. |
 
 ---
 
@@ -33,7 +29,10 @@ Resolved navigation jump glitches, stuck 3D carousels, and half-loaded component
 
 | # | Decision                              | Rationale                                      | Date       |
 |---|---------------------------------------|-------------------------------------------------|------------|
-| 1 | Title: "What I alt-tab to"            | User chose this from brainstormed options       | 2026-06-02 |
+| 1 | Use flex order for responsive Hero stack | Allows Score and Stats to stack cleanly on mobile/tablet without breaking absolute placement on desktop | 2026-06-10 |
+| 2 | Set Signature font size to 24 with responsive class | Scales the loaded SVGs sharp stroke vector path cleanly | 2026-06-10 |
+| 3 | Restrict mobile menu overlay to 50vw with minimum | Meets design criteria of covering half screen width without overflow on narrow screens | 2026-06-10 |
+| 4 | Title: "What I alt-tab to"            | User chose this from brainstormed options       | 2026-06-02 |
 | 2 | Reuse DraggableSkill for interests    | Same visual/interaction pattern as skills       | 2026-06-02 |
 | 3 | Empty src in interests array          | User will add icons themselves                  | 2026-06-02 |
 | 4 | Use nested wrapper architecture       | Isolates text tooltips from parent 3D rotation, tilt, and CSS filter flattening, resolving blur and subpixel rasterization issues | 2026-06-02 |
