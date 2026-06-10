@@ -14,7 +14,7 @@
 
 ## Last Session Work
 
-Implemented mobile and tablet responsiveness for the Selected Work section. Stacked the project title, 3D carousel, and description vertically using a relative flex layout below 1024px to create a compact, sandwiched layout with tighter gaps. Disabled trailing custom canvas cursor and circular "open/close" tooltip cursors on touch-capable/smaller viewports (below 1024px). Replaced desktop inline project info overlays on mobile/tablet with a bottom sheet drawer component (vaul-based, taking up 75% height) that opens on carousel card tap, displaying the project's website URL, metrics, tech stack icons, and approach description sequentially in a row-by-row layout without line separators or drawer header titles. Connected body scroll locking to Lenis virtual scroll manager play/stop controls while the drawer is active. Wrapped drawer contents in a scrolling flex-1 element with bottom padding (`pb-12`) to ensure approach text is fully visible. Kept drawer content mounted on close to enable vaul's exit animation. Added window resize listener to synchronize and reset desktop overlay and mobile drawer states dynamically.
+Implemented mobile and tablet responsiveness for the Selected Work section. Stacked the project title, 3D carousel, and description vertically using a relative flex layout below 1024px. Adjusted gaps (`3.5rem`) and padding (`7rem`) to prevent sandwiching and changed scene container heights to `auto` to eliminate excessive empty space between projects. Disabled trailing custom canvas cursor and circular "open/close" tooltip cursors on touch-capable/smaller viewports (below 1024px). Replaced desktop inline project info overlays on mobile/tablet with a bottom sheet drawer component (vaul-based, sizing automatically to match contents) that opens on carousel card tap, displaying the project's website URL, metrics, tech stack icons, and approach description sequentially in a row-by-row layout without line separators or drawer header titles. Connected body scroll locking to Lenis virtual scroll manager play/stop controls while the drawer is active. Wrapped drawer contents in a scrolling flex-1 element with bottom padding (`pb-8`) to ensure approach text is fully visible. Kept drawer content mounted on close to enable vaul's exit animation. Added window resize listener to synchronize and reset desktop overlay and mobile drawer states dynamically.
 
 ### Files Changed
 | File                                   | Change Type | Notes                                |
@@ -139,6 +139,7 @@ Implemented mobile and tablet responsiveness for the Selected Work section. Stac
 | 106| Bottom Drawer for mobile/tablet details   | Replaced inline hover overlays with a bottom sheet drawer (h-[75vh]) on tap to avoid screen clutter and fits mobile screens | 2026-06-10 |
 | 107| Responsive relative flex stack for Selected Work | Stacks title, carousel, and description vertically with tighter gaps instead of absolute coordinates | 2026-06-10 |
 | 108| Disable custom cursors on touch screens    | Hides trailing particle cursor and carousel tooltip cursor below 1024px to match native touch interface | 2026-06-10 |
+| 109| Dynamic 3D Carousel Card Dimming         | Calculates face angle relative to screen using Math.cos and applies CSS brightness filter dynamically to cards to enhance depth | 2026-06-10 |
 
 ---
 

@@ -138,12 +138,12 @@ const TECH_ICONS: { [key: string]: React.ReactNode } = {
     </svg>
   ),
   webgl: (
-    <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" aria-hidden="true">
+    <svg className="fill-none stroke-2 stroke-current w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
     </svg>
   ),
   react: (
-    <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" aria-hidden="true">
+    <svg className="fill-none stroke-2 stroke-current w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
       <ellipse rx="10" ry="4.5" cx="12" cy="12" transform="rotate(0 12 12)" />
       <ellipse rx="10" ry="4.5" cx="12" cy="12" transform="rotate(60 12 12)" />
       <ellipse rx="10" ry="4.5" cx="12" cy="12" transform="rotate(120 12 12)" />
@@ -532,6 +532,17 @@ export default function SelectedWork() {
             gsap.set(cards, {
               rotationZ: rotationProxy.cardsRotationZ
             });
+
+            // Calculate dynamic brightness based on face angle to create realistic 3D shadow depth
+            cards.forEach((card, cardIndex) => {
+              const angle = cardIndex * 90;
+              const worldAngle = totalRotationY + angle;
+              const angleRad = (worldAngle * Math.PI) / 180;
+              const dotProduct = Math.cos(angleRad);
+              // Map dotProduct from [-1, 1] to brightness [0.2, 1]
+              const brightness = dotProduct > 0 ? 0.2 + 0.8 * dotProduct : 0.2;
+              (card as HTMLElement).style.filter = `brightness(${brightness})`;
+            });
           };
 
           const onDragStart = (clientX: number) => {
@@ -758,7 +769,7 @@ export default function SelectedWork() {
     <section
       id="work"
       ref={containerRef}
-      className="relative w-full bg-[#050505] overflow-hidden"
+      className="relative bg-[#050505] w-full overflow-hidden"
     >
       <div id="work-inner" className="w-full h-full transform-gpu" style={{ transformStyle: "preserve-3d" }}>
         {/* "selected work" label placed inside a matching 4-column grid to align perfectly beneath the hero's ScrollArrow */}
@@ -766,7 +777,7 @@ export default function SelectedWork() {
         activeProjectId !== null ? "opacity-0 -translate-y-8" : "opacity-100 translate-y-0"
       }`}>
         <div className="hidden md:block md:col-span-3"></div>
-        <div className="text-[10px] md:text-[12px] monitor:text-[14px] uppercase tracking-widest font-montreal text-[#fff7d3] font-medium pl-0 md:pl-10">
+        <div className="pl-0 md:pl-10 font-montreal font-medium text-[#fff7d3] text-[10px] md:text-[12px] monitor:text-[14px] uppercase tracking-widest">
           Selected Work
         </div>
       </div>
@@ -775,21 +786,21 @@ export default function SelectedWork() {
       <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden transition-opacity duration-500 ease-in-out ${
         activeProjectId !== null && isLinkHovered ? "opacity-[0.15]" : "opacity-100"
       }`}>
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "5.33%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "10.00%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "16.66%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "23.33%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "30.00%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "36.66%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "43.33%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "50.00%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "56.66%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "63.33%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "70.00%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "76.66%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "83.33%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "90.00%", transform: "scaleX(0)" }} />
-        <div className="work-line absolute left-0 w-full h-[1px] bg-[#AB1509]/30 origin-left" style={{ top: "96.66%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "5.33%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "10.00%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "16.66%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "23.33%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "30.00%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "36.66%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "43.33%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "50.00%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "56.66%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "63.33%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "70.00%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "76.66%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "83.33%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "90.00%", transform: "scaleX(0)" }} />
+        <div className="left-0 absolute bg-[#AB1509]/30 w-full h-[1px] origin-left work-line" style={{ top: "96.66%", transform: "scaleX(0)" }} />
       </div>
 
       {PROJECTS_DATA.map((project, sceneIndex) => {
@@ -812,13 +823,13 @@ export default function SelectedWork() {
                 }`}
             >
                {/* TOP LEFT: Brutalist Metrics Grid (Horizontal) */}
-              <div className={`absolute top-[23%] left-6 md:left-12 lg:left-4 flex flex-row gap-6 md:gap-12 text-left pointer-events-auto select-none z-30 transition-opacity duration-500 ease-in-out ${
+              <div className={`absolute top-[10%] left-6 md:left-12 lg:left-4 flex flex-row gap-6 md:gap-12 text-left pointer-events-auto select-none z-30 transition-opacity duration-500 ease-in-out ${
                 isLinkHovered ? "opacity-25" : "opacity-100"
               }`}>
                 {project.metrics.map((metric, idx) => (
                   <div
                     key={idx}
-                    className="details-wipe-reveal opacity-0 flex flex-col items-start gap-1"
+                    className="flex flex-col items-start gap-1 opacity-0 details-wipe-reveal"
                     style={{ clipPath: "inset(0% 0% 100% 0%)" }}
                   >
                     <span className="font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal">
@@ -834,10 +845,10 @@ export default function SelectedWork() {
               </div>
 
                {/* TOP RIGHT: Immersive Website Link with Video/Image Floating Preview Card */}
-              <div className="absolute top-[23%] right-6 md:right-12 lg:right-10 pointer-events-auto text-right z-30 flex flex-col items-end group/link">
+              <div className="group/link top-[10%] right-6 md:right-12 lg:right-10 z-30 absolute flex flex-col items-end text-right pointer-events-auto">
                 {/* Wiping reveal container for link text */}
                 <div 
-                  className="details-wipe-reveal opacity-0"
+                  className="opacity-0 details-wipe-reveal"
                   style={{ clipPath: "inset(0% 0% 100% 0%)" }}
                 >
                   <a
@@ -846,15 +857,15 @@ export default function SelectedWork() {
                     rel="noopener noreferrer"
                     onMouseEnter={() => setIsLinkHovered(true)}
                     onMouseLeave={() => setIsLinkHovered(false)}
-                    className="font-montreal font-normal text-white/90 hover:text-white text-[15px] monitor:text-[17px] leading-[1.5] uppercase tracking-normal border-b border-white/20 hover:border-white/90 transition-all duration-300 flex items-center gap-1.5"
+                    className="flex items-center gap-1.5 border-white/20 hover:border-white/90 border-b font-montreal font-normal text-[15px] text-white/90 hover:text-white monitor:text-[17px] uppercase leading-[1.5] tracking-normal transition-all duration-300"
                   >
                     Visit Work ↗
                   </a>
                 </div>
 
                 {/* Floating Video Preview Card — commented out until R2 videos are ready
-                <div className="absolute top-full mt-4 w-[380px]  border border-[#AB1509] rounded-none overflow-hidden bg-black shadow-[0_20px_50px_rgba(0,0,0,0.8)] opacity-0 scale-95 -translate-y-2 pointer-events-none group-hover/link:opacity-100 group-hover/link:scale-100 group-hover/link:translate-y-0 transition-all duration-300 ease-out origin-top-right z-50">
-                  <div className="w-full h-full relative">
+                <div className="top-full z-50 absolute bg-black opacity-0 group-hover/link:opacity-100 shadow-[0_20px_50px_rgba(0,0,0,0.8)] mt-4 border border-[#AB1509] rounded-none w-[380px] overflow-hidden scale-95 group-hover/link:scale-100 origin-top-right transition-all -translate-y-2 group-hover/link:translate-y-0 duration-300 ease-out pointer-events-none">
+                  <div className="relative w-full h-full">
                     <video
                       src={project.projectVideo}
                       autoPlay
@@ -871,7 +882,7 @@ export default function SelectedWork() {
 
                {/* BOTTOM LEFT: Approach Block */}
               <div
-                className="details-wipe-reveal absolute bottom-[3%] left-6 right-6 lg:bottom-[4%] lg:left-4 lg:w-[90%] lg:max-w-[450px] monitor:!max-w-[550px] pointer-events-auto text-center lg:text-left opacity-0 flex flex-col z-30"
+                className="right-6 bottom-[3%] lg:bottom-[4%] left-6 lg:left-4 z-30 absolute flex flex-col opacity-0 lg:w-[90%] lg:max-w-[450px] monitor:!max-w-[550px] lg:text-left text-center pointer-events-auto details-wipe-reveal"
                 style={{ clipPath: "inset(0% 0% 100% 0%)" }}
               >
                 <div className={`w-full flex flex-col items-center lg:items-start gap-1 transition-opacity duration-500 ease-in-out ${
@@ -880,7 +891,7 @@ export default function SelectedWork() {
                   <span className="font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal">
                     Approach
                   </span>
-                  <p className="font-montreal font-normal text-white/90 text-[11px] md:text-[13px] monitor:text-[15px] leading-[1.2]">
+                  <p className="font-montreal font-normal text-[11px] text-white/90 md:text-[13px] monitor:text-[15px] leading-[1.2]">
                     {project.approach}
                   </p>
                 </div>
@@ -888,27 +899,27 @@ export default function SelectedWork() {
 
                {/* BOTTOM CENTER-RIGHT (UPPER): Stark Tech Stack Icons */}
               <div
-                className="details-wipe-reveal absolute bottom-[30%] lg:bottom-[38%] right-6 md:right-12 lg:right-10 flex flex-col items-end pointer-events-auto text-right opacity-0 flex z-30"
+                className="right-6 md:right-12 lg:right-10 bottom-[30%] lg:bottom-[38%] z-30 absolute flex flex flex-col items-end opacity-0 text-right pointer-events-auto details-wipe-reveal"
                 style={{ clipPath: "inset(0% 0% 100% 0%)" }}
               >
                 <div className={`w-full flex flex-col items-end gap-2 transition-opacity duration-500 ease-in-out ${
                   isLinkHovered ? "opacity-25" : "opacity-100"
                 }`}>
-                  <span className="font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal mb-1">
+                  <span className="mb-1 font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal">
                     Technologies
                   </span>
-                  <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 items-center">
+                  <div className="flex lg:flex-row flex-col items-center gap-2 lg:gap-4">
                     {project.techStack.map((tech, idx) => (
                       <div
                         key={idx}
-                        className="group relative flex items-center justify-center w-8 h-8 md:w-9 md:h-9 monitor:w-[38px] monitor:h-[38px] text-yellow-soft hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                        className="group relative flex justify-center items-center hover:bg-white/10 hover:border-white/20 w-8 md:w-9 monitor:w-[38px] h-8 md:h-9 monitor:h-[38px] text-yellow-soft transition-all duration-300"
                         title={tech.label}
                       >
-                        <div className="w-5 h-5 md:w-6 md:h-6 monitor:w-[22px] monitor:h-[22px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                        <div className="flex justify-center items-center w-5 [&>svg]:w-full md:w-6 monitor:w-[22px] h-5 [&>svg]:h-full md:h-6 monitor:h-[22px]">
                           {TECH_ICONS[tech.iconKey]}
                         </div>
                         {/* Tooltip on hover */}
-                        <span className="absolute bottom-full mb-2 scale-0 group-hover:scale-100 transition-all duration-200 origin-bottom bg-black border border-white/10 text-yellow-soft text-[10px] py-1 px-2 rounded whitespace-nowrap pointer-events-none">
+                        <span className="bottom-full absolute bg-black mb-2 px-2 py-1 border border-white/10 rounded text-[10px] text-yellow-soft whitespace-nowrap scale-0 group-hover:scale-100 origin-bottom transition-all duration-200 pointer-events-none">
                           {tech.label}
                         </span>
                       </div>
@@ -922,11 +933,11 @@ export default function SelectedWork() {
             <div className={`work-title-wrapper absolute z-20 pointer-events-none left-6 right-6 top-[15%] md:top-[18%] lg:top-auto lg:bottom-65 lg:left-4 lg:right-auto monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft/90 tracking-normal text-[26px] md:text-[36px] lg:text-[32px] monitor:!text-[45px] text-center lg:text-left">
+              <h2 className="m-0 font-tusker-standard font-medium text-[26px] text-yellow-soft/90 md:text-[36px] lg:text-[32px] monitor:!text-[45px] lg:text-left text-center tracking-normal work-scene-title-new">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
-                    className="char inline-block select-none opacity-0"
+                    className="inline-block opacity-0 select-none char"
                   >
                     {char === " " ? "\u00A0" : char}
                   </span>
@@ -934,7 +945,7 @@ export default function SelectedWork() {
               </h2>
               {/* Draw-out Underline */}
               {/* <div
-                className="work-title-underline h-[1.5px] bg-white/50 mt-1.5 origin-left w-[120px] md:w-[200px]"
+                className="bg-white/50 mt-1.5 w-[120px] md:w-[200px] h-[1.5px] work-title-underline origin-left"
                 style={{ transform: "scaleX(0)" }}
               /> */}
             </div>
@@ -946,7 +957,7 @@ export default function SelectedWork() {
               {descChars.map((char, charIndex) => (
                 <span
                   key={charIndex}
-                  className="char inline-block select-none opacity-0"
+                  className="inline-block opacity-0 select-none char"
                 >
                   {char === " " ? "\u00A0" : char}
                 </span>
@@ -955,7 +966,7 @@ export default function SelectedWork() {
 
             {/* 3D Carousel Cylinder (4 card cells) - flat parent click listener to prevent 3D transform flakiness */}
             <div 
-              className="work__carousel cursor-pointer pointer-events-auto z-20"
+              className="z-20 cursor-pointer pointer-events-auto work__carousel"
               onMouseDown={handleCarouselMouseDown}
               onClick={(e) => handleCarouselClick(e, project.id)}
               onTouchStart={handleCarouselTouchStart}
@@ -978,7 +989,7 @@ export default function SelectedWork() {
                     <div className={`work__card transition-opacity duration-500 ease-in-out ${
                       activeProjectId === project.id && isLinkHovered ? "opacity-25" : "opacity-100"
                     }`}>
-                      <div className="work__card-face relative overflow-hidden bg-[#121212]">
+                      <div className="relative bg-[#121212] overflow-hidden work__card-face">
                         {imgUrl && (
                           <Image
                             src={imgUrl}
@@ -1003,7 +1014,7 @@ export default function SelectedWork() {
       {mounted && createPortal(
         <div
           ref={cursorRef}
-          className="hidden lg:flex fixed top-0 left-0 w-12 h-12 rounded-full bg-white text-black font-montreal font-medium text-[11px] tracking-normal flex items-center justify-center pointer-events-none z-[9999] opacity-0 scale-50 -translate-x-1/2 -translate-y-1/2 will-change-transform select-none uppercase"
+          className="hidden top-0 left-0 z-[9999] fixed flex lg:flex justify-center items-center bg-white opacity-0 rounded-full w-12 h-12 font-montreal font-medium text-[11px] text-black uppercase tracking-normal scale-50 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none will-change-transform"
         >
           {activeProjectId !== null ? "Close" : "Open"}
         </div>,
@@ -1012,43 +1023,43 @@ export default function SelectedWork() {
 
       {/* Drawer component for mobile/tablet detail views */}
       <Drawer open={isDrawerOpen} onOpenChange={handleDrawerOpenChange}>
-        <DrawerContent className="bg-[#121212]! border-t border-white/10! text-white max-h-[75vh]! h-[75vh]! rounded-t-2xl flex flex-col pointer-events-auto">
+        <DrawerContent className="flex flex-col bg-[#121212]! border-white/10! border-t rounded-t-2xl max-h-[85vh]! text-white pointer-events-auto">
           {/* Vaul drag handle indicator */}
-          <div className="mx-auto w-12 h-1 rounded-full bg-white/20 my-4 shrink-0" />
+          <div className="bg-white/20 mx-auto my-4 rounded-full w-12 h-1 shrink-0" />
           
           {drawerProjectId !== null && (
             (() => {
               const activeProj = PROJECTS_DATA.find((p) => p.id === drawerProjectId);
               if (!activeProj) return null;
               return (
-                <div className="flex-1 overflow-y-auto px-6 pb-12 flex flex-col gap-6">
+                <div className="flex flex-col flex-1 gap-4 px-6 pb-8 overflow-y-auto">
                   {/* Row 1: Visit Work URL */}
-                  <div className="py-2 flex flex-col items-center">
-                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-1">
+                  <div className="flex flex-col items-center py-1.5">
+                    <span className="mb-1 font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal">
                       Website
                     </span>
                     <a
                       href={activeProj.projectUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-montreal font-normal text-white/90 hover:text-white text-[15px] uppercase tracking-normal border-b border-white/20 transition-all duration-300"
+                      className="border-white/20 border-b font-montreal font-normal text-[15px] text-white/90 hover:text-white uppercase tracking-normal transition-all duration-300"
                     >
                       Visit Work ↗
                     </a>
                   </div>
                   
                   {/* Row 2: Metrics */}
-                  <div className="py-3 flex flex-col items-center">
-                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-3">
+                  <div className="flex flex-col items-center py-2">
+                    <span className="mb-2 font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal">
                       Key Metrics
                     </span>
-                    <div className="flex gap-10 justify-center">
+                    <div className="flex justify-center gap-10">
                       {activeProj.metrics.map((metric, idx) => (
                         <div key={idx} className="flex flex-col items-center gap-1">
-                          <span className="font-montreal font-normal text-white/40 text-[9px] uppercase tracking-normal">
+                          <span className="font-montreal font-normal text-[9px] text-white/40 uppercase tracking-normal">
                             {metric.label}
                           </span>
-                          <span className="font-montreal font-normal text-white text-[24px] leading-none tracking-tighter">
+                          <span className="font-montreal font-normal text-[24px] text-white leading-none tracking-tighter">
                             {metric.value}{metric.suffix || ""}
                           </span>
                         </div>
@@ -1057,18 +1068,18 @@ export default function SelectedWork() {
                   </div>
                   
                   {/* Row 3: Technologies */}
-                  <div className="py-3 flex flex-col items-center">
-                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-3">
+                  <div className="flex flex-col items-center py-2">
+                    <span className="mb-2 font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal">
                       Technologies
                     </span>
-                    <div className="flex gap-4 items-center justify-center">
+                    <div className="flex justify-center items-center gap-4">
                       {activeProj.techStack.map((tech, idx) => (
                         <div
                           key={idx}
-                          className="w-9 h-9 flex items-center justify-center bg-white/5 rounded-full"
+                          className="flex justify-center items-center bg-white/5 rounded-full w-9 h-9"
                           title={tech.label}
                         >
-                          <div className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                          <div className="flex justify-center items-center w-5 [&>svg]:w-full h-5 [&>svg]:h-full">
                             {TECH_ICONS[tech.iconKey]}
                           </div>
                         </div>
@@ -1077,11 +1088,11 @@ export default function SelectedWork() {
                   </div>
                   
                   {/* Row 4: Approach */}
-                  <div className="py-3 flex flex-col items-center text-center">
-                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-2">
+                  <div className="flex flex-col items-center py-2 text-center">
+                    <span className="mb-1 font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal">
                       Approach
                     </span>
-                    <p className="font-montreal font-normal text-white/80 text-[12px] leading-[1.4] max-w-[400px]">
+                    <p className="max-w-[400px] font-montreal font-normal text-[12px] text-white/80 leading-[1.4]">
                       {activeProj.approach}
                     </p>
                   </div>
