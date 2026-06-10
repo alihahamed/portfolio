@@ -638,24 +638,82 @@ export default function SelectedWork() {
           // Touch Event Handlers
           const handleTouchStart = (e: TouchEvent) => {
             if (e.touches.length === 0) return;
-            onDragStart(e.touches[0].clientX);
             
+            const tStartX = e.touches[0].clientX;
+            const tStartY = e.touches[0].clientY;
+            let hasDirectionBeenChecked = false;
+            let isSwipeGesture = false;
+
+            // Intercept active kinetic glide tweens instantly on touch start
+            gsap.killTweensOf(dragRotationState);
+            targetDragRotationY = dragRotationState.y;
+
             const handleTouchMove = (moveEvt: TouchEvent) => {
               if (moveEvt.touches.length === 0) return;
-              if (Math.abs(moveEvt.touches[0].clientX - startX) > 5) {
-                moveEvt.preventDefault();
+              
+              const currentX = moveEvt.touches[0].clientX;
+              const currentY = moveEvt.touches[0].clientY;
+              const dx = Math.abs(currentX - tStartX);
+              const dy = Math.abs(currentY - tStartY);
+
+              if (!hasDirectionBeenChecked) {
+                if (dx > 8 || dy > 8) {
+                  hasDirectionBeenChecked = true;
+                  if (dx > dy) {
+                    isSwipeGesture = true;
+                    // Initialize drag start variables inline
+                    isDragging = true;
+                    startX = currentX;
+                    dragVelocity = 0;
+                    lastMoveTime = performance.now();
+                    document.body.style.cursor = "grabbing";
+                    document.body.style.userSelect = "none";
+                  } else {
+                    isSwipeGesture = false;
+                  }
+                }
               }
-              onDragMove(moveEvt.touches[0].clientX);
+
+              if (hasDirectionBeenChecked && isSwipeGesture) {
+                if (moveEvt.cancelable) {
+                  moveEvt.preventDefault();
+                }
+                
+                const deltaX = currentX - startX;
+                startX = currentX;
+
+                const now = performance.now();
+                const dt = now - lastMoveTime;
+                if (dt > 0) {
+                  dragVelocity = deltaX / dt;
+                }
+                lastMoveTime = now;
+                
+                const dragSensitivity = 0.45;
+                targetDragRotationY += deltaX * dragSensitivity;
+
+                gsap.killTweensOf(dragRotationState);
+                gsap.to(dragRotationState, {
+                  y: targetDragRotationY,
+                  duration: 0.5,
+                  ease: "power3.out",
+                  onUpdate: updateCarouselRotation
+                });
+              }
             };
 
             const handleTouchEnd = () => {
-              onDragEnd();
+              if (isSwipeGesture) {
+                onDragEnd();
+              }
               window.removeEventListener("touchmove", handleTouchMove);
               window.removeEventListener("touchend", handleTouchEnd);
+              window.removeEventListener("touchcancel", handleTouchEnd);
             };
 
             window.addEventListener("touchmove", handleTouchMove, { passive: false });
             window.addEventListener("touchend", handleTouchEnd);
+            window.addEventListener("touchcancel", handleTouchEnd);
           };
 
           carousel.addEventListener("mousedown", handleMouseDown);
@@ -669,26 +727,31 @@ export default function SelectedWork() {
           // Initialize rotation values
           updateCarouselRotation();
 
-          const tl = gsap.timeline({
-            defaults: { ease: "sine.inOut" },
-            onUpdate: () => {
-              updateCarouselRotation();
-            },
-            scrollTrigger: {
-              trigger: scene,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.8,
-            },
-          });
+          const isDesktop = typeof window !== "undefined" && window.innerWidth > 1024;
+          let tl: gsap.core.Timeline | null = null;
 
-          tl.fromTo(rotationProxy, { scrollRotationY: 0 }, { scrollRotationY: -180, duration: 1 }, 0)
-            .fromTo(
-              rotationProxy,
-              { rotationZ: 4, rotationX: 4 },
-              { rotationZ: -4, rotationX: -4, duration: 1 },
-              0
-            );
+          if (isDesktop) {
+            tl = gsap.timeline({
+              defaults: { ease: "sine.inOut" },
+              onUpdate: () => {
+                updateCarouselRotation();
+              },
+              scrollTrigger: {
+                trigger: scene,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.8,
+              },
+            });
+
+            tl.fromTo(rotationProxy, { scrollRotationY: 0 }, { scrollRotationY: -180, duration: 1 }, 0)
+              .fromTo(
+                rotationProxy,
+                { rotationZ: 4, rotationX: 4 },
+                { rotationZ: -4, rotationX: -4, duration: 1 },
+                0
+              );
+          }
 
           // 2. Separate, decoupled typing animation for project title - triggers once on enter
           const titleChars = scene.querySelectorAll(".work-scene-title-new .char");
@@ -749,12 +812,14 @@ export default function SelectedWork() {
             );
           }
 
-          tl.fromTo(
-            rotationProxy,
-            { cardsRotationZ: 8 },
-            { cardsRotationZ: -8, duration: 1, ease: "none" },
-            0
-          );
+          if (isDesktop && tl) {
+            tl.fromTo(
+              rotationProxy,
+              { cardsRotationZ: 8 },
+              { cardsRotationZ: -8, duration: 1, ease: "none" },
+              0
+            );
+          }
         }
       });
     }, containerRef);
