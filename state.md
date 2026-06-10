@@ -15,12 +15,12 @@
 ## Last Session Work
 
 ### Summary
-Enhanced layout responsiveness for mobile/tablet screen sizes in Hero and Menu components. Constrained hero container height using h-dvh and min-h-[500px] to lock components inside a single viewport height. Configured flex order on mobile/tablet to stack title and statistics logically, with absolute positioning preserved on desktop. Split desktop and mobile title headings to render "I BUILD WEBSITES" and "THAT HIT DIFFERENT" cleanly without duplicates, scaling them up to `13.5vw`/`12vw` to span edge-to-edge. Used `whitespace-nowrap` and `tracking-tighter` on Line 2 mobile to keep it on a single line. Added `pt-3` top padding to prevent character clipping, centered stats and headings, and compressed vertical gaps using `justify-center gap-6`. Centered the About section content, title, and buttons on mobile, and scaled down the hamburger menu text size to `1.5rem`.
+Enhanced layout responsiveness for mobile/tablet screen sizes in Hero and Menu components. Constrained hero container height using h-dvh and min-h-[500px] to lock components inside a single viewport height. Configured flex order on mobile/tablet to stack title and statistics logically, with absolute positioning preserved on desktop. Split desktop and mobile title headings to render "I BUILD WEBSITES" and "THAT HIT DIFFERENT" cleanly without duplicates, scaling them up to `16vw`/`14.5vw` to span edge-to-edge. Used `whitespace-nowrap` and `tracking-tighter` on Line 2 mobile to keep it on a single line. Reduced spacing wrapper top padding to narrow the gap between titles. Centered the About section content, title, and buttons on mobile, and scaled down the hamburger menu text size to `1.5rem`.
 
 ### Files Changed
 | File                        | Change Type | Notes                                |
 |-----------------------------|-------------|--------------------------------------|
-| `components/Hero.tsx`       | Modified    | Split titles, centered About section, fixed character clipping, forced single-line headings. |
+| `components/Hero.tsx`       | Modified    | Split titles, centered About section, forced single-line headings with larger size and reduced gaps. |
 | `components/Menu.tsx`       | Modified    | Mobile overlay constrained to 50vw, reduced menu button text size on mobile. |
 
 ---
