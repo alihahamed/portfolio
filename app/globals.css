@@ -12,6 +12,11 @@
   --yellow-soft: #fff7d3;  /* Soft Yellow */
   --black-deep: #050505;   /* Deep Pitch Black */
   --footer-height: 100vh;  /* Full viewport footer height */
+  
+  /* Carousel responsive values */
+  --carousel-width: 400px;
+  --carousel-height: 400px;
+  --carousel-z: 300px;
 }
 
 @theme inline {
@@ -36,9 +41,69 @@
 
 @custom-variant monitor (@media (min-width: 1600px) and (min-height: 900px));
 
+@media (max-width: 1024px) {
+  :root {
+    --carousel-width: 320px;
+    --carousel-height: 320px;
+    --carousel-z: 220px;
+  }
+
+  body, *, *::before, *::after {
+    cursor: auto !important;
+  }
+
+  .work__scene {
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 0.5rem !important; /* Tighter gaps as requested */
+    padding: 3rem 1.5rem !important;
+    height: 100vh !important;
+  }
+  
+  .selected-work-label {
+    top: 2rem !important;
+    left: 2.25rem !important;
+    position: absolute !important;
+  }
+
+  .work-title-wrapper {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    order: 1 !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .work-scene-desc-new {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    order: 3 !important;
+    width: 90% !important;
+    max-width: 450px !important;
+    text-align: center !important;
+  }
+
+  .work__carousel {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0.5rem 0 !important; /* Spacing margin for visual sandwich */
+    order: 2 !important;
+  }
+}
+
 @media (max-width: 768px) {
   :root {
     --footer-height: 100dvh;
+    --carousel-width: 250px;
+    --carousel-height: 250px;
+    --carousel-z: 160px;
   }
 }
 
@@ -128,22 +193,22 @@ html {
 }
 
 .work__carousel {
-  width: 400px;
-  height: 400px;
+  width: var(--carousel-width);
+  height: var(--carousel-height);
   top: 50%;
   left: 50%;
-  margin-top: -200px;
-  margin-left: -200px;
+  margin-top: calc(var(--carousel-height) / -2);
+  margin-left: calc(var(--carousel-width) / -2);
   position: absolute;
   transform-style: preserve-3d;
   will-change: transform;
-  transform: translateZ(-300px) rotateY(0deg);
+  transform: translateZ(calc(var(--carousel-z) * -1)) rotateY(0deg);
 }
 
 .work__carousel-cell {
   position: absolute;
-  width: 400px;
-  height: 400px;
+  width: var(--carousel-width);
+  height: var(--carousel-height);
   left: 0;
   top: 0;
   transform-style: preserve-3d;

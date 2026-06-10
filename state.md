@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Mobile & Tablet Responsiveness`
+- **Phase:** `Mobile & Tablet Responsiveness – Selected Work`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-10`
 
@@ -14,14 +14,14 @@
 
 ## Last Session Work
 
-### Summary
-Enhanced layout responsiveness for mobile/tablet screen sizes in Hero and Menu components. Constrained hero container height using h-dvh and min-h-[500px] to lock components inside a single viewport height. Configured flex order on mobile/tablet to stack title and statistics logically, with absolute positioning preserved on desktop. Split desktop and mobile title headings to render "I BUILD WEBSITES" and "THAT HIT DIFFERENT" cleanly without duplicates, scaling them up to `16vw`/`14.5vw` to span edge-to-edge. Used `whitespace-nowrap` and `tracking-tighter` on Line 2 mobile to keep it on a single line. Reduced spacing wrapper top padding to narrow the gap between titles. Centered the About section content, title, and buttons on mobile, and scaled down the hamburger menu text size to `1.5rem`.
+Implemented mobile and tablet responsiveness for the Selected Work section. Stacked the project title, 3D carousel, and description vertically using a relative flex layout below 1024px to create a compact, sandwiched layout with tighter gaps. Disabled trailing custom canvas cursor and circular "open/close" tooltip cursors on touch-capable/smaller viewports (below 1024px). Replaced desktop inline project info overlays on mobile/tablet with a bottom sheet drawer component (vaul-based, taking up 75% height) that opens on carousel card tap, displaying the project's website URL, metrics, tech stack icons, and approach description sequentially in a row-by-row layout without line separators or drawer header titles. Connected body scroll locking to Lenis virtual scroll manager play/stop controls while the drawer is active. Wrapped drawer contents in a scrolling flex-1 element with bottom padding (`pb-12`) to ensure approach text is fully visible. Kept drawer content mounted on close to enable vaul's exit animation. Added window resize listener to synchronize and reset desktop overlay and mobile drawer states dynamically.
 
 ### Files Changed
-| File                        | Change Type | Notes                                |
-|-----------------------------|-------------|--------------------------------------|
-| `components/Hero.tsx`       | Modified    | Split titles, centered About section, forced single-line headings with larger size and reduced gaps. |
-| `components/Menu.tsx`       | Modified    | Mobile overlay constrained to 50vw, reduced menu button text size on mobile. |
+| File                                   | Change Type | Notes                                |
+|----------------------------------------|-------------|--------------------------------------|
+| `components/SelectedWork.tsx`           | Modified    | Enabled Drawer, vertical layout adjustments, dynamic z-depth offsets, and disabled cursors. |
+| `components/ui/trailing-cursor.tsx`    | Modified    | Early-return in useEffect for screens <= 1024px to disable cursor. |
+| `app/globals.css`                      | Modified    | Added media query overrides for vertical stacking and custom cursor resets. |
 
 ---
 
@@ -136,6 +136,9 @@ Enhanced layout responsiveness for mobile/tablet screen sizes in Hero and Menu c
 | 103| Shift contact animations to 1.8            | Starts link, message, and image entrances only after the heading finishes corner transition at 1.8, aligning retraction symmetrically | 2026-06-05 |
 | 104| Rolling text CTA button with Tusker font   | Restored original rolling text CTA style in the footer, styled it with font-tusker-standard, increased size to 36px, and aligned height/line-height to 1.8em to prevent clipping | 2026-06-05 |
 | 105| Prominent footer name rise                 | Slowed down Contact retraction and Footer content rise to duration 1.8s starting at 3.0, using power3.out ease | 2026-06-05 |
+| 106| Bottom Drawer for mobile/tablet details   | Replaced inline hover overlays with a bottom sheet drawer (h-[75vh]) on tap to avoid screen clutter and fits mobile screens | 2026-06-10 |
+| 107| Responsive relative flex stack for Selected Work | Stacks title, carousel, and description vertically with tighter gaps instead of absolute coordinates | 2026-06-10 |
+| 108| Disable custom cursors on touch screens    | Hides trailing particle cursor and carousel tooltip cursor below 1024px to match native touch interface | 2026-06-10 |
 
 ---
 

@@ -42,6 +42,11 @@ const TrailingCursor: React.FC<TrailingCursorProps> = ({
   }
 
   useEffect(() => {
+    // Disable trailing cursor on mobile and tablet
+    if (typeof window !== 'undefined' && window.innerWidth <= 1024) {
+      return;
+    }
+
     const baseImage = new Image();
     baseImage.src = baseImageSrc;
 

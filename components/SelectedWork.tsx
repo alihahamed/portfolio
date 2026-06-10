@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Drawer, DrawerContent } from "./ui/drawer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -182,6 +183,10 @@ export default function SelectedWork() {
   const [activeProjectId, setActiveProjectId] = useState<number | null>(null);
   const [isLinkHovered, setIsLinkHovered] = useState(false);
 
+  // Bottom drawer state for mobile/tablet detail views
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [drawerProjectId, setDrawerProjectId] = useState<number | null>(null);
+
   const [mounted, setMounted] = useState(false);
   const xToRef = useRef<((val: number) => void) | null>(null);
   const yToRef = useRef<((val: number) => void) | null>(null);
@@ -199,6 +204,26 @@ export default function SelectedWork() {
     }
   }, [mounted]);
 
+  // Disable body scroll when drawer is open
+  useEffect(() => {
+    const lenis = (window as any).lenis;
+    if (isDrawerOpen) {
+      document.body.style.overflow = "hidden";
+      if (lenis) lenis.stop();
+    } else {
+      document.body.style.overflow = "";
+      if (lenis) lenis.start();
+    }
+    return () => {
+      document.body.style.overflow = "";
+      if (lenis) lenis.start();
+    };
+  }, [isDrawerOpen]);
+
+  const handleDrawerOpenChange = (open: boolean) => {
+    setIsDrawerOpen(open);
+  };
+
   const handleTooltipMouseMove = (e: React.MouseEvent) => {
     if (xToRef.current && yToRef.current) {
       xToRef.current(e.clientX);
@@ -207,6 +232,7 @@ export default function SelectedWork() {
   };
 
   const handleTooltipMouseEnter = () => {
+    if (typeof window !== "undefined" && window.innerWidth <= 1024) return;
     document.body.classList.add("carousel-hovered");
     if (cursorRef.current) {
       gsap.to(cursorRef.current, {
@@ -220,6 +246,7 @@ export default function SelectedWork() {
   };
 
   const handleTooltipMouseLeave = () => {
+    if (typeof window !== "undefined" && window.innerWidth <= 1024) return;
     document.body.classList.remove("carousel-hovered");
     if (cursorRef.current) {
       gsap.to(cursorRef.current, {
@@ -318,6 +345,25 @@ export default function SelectedWork() {
     };
   }, [activeProjectId]);
 
+  // Resize listener to bridge/reset layouts dynamically
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1024) {
+        setActiveProjectId(null);
+      } else {
+        setIsDrawerOpen(false);
+        setDrawerProjectId(null);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const closeDetails = () => {
     if (activeProjectId === null) return;
     const idToClose = activeProjectId;
@@ -400,13 +446,20 @@ export default function SelectedWork() {
   };
 
   const handleCardClick = (projectId: number) => {
-    if (activeProjectId === projectId) {
-      closeDetails();
+    if (typeof window !== "undefined" && window.innerWidth <= 1024) {
+      // Mobile/tablet path: Open bottom drawer
+      setDrawerProjectId(projectId);
+      setIsDrawerOpen(true);
     } else {
-      if (activeProjectId !== null) {
+      // Desktop path: Inline overlay
+      if (activeProjectId === projectId) {
         closeDetails();
+      } else {
+        if (activeProjectId !== null) {
+          closeDetails();
+        }
+        setActiveProjectId(projectId);
       }
-      setActiveProjectId(projectId);
     }
   };
 
@@ -462,10 +515,18 @@ export default function SelectedWork() {
           const updateCarouselRotation = () => {
             const totalRotationY = rotationProxy.scrollRotationY + dragRotationState.y;
             
+            let zVal = -300;
+            if (window.innerWidth <= 768) {
+              zVal = -160;
+            } else if (window.innerWidth <= 1024) {
+              zVal = -220;
+            }
+            
             gsap.set(carousel, {
               rotationY: totalRotationY,
               rotationZ: rotationProxy.rotationZ,
-              rotationX: rotationProxy.rotationX
+              rotationX: rotationProxy.rotationX,
+              z: zVal
             });
 
             gsap.set(cards, {
@@ -701,11 +762,11 @@ export default function SelectedWork() {
     >
       <div id="work-inner" className="w-full h-full transform-gpu" style={{ transformStyle: "preserve-3d" }}>
         {/* "selected work" label placed inside a matching 4-column grid to align perfectly beneath the hero's ScrollArrow */}
-      <div className={`selected-work-label absolute top-10 left-0 w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-4 z-20 pointer-events-none select-none transition-all duration-700 ease-in-out ${
+      <div className={`selected-work-label absolute top-6 left-6 md:top-10 md:left-0 w-full px-0 md:px-12 grid grid-cols-1 md:grid-cols-4 z-20 pointer-events-none select-none transition-all duration-700 ease-in-out ${
         activeProjectId !== null ? "opacity-0 -translate-y-8" : "opacity-100 translate-y-0"
       }`}>
         <div className="hidden md:block md:col-span-3"></div>
-        <div className="text-[12px] monitor:text-[14px] uppercase tracking-widest font-montreal text-[#fff7d3] font-medium pl-2 md:pl-10">
+        <div className="text-[10px] md:text-[12px] monitor:text-[14px] uppercase tracking-widest font-montreal text-[#fff7d3] font-medium pl-0 md:pl-10">
           Selected Work
         </div>
       </div>
@@ -750,8 +811,8 @@ export default function SelectedWork() {
               className={`absolute inset-0 w-full h-full pointer-events-none z-30 transition-all duration-500 ${activeProjectId === project.id ? "opacity-100" : "opacity-0"
                 }`}
             >
-              {/* TOP LEFT: Brutalist Metrics Grid (Horizontal) */}
-              <div className={`absolute top-[12%] left-6 md:left-12 lg:left-4 flex flex-row gap-12 text-left pointer-events-auto select-none hidden md:flex z-30 transition-opacity duration-500 ease-in-out ${
+               {/* TOP LEFT: Brutalist Metrics Grid (Horizontal) */}
+              <div className={`absolute top-[23%] left-6 md:left-12 lg:left-4 flex flex-row gap-6 md:gap-12 text-left pointer-events-auto select-none z-30 transition-opacity duration-500 ease-in-out ${
                 isLinkHovered ? "opacity-25" : "opacity-100"
               }`}>
                 {project.metrics.map((metric, idx) => (
@@ -760,11 +821,11 @@ export default function SelectedWork() {
                     className="details-wipe-reveal opacity-0 flex flex-col items-start gap-1"
                     style={{ clipPath: "inset(0% 0% 100% 0%)" }}
                   >
-                    <span className="font-montreal font-normal text-[#AB1509] text-[11px] monitor:text-[13px] uppercase tracking-normal">
+                    <span className="font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal">
                       {metric.label}
                     </span>
                     <span
-                      className={`metric-num-${idx} font-montreal font-normal text-white/90 text-[36px] md:text-[48px] monitor:text-[50px] leading-none tracking-tighter`}
+                      className={`metric-num-${idx} font-montreal font-normal text-white/90 text-[24px] md:text-[48px] monitor:text-[50px] leading-none tracking-tighter`}
                     >
                       0{metric.suffix || ""}
                     </span>
@@ -772,8 +833,8 @@ export default function SelectedWork() {
                 ))}
               </div>
 
-              {/* TOP RIGHT: Immersive Website Link with Video/Image Floating Preview Card */}
-              <div className="absolute top-[12%] right-6 md:right-12 lg:right-10 pointer-events-auto text-right z-30 flex flex-col items-end group/link">
+               {/* TOP RIGHT: Immersive Website Link with Video/Image Floating Preview Card */}
+              <div className="absolute top-[23%] right-6 md:right-12 lg:right-10 pointer-events-auto text-right z-30 flex flex-col items-end group/link">
                 {/* Wiping reveal container for link text */}
                 <div 
                   className="details-wipe-reveal opacity-0"
@@ -808,42 +869,42 @@ export default function SelectedWork() {
                 */}
               </div>
 
-              {/* BOTTOM LEFT: Approach Block */}
+               {/* BOTTOM LEFT: Approach Block */}
               <div
-                className="details-wipe-reveal absolute bottom-[4%] left-6 md:left-12 lg:left-4 w-[90%] max-w-[450px] monitor:!max-w-[550px] pointer-events-auto text-left opacity-0 hidden lg:flex flex-col z-30"
+                className="details-wipe-reveal absolute bottom-[3%] left-6 right-6 lg:bottom-[4%] lg:left-4 lg:w-[90%] lg:max-w-[450px] monitor:!max-w-[550px] pointer-events-auto text-center lg:text-left opacity-0 flex flex-col z-30"
                 style={{ clipPath: "inset(0% 0% 100% 0%)" }}
               >
-                <div className={`w-full flex flex-col gap-2 transition-opacity duration-500 ease-in-out ${
+                <div className={`w-full flex flex-col items-center lg:items-start gap-1 transition-opacity duration-500 ease-in-out ${
                   isLinkHovered ? "opacity-25" : "opacity-100"
                 }`}>
-                  <span className="font-montreal font-normal text-[#AB1509] text-[11px] monitor:text-[13px] uppercase tracking-normal">
+                  <span className="font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal">
                     Approach
                   </span>
-                  <p className="font-montreal font-normal text-white/90 text-[13px] monitor:text-[15px] leading-[1.2]">
+                  <p className="font-montreal font-normal text-white/90 text-[11px] md:text-[13px] monitor:text-[15px] leading-[1.2]">
                     {project.approach}
                   </p>
                 </div>
               </div>
 
-              {/* BOTTOM CENTER-RIGHT (UPPER): Stark Tech Stack Icons */}
+               {/* BOTTOM CENTER-RIGHT (UPPER): Stark Tech Stack Icons */}
               <div
-                className="details-wipe-reveal absolute bottom-[38%] right-6 md:right-12 lg:right-10 flex flex-col items-end pointer-events-auto text-right opacity-0 hidden lg:flex z-30"
+                className="details-wipe-reveal absolute bottom-[30%] lg:bottom-[38%] right-6 md:right-12 lg:right-10 flex flex-col items-end pointer-events-auto text-right opacity-0 flex z-30"
                 style={{ clipPath: "inset(0% 0% 100% 0%)" }}
               >
                 <div className={`w-full flex flex-col items-end gap-2 transition-opacity duration-500 ease-in-out ${
                   isLinkHovered ? "opacity-25" : "opacity-100"
                 }`}>
-                  <span className="font-montreal font-normal text-[#AB1509] text-[11px] monitor:text-[13px] uppercase tracking-normal mb-1">
+                  <span className="font-montreal font-normal text-[#AB1509] text-[9px] md:text-[11px] monitor:text-[13px] uppercase tracking-normal mb-1">
                     Technologies
                   </span>
-                  <div className="flex gap-4 items-center">
+                  <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 items-center">
                     {project.techStack.map((tech, idx) => (
                       <div
                         key={idx}
-                        className="group relative flex items-center justify-center w-9 h-9 monitor:w-[38px] monitor:h-[38px]  text-yellow-soft hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                        className="group relative flex items-center justify-center w-8 h-8 md:w-9 md:h-9 monitor:w-[38px] monitor:h-[38px] text-yellow-soft hover:bg-white/10 hover:border-white/20 transition-all duration-300"
                         title={tech.label}
                       >
-                        <div className="w-6 h-6 monitor:w-[22px] monitor:h-[22px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                        <div className="w-5 h-5 md:w-6 md:h-6 monitor:w-[22px] monitor:h-[22px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
                           {TECH_ICONS[tech.iconKey]}
                         </div>
                         {/* Tooltip on hover */}
@@ -858,10 +919,10 @@ export default function SelectedWork() {
             </div>
 
             {/* Bottom-left Project Title and Underline Wrapper */}
-            <div className={`absolute z-20 pointer-events-none left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[10%] lg:left-4 lg:right-auto lg:bottom-65 monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
+            <div className={`work-title-wrapper absolute z-20 pointer-events-none left-6 right-6 top-[15%] md:top-[18%] lg:top-auto lg:bottom-65 lg:left-4 lg:right-auto monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft/90  tracking-normal text-[12px] md:text-[32px] monitor:!text-[45px]  text-left">
+              <h2 className="work-scene-title-new m-0 font-tusker-standard font-medium text-yellow-soft/90 tracking-normal text-[26px] md:text-[36px] lg:text-[32px] monitor:!text-[45px] text-center lg:text-left">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
@@ -879,7 +940,7 @@ export default function SelectedWork() {
             </div>
 
             {/* Bottom-right Project Description (styled with Tailwind CSS directly for manual edits) */}
-            <p className={`work-scene-desc-new absolute m-0 pointer-events-none font-montreal font-normal text-yellow-soft/90 z-20 text-[10px] md:text-[15px] monitor:text-[17px] leading-[1.2] text-left left-[max(2rem,calc(50%-300px))] right-[max(2rem,calc(50%-300px))] bottom-[4%] lg:left-auto lg:right-10 lg:bottom-[4%] lg:text-right lg:w-[420px] monitor:w-[470px] transition-opacity duration-500 ease-in-out ${
+            <p className={`work-scene-desc-new absolute m-0 pointer-events-none font-montreal font-normal text-yellow-soft/90 z-20 text-[12px] md:text-[15px] monitor:text-[17px] leading-[1.3] text-center lg:text-right left-6 right-6 bottom-[10%] md:bottom-[12%] lg:left-auto lg:right-10 lg:bottom-[4%] lg:text-right lg:w-[420px] monitor:w-[470px] transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-25" : "opacity-100"
             }`}>
               {descChars.map((char, charIndex) => (
@@ -904,9 +965,9 @@ export default function SelectedWork() {
               onMouseLeave={handleTooltipMouseLeave}
             >
               {project.images.map((imgUrl, cardIndex) => {
-                // Calculate circular geometry transforms for 4 cells (radius = 300px)
+                // Calculate circular geometry transforms for 4 cells (radius driven by responsive CSS variable)
                 const angle = cardIndex * 90; // 360 / 4 = 90
-                const transform = `rotateY(${angle}deg) translateZ(300px)`;
+                const transform = `rotateY(${angle}deg) translateZ(var(--carousel-z))`;
 
                 return (
                   <div
@@ -942,12 +1003,94 @@ export default function SelectedWork() {
       {mounted && createPortal(
         <div
           ref={cursorRef}
-          className="fixed top-0 left-0 w-12 h-12 rounded-full bg-white text-black font-montreal font-medium text-[11px] tracking-normal flex items-center justify-center pointer-events-none z-[9999] opacity-0 scale-50 -translate-x-1/2 -translate-y-1/2 will-change-transform select-none uppercase"
+          className="hidden lg:flex fixed top-0 left-0 w-12 h-12 rounded-full bg-white text-black font-montreal font-medium text-[11px] tracking-normal flex items-center justify-center pointer-events-none z-[9999] opacity-0 scale-50 -translate-x-1/2 -translate-y-1/2 will-change-transform select-none uppercase"
         >
           {activeProjectId !== null ? "Close" : "Open"}
         </div>,
         document.body
       )}
+
+      {/* Drawer component for mobile/tablet detail views */}
+      <Drawer open={isDrawerOpen} onOpenChange={handleDrawerOpenChange}>
+        <DrawerContent className="bg-[#121212]! border-t border-white/10! text-white max-h-[75vh]! h-[75vh]! rounded-t-2xl flex flex-col pointer-events-auto">
+          {/* Vaul drag handle indicator */}
+          <div className="mx-auto w-12 h-1 rounded-full bg-white/20 my-4 shrink-0" />
+          
+          {drawerProjectId !== null && (
+            (() => {
+              const activeProj = PROJECTS_DATA.find((p) => p.id === drawerProjectId);
+              if (!activeProj) return null;
+              return (
+                <div className="flex-1 overflow-y-auto px-6 pb-12 flex flex-col gap-6">
+                  {/* Row 1: Visit Work URL */}
+                  <div className="py-2 flex flex-col items-center">
+                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-1">
+                      Website
+                    </span>
+                    <a
+                      href={activeProj.projectUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-montreal font-normal text-white/90 hover:text-white text-[15px] uppercase tracking-normal border-b border-white/20 transition-all duration-300"
+                    >
+                      Visit Work ↗
+                    </a>
+                  </div>
+                  
+                  {/* Row 2: Metrics */}
+                  <div className="py-3 flex flex-col items-center">
+                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-3">
+                      Key Metrics
+                    </span>
+                    <div className="flex gap-10 justify-center">
+                      {activeProj.metrics.map((metric, idx) => (
+                        <div key={idx} className="flex flex-col items-center gap-1">
+                          <span className="font-montreal font-normal text-white/40 text-[9px] uppercase tracking-normal">
+                            {metric.label}
+                          </span>
+                          <span className="font-montreal font-normal text-white text-[24px] leading-none tracking-tighter">
+                            {metric.value}{metric.suffix || ""}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Row 3: Technologies */}
+                  <div className="py-3 flex flex-col items-center">
+                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-3">
+                      Technologies
+                    </span>
+                    <div className="flex gap-4 items-center justify-center">
+                      {activeProj.techStack.map((tech, idx) => (
+                        <div
+                          key={idx}
+                          className="w-9 h-9 flex items-center justify-center bg-white/5 rounded-full"
+                          title={tech.label}
+                        >
+                          <div className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                            {TECH_ICONS[tech.iconKey]}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Row 4: Approach */}
+                  <div className="py-3 flex flex-col items-center text-center">
+                    <span className="font-montreal font-normal text-[#AB1509] text-[10px] uppercase tracking-normal mb-2">
+                      Approach
+                    </span>
+                    <p className="font-montreal font-normal text-white/80 text-[12px] leading-[1.4] max-w-[400px]">
+                      {activeProj.approach}
+                    </p>
+                  </div>
+                </div>
+              );
+            })()
+          )}
+        </DrawerContent>
+      </Drawer>
     </section>
   );
 }
