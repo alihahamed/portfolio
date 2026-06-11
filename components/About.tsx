@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,6 +16,19 @@ export default function About() {
   const docWrapRef = useRef<HTMLDivElement>(null);
   
   const sigRef = useRef<SignatureRef>(null);
+  const sigRef1 = useRef<SignatureRef>(null);
+  const sigRef2 = useRef<SignatureRef>(null);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     let ctx: gsap.Context;
@@ -41,7 +54,7 @@ export default function About() {
 
       // Scale proportionally to viewport so signature fills screen on all monitor sizes
       // Base: 1x at 1440px, scales up on larger screens
-      const sigBaseScale = Math.max(1, window.innerWidth / 1440);
+      const sigBaseScale = isMobile ? 1 : Math.max(1, window.innerWidth / 1440);
       
       // Scale the inner signature container to sigBaseScale around its center
       const innerContainer = signatureWrapRef.current?.querySelector(".signature-scale-container");
@@ -53,18 +66,18 @@ export default function About() {
       }
 
       // Calculate percentage-based transform origin relative to screen center.
-      // On 1440x900 viewport, "42% 52%" corresponds to:
-      // X = 1440 * 0.42 = 604.8px (offset from center: -115.2px)
-      // Y = 900 * 0.52 = 468px (offset from center: 18px)
-      // We scale these offsets by sigBaseScale to match signature sizing.
-      const originX = window.innerWidth / 2 - 115.2 * sigBaseScale;
-      const originY = window.innerHeight / 2 + 18 * sigBaseScale;
+      // On desktop, zooms into a letter stroke. On mobile, zooms from screen center.
+      const originX = isMobile 
+        ? window.innerWidth / 2 
+        : window.innerWidth / 2 - 115.2 * sigBaseScale;
+      const originY = isMobile 
+        ? window.innerHeight / 2 
+        : window.innerHeight / 2 + 18 * sigBaseScale;
 
       const pctX = (originX / window.innerWidth) * 100;
       const pctY = (originY / window.innerHeight) * 100;
 
-      // Set transform origin of signature wrapper to zoom directly into a letter stroke
-      // Starts at scale: 1 to avoid initial layout shifts
+      // Set transform origin of signature wrapper
       gsap.set(signatureWrapRef.current, { 
         transformOrigin: `${pctX}% ${pctY}%`,
         scale: 1
@@ -88,7 +101,12 @@ export default function About() {
         });
         
         // Ensure signature is hidden initially
-        if (sigRef.current) sigRef.current.setProgress(0);
+        if (isMobile) {
+          if (sigRef1.current) sigRef1.current.setProgress(0);
+          if (sigRef2.current) sigRef2.current.setProgress(0);
+        } else {
+          if (sigRef.current) sigRef.current.setProgress(0);
+        }
 
         // Set initial positions for entrance reveal animations (folder image badge remains static)
         gsap.set(".reveal-line-v", { opacity: 1, scaleY: 0, transformOrigin: "50% 0%" });
@@ -119,7 +137,12 @@ export default function About() {
             },
             onLeaveBack: () => {
               if (redBgRef.current) redBgRef.current.style.display = "none";
-              if (sigRef.current) sigRef.current.setProgress(0);
+              if (isMobile) {
+                if (sigRef1.current) sigRef1.current.setProgress(0);
+                if (sigRef2.current) sigRef2.current.setProgress(0);
+              } else {
+                if (sigRef.current) sigRef.current.setProgress(0);
+              }
             },
             onUpdate: (self) => {
               const isTransitioning = document.body.classList.contains("is__transitioning");
@@ -184,14 +207,19 @@ export default function About() {
           duration: 4.0,
           ease: "power1.inOut",
           onUpdate: () => {
-            if (sigRef.current) sigRef.current.setProgress(sigProxy.val);
+            if (isMobile) {
+              if (sigRef1.current) sigRef1.current.setProgress(sigProxy.val);
+              if (sigRef2.current) sigRef2.current.setProgress(sigProxy.val);
+            } else {
+              if (sigRef.current) sigRef.current.setProgress(sigProxy.val);
+            }
           }
         }, 7.0);
 
         // Stage 2b: Subtle vertical parallax drift on the signature during drawing
         tl.fromTo(signatureWrapRef.current,
-          { y: 8 },
-          { y: -8, duration: 4.0, ease: "power1.inOut" },
+          { y: isMobile ? 0 : 8 },
+          { y: isMobile ? 0 : -8, duration: 4.0, ease: "power1.inOut" },
           7.0
         );
 
@@ -199,24 +227,35 @@ export default function About() {
         tl.to({}, { duration: 2.0 }, 11.0);
 
         // Stage 4 (time 13.0 to 25.0): Signature zooms with long scroll span and deep parallax drift
-        // power1.inOut avoids the fast expo middle while keeping a smooth acceleration curve
+        const targetScale = isMobile ? 18 : 120;
+        const targetX = isMobile ? 0 : -window.innerWidth * 0.06;
+        const targetY = isMobile ? 0 : -window.innerHeight * 0.18;
+
         tl.fromTo(signatureWrapRef.current,
           {
             scale: 1,
             x: 0,
-            y: -8,
+            y: isMobile ? 0 : -8,
             transformOrigin: `${pctX}% ${pctY}%`
           },
           {
-            scale: 120,
-            x: () => -window.innerWidth * 0.06,
-            y: () => -window.innerHeight * 0.18,
+            scale: targetScale,
+            x: targetX,
+            y: targetY,
             transformOrigin: `${pctX}% ${pctY}%`,
             duration: 12,
             ease: "power1.inOut"
           },
           13.0
         );
+
+        if (isMobile) {
+          tl.to(signatureWrapRef.current, {
+            opacity: 0,
+            duration: 8,
+            ease: "power1.in"
+          }, 14.5);
+        }
 
         // Stage 5 (time 25.0 to 35.0): Document lowers into position — NO fade, pure scroll-driven descent
         tl.fromTo(docWrapRef.current,
@@ -282,8 +321,6 @@ export default function About() {
         // Step 5: Header reveal (exactly 0.3s after Step 4)
         entranceTimeline.to(".reveal-header", { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, stagger: 0.1, ease: "power4.out" }, 1.2);
 
-
-
         // Add a 100vh scroll hold at the end of the document animation (duration 6.0 units)
         // to pin the fully rendered resume before entering the contact section circular reveal.
         tl.to({}, { duration: 6.0 }, 35.0);
@@ -306,7 +343,7 @@ export default function About() {
         gsap.set(workInnerEl, { scale: 1, z: 0, opacity: 1, rotateX: 0, clearProps: "all" });
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
@@ -332,20 +369,41 @@ export default function About() {
           >
             <div className="signature-scale-container flex items-center justify-center">
               {/* Mounted immediately so Opentype can load the font, but drawn via GSAP scrub */}
-              <Signature
-                ref={sigRef}
-                text="Ali Ahmed"
-                color="#fff7d3"
-                fontSize={50}
-                inView={false}
-                once={true}
-              />
+              {isMobile ? (
+                <div className="flex flex-col items-center justify-center gap-1">
+                  <Signature
+                    ref={sigRef1}
+                    text="Ali"
+                    color="#fff7d3"
+                    fontSize={36}
+                    inView={false}
+                    once={true}
+                  />
+                  <Signature
+                    ref={sigRef2}
+                    text="Ahmed"
+                    color="#fff7d3"
+                    fontSize={36}
+                    inView={false}
+                    once={true}
+                  />
+                </div>
+              ) : (
+                <Signature
+                  ref={sigRef}
+                  text="Ali Ahmed"
+                  color="#fff7d3"
+                  fontSize={50}
+                  inView={false}
+                  once={true}
+                />
+              )}
             </div>
           </div>
 
           <div
             ref={docWrapRef}
-            className="about-doc-wrap absolute left-1/2 w-[90vw] h-screen md:w-[78vh] md:h-screen lg:w-[82vh] lg:h-screen bg-[#fff7d3] border-l border-r border-[#AB1509] shadow-[0_30px_70px_rgba(0,0,0,0.7)] z-50 overflow-visible select-none"
+            className="about-doc-wrap absolute left-1/2 w-full h-screen md:w-[78vh] md:h-screen lg:w-[82vh] lg:h-screen bg-[#fff7d3] md:border-l md:border-r md:border-[#AB1509] shadow-[0_30px_70px_rgba(0,0,0,0.7)] z-50 overflow-y-auto md:overflow-visible select-none"
             style={{ 
               transform: "translate(-50%, -150%)", 
               willChange: "transform"
