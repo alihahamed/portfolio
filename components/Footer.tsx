@@ -30,10 +30,9 @@ export default function Footer() {
       // Match the total timeline duration of Contact (4.8)
       tl.to({}, { duration: 5.8 }, 0);
 
-      // Footer name text and red block content entrance animation
-      // Starts exactly when retraction starts (3.0) and runs for full retraction duration (1.8)
+      // Footer name text reveal
       tl.fromTo(
-        [nameRef.current, redBlockContentRef.current],
+        nameRef.current,
         {
           yPercent: 100,
         },
@@ -43,6 +42,20 @@ export default function Footer() {
           duration: 1.3,
         },
         4.0
+      );
+
+      // Footer bottom red block content reveal
+      tl.fromTo(
+        redBlockContentRef.current,
+        {
+          y: "38dvh",
+        },
+        {
+          y: "0dvh",
+          ease: "power3.out",
+          duration: 1.3,
+        },
+        4.2
       );
     }, footerRef);
 

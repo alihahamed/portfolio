@@ -98,7 +98,7 @@ export default function Hero() {
       }, 3.68);
 
       tl.to(yearsObj, {
-        value: 2,
+        value: 1.,
         duration: 1.4,
         ease: "power3.out",
         onUpdate: () => {
@@ -207,7 +207,7 @@ export default function Hero() {
                 <span className="heading-gradient">That</span>
               </h1>
               {/* Mobile heading */}
-              <h1 className="flex md:hidden flex-wrap justify-center items-center gap-x-[0.2em] pb-0 w-full font-tusker-standard font-medium text-[#fff7d3] text-[16vw] text-reveal sm:text-[13.5vw] uppercase leading-[0.9] tracking-tighter whitespace-nowrap">
+              <h1 className="md:hidden flex flex-wrap justify-center items-center gap-x-[0.2em] pb-0 w-full font-tusker-standard font-medium text-[#fff7d3] text-[16vw] text-reveal sm:text-[13.5vw] uppercase leading-[0.9] tracking-tighter whitespace-nowrap">
                 <span className="heading-gradient">I Build</span>
                 <span className="heading-gradient">Websites</span>
               </h1>
@@ -231,7 +231,7 @@ export default function Hero() {
                   <span className="heading-gradient">Hit Different</span>
                 </h1>
                 {/* Mobile Line 2 */}
-                <h1 className="block md:hidden pb-1 w-full font-tusker-standard font-medium text-[14.5vw] text-reveal sm:text-[12vw] text-center uppercase leading-[0.9] tracking-tighter whitespace-nowrap">
+                <h1 className="md:hidden block pb-1 w-full font-tusker-standard font-medium text-[14.5vw] text-reveal sm:text-[12vw] text-center uppercase leading-[0.9] tracking-tighter whitespace-nowrap">
                   <span className="heading-gradient">That Hit Different</span>
                 </h1>
               </div>

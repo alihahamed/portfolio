@@ -109,7 +109,7 @@ const interests = [
   {
     name: "Interest 1",
     src: "/bike.png",
-    desc: "yep i like bikes",
+    desc: " i like bikes",
     style: {
       left: "4%",
       top: "5%",
@@ -996,7 +996,7 @@ export default function Document() {
       </div>
 
       {/* PHYSICAL APPROACH FOLDER */}
-      <div className="z-20 absolute flex justify-center items-center reveal-folder" style={{ left: "53%", width: "40%", top: "66%", height: "23%" }}>
+      <div className="z-20 absolute flex justify-center items-center reveal-folder" style={{ left: "53%", width: "40%", top: "68%", height: "23%" }}>
         <ImagesBadge folderSize={{ width: 180, height: 120 }} />
       </div>
 

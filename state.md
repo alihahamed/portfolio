@@ -6,21 +6,21 @@
 
 ## Current Phase
 
-- **Phase:** `Mobile & Tablet Responsiveness – About`
+- **Phase:** `Feature Development – Footer Reveals & Masking`
 - **Status:** `Complete`
-- **Last Updated:** `2026-06-11`
+- **Last Updated:** `2026-06-13`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Centered the physical folder ("How I Work" component) vertically in both desktop and mobile layouts. Added vertical side grid lines (`reveal-line-v` at `left-[16px]` and `right-[16px]`) and edge-to-edge horizontal divider lines (`reveal-line-h` with negative horizontal margins) to the mobile layout of the resume document in `components/Document.tsx`, connecting them to mimic the large-screen blueprint grid layout. Preserved all user manual adjustments to folder size, padding, and scaling. Implemented tap-triggered tooltips for interest icons on mobile viewports with click-outside dismissal and a 3-second auto-hide timer.
+Separated the GSAP timeline triggers for the footer signature name text ("Ali Ahmed") and the bottom brand red block contents. Used viewport-relative translation (`y: "38dvh"`) on the red block content grid to keep it fully masked and hidden inside the parent `overflow-hidden` container until its separate trigger time.
 
 ### Files Changed
 | File                                   | Change Type | Notes                                |
 |----------------------------------------|-------------|--------------------------------------|
-| `components/Document.tsx`               | Modified    | Centered folder, added connected mobile grid lines, and implemented mobile tap tooltips. |
+| `components/Footer.tsx`                | Modified    | Separated GSAP animation timelines for footer name and red block content. Applied `y: "38dvh"` translation to links. |
 
 ---
 
@@ -140,6 +140,7 @@ Centered the physical folder ("How I Work" component) vertically in both desktop
 | 108| Disable custom cursors on touch screens    | Hides trailing particle cursor and carousel tooltip cursor below 1024px to match native touch interface | 2026-06-10 |
 | 109| Dynamic 3D Carousel Card Dimming         | Calculates face angle relative to screen using Math.cos and applies CSS brightness filter dynamically to cards to enhance depth | 2026-06-10 |
 | 110| Center physical folder container          | Centered the folder vertically in mobile view using padding (py-10) and bottom border, and in desktop view using absolute positioning between the 66% and 89% grid lines. | 2026-06-11 |
+| 111| Separate footer signature & links reveal  | Animated signature name and red block content on separate timelines. Applied `y: "38dvh"` translation to keep links hidden within overflow-hidden boundary before retraction. | 2026-06-13 |
 
 ---
 

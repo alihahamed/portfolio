@@ -48,9 +48,9 @@ const PROJECTS_DATA: Project[] = [
       { label: "Payload CMS", iconKey: "payload" }
     ],
     metrics: [
-      { label: "Runways Mapped", value: 12, suffix: "" },
-      { label: "Avg Engagement", value: 87, suffix: "%" },
-      { label: "Assets Rendered", value: 142, suffix: "" }
+      { label: "Searchable Regions", value: 12, suffix: "" },
+      { label: "CMS Collections", value: 6, suffix: "" },
+      { label: "Pages Built", value: 15, suffix: "+" }
     ],
     projectUrl: "https://agb-website.vercel.app/",
     projectVideo: "demo.mp4"
@@ -71,9 +71,9 @@ const PROJECTS_DATA: Project[] = [
       { label: "shadcn/ui", iconKey: "shadcn" }
     ],
     metrics: [
-      { label: "Projects Tracked", value: 8, suffix: "" },
-      { label: "Scrub Frames", value: 1440, suffix: "" },
-      { label: "Projections", value: 350, suffix: "m" }
+      { label: "Conversion Paths", value: 3, suffix: "" },
+      { label: "Inquiry Touchpoints", value: 5, suffix: "" },
+      { label: "User Journeys", value: 3, suffix: "" }
     ],
     projectUrl: "https://primecrestproperty.in/",
     projectVideo: "https://assets.mixkit.co/videos/preview/mixkit-urban-fashion-runway-showcase-40290-large.mp4"
@@ -91,9 +91,9 @@ const PROJECTS_DATA: Project[] = [
       { label: "GSAP", iconKey: "gsap" }
     ],
     metrics: [
-      { label: "Houses Detailed", value: 15, suffix: "" },
-      { label: "Ratio Grids", value: 32, suffix: "" },
-      { label: "Ambient Frames", value: 240, suffix: "" }
+      { label: "User Flows Revised", value: 4, suffix: "" },
+      { label: "Components Crafted", value: 15, suffix: "" },
+      { label: "Hours Invested", value: 40, suffix: "+" }
     ],
     projectUrl: "https://digi-difference.vercel.app/",
     projectVideo: "https://assets.mixkit.co/videos/preview/mixkit-model-posing-in-neon-lights-40296-large.mp4"
