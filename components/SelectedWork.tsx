@@ -53,7 +53,7 @@ const PROJECTS_DATA: Project[] = [
       { label: "Pages Built", value: 15, suffix: "+" }
     ],
     projectUrl: "https://agb-website.vercel.app/",
-    projectVideo: "demo.mp4"
+    projectVideo: "https://u8yyhoq1ydpvxbur.public.blob.vercel-storage.com/agb-demo.mp4"
   },
   {
     id: 2,
@@ -76,7 +76,7 @@ const PROJECTS_DATA: Project[] = [
       { label: "User Journeys", value: 3, suffix: "" }
     ],
     projectUrl: "https://primecrestproperty.in/",
-    projectVideo: "https://assets.mixkit.co/videos/preview/mixkit-urban-fashion-runway-showcase-40290-large.mp4"
+    projectVideo: "https://u8yyhoq1ydpvxbur.public.blob.vercel-storage.com/pmc-demo.mp4"
   },
   {
     id: 3,
@@ -96,7 +96,7 @@ const PROJECTS_DATA: Project[] = [
       { label: "Hours Invested", value: 40, suffix: "+" }
     ],
     projectUrl: "https://digi-difference.vercel.app/",
-    projectVideo: "https://assets.mixkit.co/videos/preview/mixkit-model-posing-in-neon-lights-40296-large.mp4"
+    projectVideo: "https://u8yyhoq1ydpvxbur.public.blob.vercel-storage.com/digi-dif.mp4"
   }
 ];
 
@@ -180,6 +180,7 @@ export default function SelectedWork() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scenesRef = useRef<(HTMLDivElement | null)[]>([]);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const videoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({});
   const [activeProjectId, setActiveProjectId] = useState<number | null>(null);
   const [isLinkHovered, setIsLinkHovered] = useState(false);
 
@@ -921,29 +922,43 @@ export default function SelectedWork() {
                     href={project.projectUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onMouseEnter={() => setIsLinkHovered(true)}
-                    onMouseLeave={() => setIsLinkHovered(false)}
+                    onMouseEnter={() => {
+                      setIsLinkHovered(true);
+                      const video = videoRefs.current[project.id];
+                      if (video) {
+                        video.currentTime = 0;
+                        video.play().catch(() => {});
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      setIsLinkHovered(false);
+                      const video = videoRefs.current[project.id];
+                      if (video) {
+                        video.pause();
+                        video.currentTime = 0;
+                      }
+                    }}
                     className="flex items-center gap-1.5 border-white/20 hover:border-white/90 border-b font-montreal font-normal text-[15px] text-white/90 hover:text-white monitor:text-[17px] uppercase leading-[1.5] tracking-normal transition-all duration-300"
                   >
                     Visit Work ↗
                   </a>
                 </div>
 
-                {/* Floating Video Preview Card — commented out until R2 videos are ready
-                <div className="top-full z-50 absolute bg-black opacity-0 group-hover/link:opacity-100 shadow-[0_20px_50px_rgba(0,0,0,0.8)] mt-4 border border-[#AB1509] rounded-none w-[380px] overflow-hidden scale-95 group-hover/link:scale-100 origin-top-right transition-all -translate-y-2 group-hover/link:translate-y-0 duration-300 ease-out pointer-events-none">
+                {/* Floating Video Preview Card */}
+                <div className="top-full z-50 absolute bg-black opacity-0 group-hover/link:opacity-100 shadow-[0_20px_50px_rgba(0,0,0,0.8)] mt-4 rounded-none w-[380px] overflow-hidden scale-95 group-hover/link:scale-100 origin-top-right transition-all -translate-y-2 group-hover/link:translate-y-0 duration-300 ease-out pointer-events-none">
                   <div className="relative w-full h-full">
                     <video
+                      ref={(el) => {
+                        videoRefs.current[project.id] = el;
+                      }}
                       src={project.projectVideo}
-                      autoPlay
                       muted
                       loop
                       playsInline
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#AB1509]/15 via-transparent to-transparent pointer-events-none" />
                   </div>
                 </div>
-                */}
               </div>
 
                {/* BOTTOM LEFT: Approach Block */}

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – Footer Reveals & Masking`
+- **Phase:** `Feature Development – Selected Work Video Previews`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-13`
 
@@ -15,12 +15,13 @@
 ## Last Session Work
 
 ### Summary
-Separated the GSAP timeline triggers for the footer signature name text ("Ali Ahmed") and the bottom brand red block contents. Used viewport-relative translation (`y: "38dvh"`) on the red block content grid to keep it fully masked and hidden inside the parent `overflow-hidden` container until its separate trigger time.
+Configured Vercel Blob hosted video links (`https://u8yyhoq1ydpvxbur.public.blob.vercel-storage.com/...`) for all three works in `PROJECTS_DATA` within `components/SelectedWork.tsx`. Uncommented and enabled the interactive floating video preview card overlay in desktop view, letting project videos autoplay/loop silently on work link hover. Removed the red border and bottom gradient overlay from the floating video card for a clean borderless visual look. Configured videos to only start playing from 0s on link hover, and pause + reset to 0s when mouse leaves.
 
 ### Files Changed
 | File                                   | Change Type | Notes                                |
 |----------------------------------------|-------------|--------------------------------------|
-| `components/Footer.tsx`                | Modified    | Separated GSAP animation timelines for footer name and red block content. Applied `y: "38dvh"` translation to links. |
+| `components/SelectedWork.tsx`          | Modified    | Updated video preview URLs with Vercel Blob links, enabled floating hover card previews, removed borders/gradients, and implemented play-on-hover logic. |
+| `.env.local`                           | Created     | Configured Vercel Blob store ID and read-write tokens. |
 
 ---
 
@@ -141,6 +142,7 @@ Separated the GSAP timeline triggers for the footer signature name text ("Ali Ah
 | 109| Dynamic 3D Carousel Card Dimming         | Calculates face angle relative to screen using Math.cos and applies CSS brightness filter dynamically to cards to enhance depth | 2026-06-10 |
 | 110| Center physical folder container          | Centered the folder vertically in mobile view using padding (py-10) and bottom border, and in desktop view using absolute positioning between the 66% and 89% grid lines. | 2026-06-11 |
 | 111| Separate footer signature & links reveal  | Animated signature name and red block content on separate timelines. Applied `y: "38dvh"` translation to keep links hidden within overflow-hidden boundary before retraction. | 2026-06-13 |
+| 112| Host project video previews on Vercel Blobs| Sourced project video previews from high-performance Vercel Blob URLs and enabled floating hover card overlays | 2026-06-13 |
 
 ---
 
