@@ -201,7 +201,7 @@ export default function Hero() {
             {/* Line 1: Static Heading */}
             <div className="order-2 pt-1 md:pt-3 pb-1 w-full overflow-hidden">
               {/* Desktop heading */}
-              <h1 className="hidden md:flex flex-wrap items-baseline gap-x-[0.25em] pb-2 w-full font-tusker-standard font-medium text-[#fff7d3] text-[10vw] text-reveal text-left uppercase leading-[0.85] tracking-tight">
+              <h1 className="hidden md:flex flex-wrap items-baseline gap-x-[0.25em] pb-2 w-full font-tusker-standard font-medium text-[#fff7d3] text-[10vw] text-reveal text-left uppercase leading-[0.85] tracking-tighter">
                 <span className="heading-gradient">I Build</span>
                 <span className="heading-gradient">Websites</span>
                 <span className="heading-gradient">That</span>
@@ -227,7 +227,7 @@ export default function Hero() {
             <div className="flex justify-start md:justify-end order-3 w-full max-w-[150vw]">
               <div className="flex flex-col items-center md:items-end pt-1 md:pt-3 pb-1 w-full max-w-full overflow-hidden">
                 {/* Desktop Line 2 */}
-                <h1 className="hidden md:block pb-2 font-tusker-standard font-medium text-[9.5vw] text-reveal uppercase leading-[0.85] tracking-tight">
+                <h1 className="hidden md:block pb-2 font-tusker-standard font-medium text-[9.5vw] text-reveal uppercase leading-[0.85] tracking-tighter">
                   <span className="heading-gradient">Hit Different</span>
                 </h1>
                 {/* Mobile Line 2 */}
