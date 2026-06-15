@@ -130,6 +130,8 @@ html {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+  padding-top: 0.12em;
+  margin-top: -0.12em;
 }
 
 .pinyon-script-regular {

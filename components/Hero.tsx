@@ -188,7 +188,7 @@ export default function Hero() {
           {/* TYPOGRAPHY WRAPPER */}
           <div className="relative flex flex-col md:flex-initial flex-1 justify-center md:justify-start items-center gap-2 md:gap-2 mt-2 md:mt-10 lg:mt-0 w-full text-center select-none">
             {/* Top-right stat with long connector line */}
-            <div className="top-0 md:top-[-2vw] left-0 md:left-2 md:absolute relative flex justify-center md:justify-between items-center order-1 px-2 md:px-0 py-1 md:py-0 w-full font-montreal font-medium text-[9px] text-white/80 md:text-[10px] uppercase tracking-wider fade-in-item">
+            <div className="top-0 md:top-[-3vw] left-0 md:left-2 md:absolute relative flex justify-center md:justify-between items-center order-1 px-2 md:px-0 py-1 md:py-0 w-full font-montreal font-medium text-[9px] text-white/80 md:text-[10px] uppercase tracking-wider fade-in-item">
               <div 
                 id="top-stat-connector-line" 
                 className="hidden md:block flex-1 bg-white/50 mr-6 h-[1px] scale-x-0 origin-right"
@@ -199,7 +199,7 @@ export default function Hero() {
             </div>
 
             {/* Line 1: Static Heading */}
-            <div className="order-2 pt-1 md:pt-3 pb-1 w-full overflow-hidden">
+            <div className="order-2 -mt-[3vw] pt-[3vw] pb-1 w-full overflow-hidden">
               {/* Desktop heading */}
               <h1 className="hidden md:flex flex-wrap items-baseline gap-x-[0.25em] pb-2 w-full font-tusker-standard font-medium text-[#fff7d3] text-[10vw] text-reveal text-left uppercase leading-[0.85] tracking-tighter">
                 <span className="heading-gradient">I Build</span>
@@ -207,7 +207,7 @@ export default function Hero() {
                 <span className="heading-gradient">That</span>
               </h1>
               {/* Mobile heading */}
-              <h1 className="md:hidden flex flex-wrap justify-center items-center gap-x-[0.2em] pb-0 w-full font-tusker-standard font-medium text-[#fff7d3] text-[16vw] text-reveal sm:text-[13.5vw] uppercase leading-[0.9] tracking-tighter whitespace-nowrap">
+              <h1 className="md:hidden flex flex-wrap justify-center items-center gap-x-[0.2em] pb-0 w-full font-tusker-standard font-medium text-[#fff7d3] text-[16vw] text-reveal sm:text-[13.5vw] uppercase leading-[0.95] tracking-tighter whitespace-nowrap">
                 <span className="heading-gradient">I Build</span>
                 <span className="heading-gradient">Websites</span>
               </h1>
@@ -225,13 +225,13 @@ export default function Hero() {
 
             {/* Line 2: "Hit Different" */}
             <div className="flex justify-start md:justify-end order-3 w-full max-w-[150vw]">
-              <div className="flex flex-col items-center md:items-end pt-1 md:pt-3 pb-1 w-full max-w-full overflow-hidden">
+              <div className="flex flex-col items-center md:items-end -mt-[3vw] pt-[3vw] pb-1 w-full max-w-full overflow-hidden">
                 {/* Desktop Line 2 */}
-                <h1 className="hidden md:block pb-2 font-tusker-standard font-medium text-[9.5vw] text-reveal uppercase leading-[0.85] tracking-tighter">
+                <h1 className="hidden md:block pb-2 font-tusker-standard font-medium text-[10vw] text-reveal uppercase leading-[0.9] tracking-tighter">
                   <span className="heading-gradient">Hit Different</span>
                 </h1>
                 {/* Mobile Line 2 */}
-                <h1 className="md:hidden block pb-1 w-full font-tusker-standard font-medium text-[14.5vw] text-reveal sm:text-[12vw] text-center uppercase leading-[0.9] tracking-tighter whitespace-nowrap">
+                <h1 className="md:hidden block pb-1 w-full font-tusker-standard font-medium text-[14.5vw] text-reveal sm:text-[12vw] text-center uppercase leading-[0.95] tracking-tighter whitespace-nowrap">
                   <span className="heading-gradient">That Hit Different</span>
                 </h1>
               </div>

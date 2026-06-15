@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Signature, SignatureRef } from "@/components/ui/signature";
 import Document from "@/components/Document";
+import Background3DText from "@/components/Background3DText";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -94,6 +95,7 @@ export default function About() {
         gsap.set(redBgRef.current, { yPercent: 100 });
         if (redBgRef.current) redBgRef.current.style.display = "none";
         gsap.set(docWrapRef.current, { xPercent: -50, yPercent: -150 });
+        gsap.set(".about-3d-text-container", { yPercent: 100 });
         gsap.set(signatureWrapRef.current, { 
           transformOrigin: `${pctX}% ${pctY}%`,
           scale: 1, 
@@ -268,6 +270,17 @@ export default function About() {
           25.0
         );
 
+        // Synchronized rise of 3D circular background text elements from the bottom
+        tl.fromTo(".about-3d-text-container",
+          { yPercent: 100 },
+          {
+            yPercent: 0,
+            duration: 10,
+            ease: "none"
+          },
+          25.0
+        );
+
         // Subtle gravity pendulum swing anchored at the top center (50% 0%) of the document
         tl.fromTo(docWrapRef.current,
           { rotate: 0, transformOrigin: "50% 0%" },
@@ -363,6 +376,8 @@ export default function About() {
             backgroundPositionY: "100%"
           }}
         >
+          <Background3DText />
+
           <div
             ref={signatureWrapRef}
             className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none transform z-40"
