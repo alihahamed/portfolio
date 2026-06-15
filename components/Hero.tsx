@@ -8,6 +8,7 @@ import { Signature, SignatureRef } from "@/components/ui/signature";
 import ScrollArrow from "@/components/ScrollArrow";
 import { TransitionLink, useTransitionContext } from "@/components/PageTransition";
 import SilkBackground from "@/components/SilkBackground";
+import Shuffle from "@/components/Shuffle";
 
 export default function Hero() {
   const context = useTransitionContext();
@@ -202,13 +203,53 @@ export default function Hero() {
             <div className="order-2 -mt-[3vw] pt-[3vw] pb-1 w-full overflow-hidden">
               {/* Desktop heading */}
               <h1 className="hidden md:flex flex-wrap items-baseline gap-x-[0.25em] pb-2 w-full font-tusker-standard font-medium text-[#fff7d3] text-[10vw] text-reveal text-left uppercase leading-[0.85] tracking-tighter">
-                <span className="heading-gradient">I Build</span>
+                <span className="heading-gradient">I</span>
+                {!showPreloader ? (
+                  <Shuffle
+                    text="Build"
+                    tag="span"
+                    className="heading-gradient font-tusker-standard"
+                    style={{ fontSize: "inherit", lineHeight: "inherit" }}
+                    shuffleDirection="right"
+                    duration={0.4}
+                    animationMode="evenodd"
+                    shuffleTimes={3}
+                    ease="expo.out"
+                    stagger={0.02}
+                    triggerOnce={true}
+                    triggerOnHover={true}
+                    loop={true}
+                    loopDelay={2}
+                  />
+                ) : (
+                  <span className="heading-gradient">Build</span>
+                )}
                 <span className="heading-gradient">Websites</span>
                 <span className="heading-gradient">That</span>
               </h1>
               {/* Mobile heading */}
               <h1 className="md:hidden flex flex-wrap justify-center items-center gap-x-[0.2em] pb-0 w-full font-tusker-standard font-medium text-[#fff7d3] text-[16vw] text-reveal sm:text-[13.5vw] uppercase leading-[0.95] tracking-tighter whitespace-nowrap">
-                <span className="heading-gradient">I Build</span>
+                <span className="heading-gradient">I</span>
+                {!showPreloader ? (
+                  <Shuffle
+                    text="Build"
+                    tag="span"
+                    className="heading-gradient font-tusker-standard"
+                    style={{ fontSize: "inherit", lineHeight: "inherit" }}
+                    shuffleDirection="right"
+                    duration={0.4}
+                    animationMode="evenodd"
+                    shuffleTimes={3}
+                    ease="expo.out"
+                    stagger={0.02}
+                    triggerOnce={true}
+                    triggerOnHover={true}
+                    loop={true}
+                    loopDelay={2}
+                  />
+                ) : (
+                  <span className="heading-gradient">Build</span>
+                )}
                 <span className="heading-gradient">Websites</span>
               </h1>
             </div>
@@ -228,11 +269,51 @@ export default function Hero() {
               <div className="flex flex-col items-center md:items-end -mt-[3vw] pt-[3vw] pb-1 w-full max-w-full overflow-hidden">
                 {/* Desktop Line 2 */}
                 <h1 className="hidden md:block pb-2 font-tusker-standard font-medium text-[10vw] text-reveal uppercase leading-[0.9] tracking-tighter">
-                  <span className="heading-gradient">Hit Different</span>
+                  <span className="heading-gradient mr-[0.25em]">Hit</span>
+                  {!showPreloader ? (
+                    <Shuffle
+                      text="Different"
+                      tag="span"
+                      className="heading-gradient font-tusker-standard"
+                      style={{ fontSize: "inherit", lineHeight: "inherit" }}
+                      shuffleDirection="right"
+                      duration={0.4}
+                      animationMode="evenodd"
+                      shuffleTimes={3}
+                      ease="expo.out"
+                      stagger={0.02}
+                      triggerOnce={true}
+                      triggerOnHover={true}
+                      loop={true}
+                      loopDelay={2}
+                    />
+                  ) : (
+                    <span className="heading-gradient font-tusker-standard">Different</span>
+                  )}
                 </h1>
                 {/* Mobile Line 2 */}
                 <h1 className="md:hidden block pb-1 w-full font-tusker-standard font-medium text-[14.5vw] text-reveal sm:text-[12vw] text-center uppercase leading-[0.95] tracking-tighter whitespace-nowrap">
-                  <span className="heading-gradient">That Hit Different</span>
+                  <span className="heading-gradient mr-[0.2em]">That Hit</span>
+                  {!showPreloader ? (
+                    <Shuffle
+                      text="Different"
+                      tag="span"
+                      className="heading-gradient font-tusker-standard"
+                      style={{ fontSize: "inherit", lineHeight: "inherit" }}
+                      shuffleDirection="right"
+                      duration={0.4}
+                      animationMode="evenodd"
+                      shuffleTimes={3}
+                      ease="expo.out"
+                      stagger={0.02}
+                      triggerOnce={true}
+                      triggerOnHover={true}
+                      loop={true}
+                      loopDelay={2}
+                    />
+                  ) : (
+                    <span className="heading-gradient font-tusker-standard">Different</span>
+                  )}
                 </h1>
               </div>
             </div>

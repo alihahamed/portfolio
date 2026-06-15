@@ -89,7 +89,7 @@ export default function About() {
         if (redBgRef.current) redBgRef.current.style.transform = "";
         if (docWrapRef.current) docWrapRef.current.style.transform = "";
 
-        let entranceTimeline: gsap.core.Timeline;
+        const entranceTimeline = gsap.timeline({ paused: true });
 
         // Set initial positions
         gsap.set(redBgRef.current, { yPercent: 100 });
@@ -281,6 +281,19 @@ export default function About() {
           25.0
         );
 
+        // Transition marquee from straight (2D) to 3D cylinder rotation
+        tl.fromTo(".text-3d-left-wrapper",
+          { rotateY: 0, transformPerspective: 1000 },
+          { rotateY: 35, transformPerspective: 1000, duration: 10, ease: "power1.inOut" },
+          25.0
+        );
+
+        tl.fromTo(".text-3d-right-wrapper",
+          { rotateY: 0, transformPerspective: 1000 },
+          { rotateY: -35, transformPerspective: 1000, duration: 10, ease: "power1.inOut" },
+          25.0
+        );
+
         // Subtle gravity pendulum swing anchored at the top center (50% 0%) of the document
         tl.fromTo(docWrapRef.current,
           { rotate: 0, transformOrigin: "50% 0%" },
@@ -314,7 +327,7 @@ export default function About() {
         // -------------------------------------------------------------------------------------
 
         // Define a unified, real-time sequential entrance timeline for the document contents
-        entranceTimeline = gsap.timeline({ paused: true });
+        // (already initialized above)
 
         // Step 1: Grid lines draw immediately (no delay) + footer quote reveal (fade + slide up)
         entranceTimeline.to(".reveal-line-v", { scaleY: 1, duration: 1.2, stagger: 0.08, ease: "power4.inOut" }, 0)

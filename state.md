@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-- **Phase:** `Feature Development – About Background Aesthetics`
+- **Phase:** `Bug Fixing – UI Layout Adjustments`
 - **Status:** `Complete`
 - **Last Updated:** `2026-06-15`
 
@@ -15,19 +15,26 @@
 ## Last Session Work
 
 ### Summary
-Replaced placeholder names in the 3D rotating background text wheel with bold, custom editorial portfolio statements ("DESIGN LIKE YOU GIVE A DAMN", "NEVER SETTLE FOR AVERAGE", etc.) matching the site's brutalist tone.
+Fixed the red footer background bleed issue by dynamically setting footer visibility based on scroll progress. The footer is hidden until the curtain retraction stage starts (progress > 0.62).
 
 ### Files Changed
 | File                                   | Change Type | Notes                                |
 |----------------------------------------|-------------|--------------------------------------|
-| `components/Background3DText.tsx`      | Modified    | Added `about-3d-text-container` class to root wrapper. |
-| `components/About.tsx`                  | Modified    | Set initial hidden position (`yPercent: 100`) and added timeline animation from progress 25.0 to 35.0. |
+| `components/Contact.tsx`               | Modified    | Updated scroll trigger `onUpdate` callback to conditionally render footer `visibility` based on progress > 0.62. |
 
 ## Decisions Made
 
 | # | Decision                              | Rationale                                      | Date       |
 |---|---------------------------------------|-------------------------------------------------|------------|
-| 1 | Use flex order for responsive Hero stack | Allows Score and Stats to stack cleanly on mobile/tablet without breaking absolute placement on desktop | 2026-06-10 |
+| 1 | Hide footer during early contact stages| Prevents the brand red footer block from bleeding through at the bottom corners of the viewport during circle expansion. | 2026-06-15 |
+| 2 | Bypass scoped GSAP context queries    | Using document.querySelector resolves elements outside the component's DOM scope (e.g. from preceding sections). | 2026-06-15 |
+| 3 | High velocity flow-up on contact start| Simulates a high-speed scroll momentum overdrive for the background 3D texts. | 2026-06-15 |
+| 3 | Add vertical padding buffer to Shuffle wrapper | Prevents custom font tall uppercase letters from being chopped by `overflow: hidden`. | 2026-06-15 |
+| 4 | Propagate gradient class to characters directly | Resolves transparent text bugs caused by nested span nesting and background-clip: text. | 2026-06-15 |
+| 5 | Set Shuffle direction to right | Requested user layout direction change. | 2026-06-15 |
+| 6 | Integrate React Bits Shuffle text component | Enhances hero title text dynamics with a premium scramble reveal. | 2026-06-15 |
+| 2 | Initialize `entranceTimeline` immediately | Prevents undefined `progress` TypeErrors on early ScrollTrigger update events. | 2026-06-15 |
+| 3 | Use flex order for responsive Hero stack | Allows Score and Stats to stack cleanly on mobile/tablet without breaking absolute placement on desktop | 2026-06-10 |
 | 2 | Set Signature font size to 24 with responsive class | Scales the loaded SVGs sharp stroke vector path cleanly | 2026-06-10 |
 | 3 | Restrict mobile menu overlay to 50vw with minimum | Meets design criteria of covering half screen width without overflow on narrow screens | 2026-06-10 |
 | 4 | Title: "What I alt-tab to"            | User chose this from brainstormed options       | 2026-06-02 |
@@ -146,6 +153,8 @@ Replaced placeholder names in the 3D rotating background text wheel with bold, c
 
 | 115| Defer 3D text reveal to document descent | Slides 3D background text up from bottom at timeline progress 25.0 to 35.0, synchronizing it with the document descent and keeping it hidden beforehand | 2026-06-15 |
 | 116| Use short 2-word editorial statements for 3D wheels | Replaced long phrases with punchy 2-word statements (DESIGN FORWARD, NEVER SETTLE, etc.) to match brutalist aesthetic and improve visual rhythm | 2026-06-15 |
+| 117| Refactor 3D text from circular rotation to CSS marquee | Replaced GSAP circular positioning with pure CSS translateY marquee. Fixes uneven gaps, gap after cycle, and desync between left/right columns. Both use identical 45s duration for synchronized start | 2026-06-15 |
+| 118| Straight to 3D Marquee Transition | Marquee mounts perfectly flat (rotateY: 0). As document descends, GSAP tween animates rotateY to 35 / -35 degrees with transformPerspective 1000. Creates a smooth pivot into a 3D cylinder layout driven entirely by scroll timeline | 2026-06-15 |
 ---
 
 ## Open Questions

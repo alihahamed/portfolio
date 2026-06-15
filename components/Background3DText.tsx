@@ -4,152 +4,100 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
 const LEFT_ITEMS = [
-  "DESIGN FORWARD", "BUILT DIFFERENT", "STAY HUNGRY", "PIXEL PERFECT", "BREAK RULES", "THINK BIGGER",
-  "DESIGN FORWARD", "BUILT DIFFERENT", "STAY HUNGRY", "PIXEL PERFECT", "BREAK RULES", "THINK BIGGER",
-  "DESIGN FORWARD", "BUILT DIFFERENT", "STAY HUNGRY", "PIXEL PERFECT", "BREAK RULES", "THINK BIGGER",
-  "DESIGN FORWARD", "BUILT DIFFERENT", "STAY HUNGRY", "PIXEL PERFECT", "BREAK RULES", "THINK BIGGER"
+  "DESIGN FORWARD", "BUILT DIFFERENT", "STAY HUNGRY",
+  "PIXEL PERFECT", "BREAK RULES", "THINK BIGGER",
 ];
 
 const RIGHT_ITEMS = [
-  "NEVER SETTLE", "MOVE FAST", "STAY SHARP", "PURE CRAFT", "PUSH LIMITS", "GO FURTHER",
-  "NEVER SETTLE", "MOVE FAST", "STAY SHARP", "PURE CRAFT", "PUSH LIMITS", "GO FURTHER",
-  "NEVER SETTLE", "MOVE FAST", "STAY SHARP", "PURE CRAFT", "PUSH LIMITS", "GO FURTHER",
-  "NEVER SETTLE", "MOVE FAST", "STAY SHARP", "PURE CRAFT", "PUSH LIMITS", "GO FURTHER"
+  "NEVER SETTLE", "MOVE FAST", "STAY SHARP",
+  "PURE CRAFT", "PUSH LIMITS", "GO FURTHER",
 ];
 
+const buildTrack = (items: string[]) => {
+  const set = [...items, ...items, ...items]; 
+  return [...set, ...set]; 
+};
+
 export default function Background3DText() {
-  const leftWrapperRef = useRef<HTMLUListElement>(null);
-  const rightWrapperRef = useRef<HTMLUListElement>(null);
-  const leftItemsRef = useRef<(HTMLLIElement | null)[]>([]);
-  const rightItemsRef = useRef<(HTMLLIElement | null)[]>([]);
+  const leftTrack = buildTrack(LEFT_ITEMS);
+  const rightTrack = buildTrack(RIGHT_ITEMS);
+  const leftWrapperRef = useRef<HTMLDivElement>(null);
+  const rightWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const calculateStaticPositions = () => {
-      const leftItems = leftItemsRef.current.filter(Boolean);
-      const rightItems = rightItemsRef.current.filter(Boolean);
-
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      // Position left items statically
-      if (leftWrapperRef.current && leftItems.length > 0) {
-        const radius = leftWrapperRef.current.offsetWidth / 2;
-        const totalItems = leftItems.length;
-        const spacing = Math.PI / totalItems;
-
-        leftItems.forEach((item, index) => {
-          const angle = index * spacing;
-          const x = centerX + Math.cos(angle) * radius;
-          const y = centerY + Math.sin(angle) * radius;
-          const rotation = (angle * 180) / Math.PI;
-
-          gsap.set(item, {
-            x,
-            y,
-            rotation,
-            transformOrigin: "center center",
-          });
-        });
-      }
-
-      // Position right items statically
-      if (rightWrapperRef.current && rightItems.length > 0) {
-        const radius = rightWrapperRef.current.offsetWidth / 2;
-        const totalItems = rightItems.length;
-        const spacing = Math.PI / totalItems;
-
-        rightItems.forEach((item, index) => {
-          const angle = index * spacing;
-          const x = centerX + Math.cos(angle) * radius;
-          const y = centerY + Math.sin(angle) * radius;
-          const rotation = (angle * 180) / Math.PI + 180;
-
-          gsap.set(item, {
-            x,
-            y,
-            rotation,
-            transformOrigin: "center center",
-          });
-        });
-      }
-    };
-
-    // Calculate static positions immediately
-    calculateStaticPositions();
-
-    const handleResize = () => {
-      calculateStaticPositions();
-    };
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    // Initial 2D state for straight marquee
+    gsap.set(leftWrapperRef.current, {
+      perspective: "none",
+      transformStyle: "flat",
+      rotateY: 0,
+    });
+    
+    gsap.set(rightWrapperRef.current, {
+      perspective: "none",
+      transformStyle: "flat",
+      rotateY: 0,
+    });
   }, []);
 
   return (
-    <div className="z-30 absolute inset-0 w-full h-full overflow-hidden about-3d-text-container pointer-events-none select-none">
+    <div 
+      className="about-3d-text-container z-30 absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none"
+      style={{
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)"
+      }}
+    >
       <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes spin-left {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(-360deg); }
+        @keyframes marquee-up {
+          0%   { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
         }
-        @keyframes spin-right {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+        @keyframes marquee-down {
+          0%   { transform: translateY(-50%); }
+          100% { transform: translateY(0); }
         }
-        .animate-spin-left {
-          animation: spin-left 150s linear infinite;
+        .marquee-track-up {
+          animation: marquee-up 45s linear infinite;
           will-change: transform;
-          transform-style: preserve-3d;
-          transform-origin: center center;
         }
-        .animate-spin-right {
-          animation: spin-right 150s linear infinite;
+        .marquee-track-down {
+          animation: marquee-down 45s linear infinite;
           will-change: transform;
-          transform-style: preserve-3d;
-          transform-origin: center center;
         }
       `}} />
 
-      {/* Left text wheel container */}
-      <div className="left-[23%] absolute w-[100vw] h-full -translate-x-full pointer-events-none">
-        <ul
-          ref={leftWrapperRef}
-          className="m-0 p-0 w-full h-full animate-spin-left list-none"
-        >
-          {LEFT_ITEMS.map((name, index) => (
-            <li
-              key={index}
-              ref={(el) => {
-                leftItemsRef.current[index] = el;
-              }}
-              className="top-0 left-0 absolute w-[10rem] w-[25rem] sm:w-[15rem] md:w-[25rem] font-tusker-standard font-medium text-[#AB1509]/30 text-[clamp(1.5rem,5vw,6.5rem)] uppercase leading-none tracking-tighter whitespace-nowrap -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
+      {/* Left column */}
+      <div 
+        ref={leftWrapperRef}
+        className="top-0 left-0 absolute w-[23%] h-full overflow-visible text-3d-left-wrapper origin-right"
+      >
+        <div className="flex flex-col marquee-track-up">
+          {leftTrack.map((text, i) => (
+            <div
+              key={i}
+              className="py-[1vw] font-tusker-standard font-medium text-[#AB1509]/30 text-[clamp(1.5rem,5vw,6.5rem)] uppercase leading-[1.15] tracking-tighter whitespace-nowrap"
             >
-              {name}
-            </li>
+              {text}
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
-      {/* Right text wheel container */}
-      <div className="left-[83%] absolute w-[100vw] h-full pointer-events-none">
-        <ul
-          ref={rightWrapperRef}
-          className="m-0 p-0 w-full h-full animate-spin-right list-none"
-        >
-          {RIGHT_ITEMS.map((name, index) => (
-            <li
-              key={index}
-              ref={(el) => {
-                rightItemsRef.current[index] = el;
-              }}
-              className="top-0 left-0 absolute w-[10rem] w-[25rem] sm:w-[15rem] md:w-[25rem] font-tusker-standard font-medium text-[#AB1509]/30 text-[clamp(1.5rem,5vw,6.5rem)] text-left uppercase leading-none tracking-tighter whitespace-nowrap -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
+      {/* Right column */}
+      <div 
+        ref={rightWrapperRef}
+        className="top-0 right-0 text-3d-right-wrapper absolute w-[23%] h-full overflow-visible origin-left"
+      >
+        <div className="flex flex-col marquee-track-down">
+          {rightTrack.map((text, i) => (
+            <div
+              key={i}
+              className="py-[1vw] font-tusker-standard font-medium text-[#AB1509]/30 text-[clamp(1.5rem,5vw,6.5rem)] text-right uppercase leading-[1.15] tracking-tighter whitespace-nowrap"
             >
-              {name}
-            </li>
+              {text}
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );

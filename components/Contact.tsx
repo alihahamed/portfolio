@@ -21,12 +21,10 @@ export default function Contact() {
           scrub: 0.8,
           invalidateOnRefresh: true,
           onEnter: () => {
-            const footer = document.querySelector<HTMLElement>('footer');
-            if (footer) footer.style.visibility = 'visible';
+            // Let onUpdate control footer visibility dynamically
           },
           onEnterBack: () => {
-            const footer = document.querySelector<HTMLElement>('footer');
-            if (footer) footer.style.visibility = 'visible';
+            // Let onUpdate control footer visibility dynamically
           },
           onLeaveBack: () => {
             const footer = document.querySelector<HTMLElement>('footer');
@@ -35,7 +33,11 @@ export default function Contact() {
           onUpdate: (self) => {
             const footer = document.querySelector<HTMLElement>('footer');
             if (footer) {
-              footer.style.visibility = 'visible';
+              if (self.progress > 0.62) {
+                footer.style.visibility = 'visible';
+              } else {
+                footer.style.visibility = 'hidden';
+              }
             }
 
             // Instantly kill the About section DOM rendering once circle covers viewport
@@ -67,29 +69,65 @@ export default function Contact() {
       // Clear clip path after circle expands to allow shadow to overflow
       tl.set(circleRef.current, { clipPath: "none" }, 1.5);
 
+      const docWrap = document.querySelector(".about-doc-wrap");
+      const redBg = document.querySelector(".about-red-bg");
+      const text3dLeft = document.querySelector(".text-3d-left-wrapper");
+      const text3dRight = document.querySelector(".text-3d-right-wrapper");
+
       // Strong parallax: Slide the CV document up a little
-      tl.fromTo(
-        ".about-doc-wrap",
-        { yPercent: 0 },
-        {
-          yPercent: -75,
-          ease: "none",
-          duration: 1,
-        },
-        0
-      );
+      if (docWrap) {
+        tl.fromTo(
+          docWrap,
+          { yPercent: 0 },
+          {
+            yPercent: -75,
+            ease: "none",
+            duration: 1,
+          },
+          0
+        );
+      }
 
       // Slower parallax: Slide the red background up a very little
-      tl.fromTo(
-        ".about-red-bg",
-        { yPercent: 0 },
-        {
-          yPercent: -15,
-          ease: "none",
-          duration: 1.5,
-        },
-        0
-      );
+      if (redBg) {
+        tl.fromTo(
+          redBg,
+          { yPercent: 0 },
+          {
+            yPercent: -15,
+            ease: "none",
+            duration: 1.5,
+          },
+          0
+        );
+      }
+
+      // Velocity scroll effect: flow the left and right 3D text wrappers up fast at different speeds
+      if (text3dLeft) {
+        tl.fromTo(
+          text3dLeft,
+          { y: 0 },
+          {
+            y: "-180vh",
+            ease: "power2.in",
+            duration: 1.2,
+          },
+          0
+        );
+      }
+
+      if (text3dRight) {
+        tl.fromTo(
+          text3dRight,
+          { y: 0 },
+          {
+            y: "-130vh",
+            ease: "power2.in",
+            duration: 1.2,
+          },
+          0
+        );
+      }
 
       // Title slides up from bottom center to viewport center as the circle expands
       tl.fromTo(

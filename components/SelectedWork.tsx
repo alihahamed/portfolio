@@ -980,7 +980,7 @@ export default function SelectedWork() {
 
                {/* BOTTOM CENTER-RIGHT (UPPER): Stark Tech Stack Icons */}
               <div
-                className="right-6 md:right-12 lg:right-10 bottom-[30%] lg:bottom-[38%] z-30 absolute flex flex flex-col items-end opacity-0 text-right pointer-events-auto details-wipe-reveal"
+                className="right-6 md:right-12 lg:right-10 bottom-[30%] lg:bottom-[45%] z-30 absolute flex flex flex-col items-end opacity-0 text-right pointer-events-auto details-wipe-reveal"
                 style={{ clipPath: "inset(0% 0% 100% 0%)" }}
               >
                 <div className={`w-full flex flex-col items-end gap-2 transition-opacity duration-500 ease-in-out ${
@@ -1011,10 +1011,10 @@ export default function SelectedWork() {
             </div>
 
             {/* Bottom-left Project Title and Underline Wrapper */}
-            <div className={`work-title-wrapper absolute z-20 pointer-events-none left-6 right-6 top-[15%] md:top-[18%] lg:top-auto lg:bottom-65 lg:left-4 lg:right-auto monitor:bottom-75 transition-opacity duration-500 ease-in-out ${
+            <div className={`work-title-wrapper absolute z-20 pointer-events-none left-6 right-6 top-[15%] md:top-[18%] lg:top-auto lg:bottom-79 lg:left-4 lg:right-auto monitor:bottom-105 transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="m-0 font-tusker-standard font-medium text-[26px] text-yellow-soft/90 md:text-[36px] lg:text-[32px] monitor:!text-[45px] lg:text-left text-center tracking-normal work-scene-title-new">
+              <h2 className="m-0 font-tusker-standard font-medium text-[26px] text-yellow-soft/90 md:text-[36px] lg:text-[36px] monitor:!text-[45px] lg:text-left text-center tracking-normal work-scene-title-new">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
