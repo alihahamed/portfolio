@@ -164,6 +164,10 @@ export default function About() {
           }
         });
 
+        // Force initial positions inside the timeline to prevent GSAP from resetting them to 0 before time 25.0
+        tl.set(docWrapRef.current, { xPercent: -50, yPercent: -150, rotate: 0 }, 0);
+        tl.set(".about-3d-text-container", { yPercent: 100 }, 0);
+
         // We use an arbitrary total duration of 10 to easily map scroll percentages.
 
         // Stage 1 (time 0 to 7.0): 3D recede #work-inner + red panel slides up (duration extended for slower entry/exit)
@@ -260,8 +264,7 @@ export default function About() {
         }
 
         // Stage 5 (time 25.0 to 35.0): Document lowers into position — NO fade, pure scroll-driven descent
-        tl.fromTo(docWrapRef.current,
-          { yPercent: -150 },
+        tl.to(docWrapRef.current,
           {
             yPercent: 0,
             duration: 10,
@@ -271,8 +274,7 @@ export default function About() {
         );
 
         // Synchronized rise of 3D circular background text elements from the bottom
-        tl.fromTo(".about-3d-text-container",
-          { yPercent: 100 },
+        tl.to(".about-3d-text-container",
           {
             yPercent: 0,
             duration: 10,

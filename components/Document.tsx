@@ -109,7 +109,7 @@ const interests = [
   {
     name: "Interest 1",
     src: "/bike.png",
-    desc: " i like bikes",
+    desc: "bikes",
     style: {
       left: "4%",
       top: "5%",
@@ -135,7 +135,7 @@ const interests = [
   {
     name: "Interest 4",
     src: "/pink-floyd.png",
-    desc: "yes..i listen to pink floyd",
+    desc: "i like rock & heavy metal",
     style: {
       left: "0%",
       top: "46%",

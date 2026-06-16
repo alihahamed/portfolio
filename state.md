@@ -8,19 +8,22 @@
 
 - **Phase:** `Bug Fixing – UI Layout Adjustments`
 - **Status:** `Complete`
-- **Last Updated:** `2026-06-15`
+- **Last Updated:** `2026-06-16`
 
 ---
 
 ## Last Session Work
 
 ### Summary
-Fixed the red footer background bleed issue by dynamically setting footer visibility based on scroll progress. The footer is hidden until the curtain retraction stage starts (progress > 0.62).
+Resolved scroll transition overlaps and background layer bleeds in the About and Contact sections:
+1. Synchronized footer visibility with the GSAP timeline scrub playhead in `Contact.tsx`.
+2. Enforced document and 3D text container offscreen placement at timeline time 0 in `About.tsx` to prevent premature overlaps during the signature phases.
 
 ### Files Changed
 | File                                   | Change Type | Notes                                |
 |----------------------------------------|-------------|--------------------------------------|
-| `components/Contact.tsx`               | Modified    | Updated scroll trigger `onUpdate` callback to conditionally render footer `visibility` based on progress > 0.62. |
+| `components/Contact.tsx`               | Modified    | Moved footer visibility toggling from ScrollTrigger `onUpdate` to timeline `set()` calls to match scrub lag. |
+| `components/About.tsx`                 | Modified    | Added initial offscreen transforms at timeline time 0 and converted entrance animations to `.to()` tweens. |
 
 ## Decisions Made
 
@@ -155,6 +158,8 @@ Fixed the red footer background bleed issue by dynamically setting footer visibi
 | 116| Use short 2-word editorial statements for 3D wheels | Replaced long phrases with punchy 2-word statements (DESIGN FORWARD, NEVER SETTLE, etc.) to match brutalist aesthetic and improve visual rhythm | 2026-06-15 |
 | 117| Refactor 3D text from circular rotation to CSS marquee | Replaced GSAP circular positioning with pure CSS translateY marquee. Fixes uneven gaps, gap after cycle, and desync between left/right columns. Both use identical 45s duration for synchronized start | 2026-06-15 |
 | 118| Straight to 3D Marquee Transition | Marquee mounts perfectly flat (rotateY: 0). As document descends, GSAP tween animates rotateY to 35 / -35 degrees with transformPerspective 1000. Creates a smooth pivot into a 3D cylinder layout driven entirely by scroll timeline | 2026-06-15 |
+| 119| Timeline-Synced Footer Visibility | Using timeline set() matches the footer reveal to the scrub lag, preventing the background black canvas from bleeding through at the bottom seam. | 2026-06-16 |
+| 120| Timeline-Enforced Initial Transforms | Setting document and 3D text container transforms at timeline time 0 prevents GSAP timeline playhead updates from reverting them to default 0% values, preventing overlapping visual bugs during early scroll phases. | 2026-06-16 |
 ---
 
 ## Open Questions

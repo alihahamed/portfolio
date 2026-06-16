@@ -20,26 +20,11 @@ export default function Contact() {
           end: "bottom bottom",
           scrub: 0.8,
           invalidateOnRefresh: true,
-          onEnter: () => {
-            // Let onUpdate control footer visibility dynamically
-          },
-          onEnterBack: () => {
-            // Let onUpdate control footer visibility dynamically
-          },
           onLeaveBack: () => {
             const footer = document.querySelector<HTMLElement>('footer');
             if (footer) footer.style.visibility = 'hidden';
           },
           onUpdate: (self) => {
-            const footer = document.querySelector<HTMLElement>('footer');
-            if (footer) {
-              if (self.progress > 0.62) {
-                footer.style.visibility = 'visible';
-              } else {
-                footer.style.visibility = 'hidden';
-              }
-            }
-
             // Instantly kill the About section DOM rendering once circle covers viewport
             // This fires on every scroll frame with ZERO delay (bypasses scrub lag)
             const aboutRedBg = document.querySelector<HTMLElement>('.about-red-bg');
@@ -73,6 +58,12 @@ export default function Contact() {
       const redBg = document.querySelector(".about-red-bg");
       const text3dLeft = document.querySelector(".text-3d-left-wrapper");
       const text3dRight = document.querySelector(".text-3d-right-wrapper");
+      const footer = document.querySelector("footer");
+
+      if (footer) {
+        tl.set(footer, { visibility: "hidden" }, 0);
+        tl.set(footer, { visibility: "visible" }, 2.8);
+      }
 
       // Strong parallax: Slide the CV document up a little
       if (docWrap) {
