@@ -889,8 +889,8 @@ export default function SelectedWork() {
               className={`absolute inset-0 w-full h-full pointer-events-none z-30 transition-all duration-500 ${activeProjectId === project.id ? "opacity-100" : "opacity-0"
                 }`}
             >
-               {/* TOP LEFT: Brutalist Metrics Grid (Horizontal) */}
-              <div className={`absolute top-[10%] left-6 md:left-12 lg:left-4 flex flex-row gap-6 md:gap-12 text-left pointer-events-auto select-none z-30 transition-opacity duration-500 ease-in-out ${
+               {/* LEFT MID: Brutalist Metrics Grid (Horizontal) */}
+              <div className={`absolute left-6 right-6 top-[15%] md:top-[18%] lg:top-auto lg:bottom-79 lg:left-4 lg:right-auto monitor:bottom-105 flex flex-row gap-6 md:gap-12 text-left pointer-events-auto select-none z-30 transition-opacity duration-500 ease-in-out ${
                 isLinkHovered ? "opacity-25" : "opacity-100"
               }`}>
                 {project.metrics.map((metric, idx) => (
@@ -1010,11 +1010,11 @@ export default function SelectedWork() {
               </div>
             </div>
 
-            {/* Bottom-left Project Title and Underline Wrapper */}
-            <div className={`work-title-wrapper absolute z-20 pointer-events-none left-6 right-6 top-[15%] md:top-[18%] lg:top-auto lg:bottom-79 lg:left-4 lg:right-auto monitor:bottom-105 transition-opacity duration-500 ease-in-out ${
+            {/* Top-left Project Title */}
+            <div className={`work-title-wrapper absolute z-20 pointer-events-none top-[10%] left-6 md:left-12 lg:left-4 right-auto transition-opacity duration-500 ease-in-out ${
               activeProjectId === project.id && isLinkHovered ? "opacity-[0.35]" : "opacity-100"
             }`}>
-              <h2 className="m-0 font-tusker-standard font-medium text-[26px] text-yellow-soft/90 md:text-[36px] lg:text-[36px] monitor:!text-[45px] lg:text-left text-center tracking-normal work-scene-title-new">
+              <h2 className="m-0 font-tusker-standard font-medium text-[26px] text-yellow-soft/90 md:text-[36px] lg:text-[36px] monitor:!text-[45px] text-left tracking-normal work-scene-title-new">
                 {titleChars.map((char, charIndex) => (
                   <span
                     key={charIndex}
