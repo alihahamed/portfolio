@@ -1,255 +1,143 @@
-@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
-/* Hide native cursor — TrailingCursor canvas takes over */
-*, *::before, *::after { cursor: none !important; }
-
-:root {
-  --background: #050505;
-  --foreground: #fff7d3;
-  --border-color: #2c0a07; /* Dark reddish warm border */
-  --accent-color: #AB1509; /* Deep Rich Red */
-  --yellow-soft: #fff7d3;  /* Soft Yellow */
-  --black-deep: #050505;   /* Deep Pitch Black */
-  --footer-height: 100vh;  /* Full viewport footer height */
-  
-  /* Carousel responsive values */
-  --carousel-width: 400px;
-  --carousel-height: 400px;
-  --carousel-z: 300px;
+/* The design system. Two palettes, picked by the clock where Ali is (see the script in layout.tsx): day is the
+   default, night overrides it. Everything is neutral except the sky and the pen ink of the handwritten notes. */
+:root,
+[data-theme='day'] {
+  --bg: #fafaf9;
+  --fg: #141413;
+  --ink: #2b4acb; /* pen blue */
+  --sky-top: #7ec3f0;
+  --sky-bottom: #ddf0fc;
+  --lamp: var(--bg); /* headlights and lamps: off by day */
+  --cloud: #fff; /* clouds are whiter than the page */
+  --cloud-shade: #c6d9ec; /* their undersides */
+  /* how the scene's objects are drawn: outline, glass, and how much light there is to paint with */
+  --edge: var(--fg);
+  --glass: #3a3c40;
+  --night-l: 1; /* lightness and colour kept by painted things */
+  --night-c: 1;
+  --glint: 1; /* how strong the highlight on a roof is */
+  --pane: var(--glass); /* windows with a light behind them: dark by day */
+  --beam: 0; /* light falling from a lamp: only at night */
+  --gap: rgb(20 80 140 / 0.12); /* the lines between the sky's dots */
+  --orb: #fff6cf; /* the sun */
+  --orb-shade: transparent;
+  --halo: rgb(255 238 170 / 0.8);
+}
+[data-theme='night'] {
+  --bg: #0a0b0f;
+  --fg: #ededec;
+  --ink: #a9b8ff; /* moonlight */
+  --sky-top: #0b1230;
+  --sky-bottom: #141a2e;
+  --lamp: #ffd76a; /* the one warm colour, only at night */
+  --cloud: #2f3a66; /* moonlit */
+  --cloud-shade: #1b2344;
+  --edge: #05060b; /* outlines stay dark at night; light ones make everything look like a chalk drawing */
+  --glass: #111936; /* unlit windows, reflecting the sky */
+  --night-l: 0.6;
+  --night-c: 0.75;
+  --glint: 0.35;
+  --pane: var(--lamp); /* and lit at night */
+  --beam: 1; /* and on at night */
+  --gap: rgb(0 0 0 / 0.4);
+  --orb: #e9edf8; /* the moon, */
+  --orb-shade: #c2cade; /* darker down one side */
+  --halo: rgb(190 205 255 / 0.25);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-border: var(--border-color);
-  --color-accent: var(--accent-color);
-  --color-yellow-soft: var(--yellow-soft);
-  --color-black-deep: var(--black-deep);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-montreal: var(--font-neue-montreal);
-  
-  /* Tusker Grotesk fonts */
-  --font-tusker-condensed: var(--font-tusker-condensed);
-  --font-tusker-standard: var(--font-tusker-standard);
-  --font-tusker-expanded: var(--font-tusker-expanded);
-  
-  /* Pinyon Script font */
-  --font-pinyon: "Pinyon Script", cursive;
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: color-mix(in srgb, var(--fg) 60%, transparent);
+  --color-line: color-mix(in srgb, var(--fg) 10%, transparent);
+  --color-ink: var(--ink);
+  --color-sky-top: var(--sky-top);
+  --color-sky-bottom: var(--sky-bottom);
+
+  /* Two faces: Mona Sans for everything (regular to read, medium for the name, headings and labels) and a hand for the
+     notes. The dots belong to the pictures, not the letters, so there is no pixel face, and no monospace. */
+  --font-sans: var(--font-mona-sans), 'Helvetica Neue', Arial, sans-serif;
+  --font-hand: var(--font-caveat), cursive;
+
+  /* Fixed sizes on a 4px baseline; a 768px column doesn't need fluid type. */
+  --text-name: 2rem;
+  --text-name--line-height: 2.25rem;
+  --text-name--letter-spacing: -0.03em;
+  --text-name--font-weight: 500;
+  --text-h2: 1.25rem;
+  --text-h2--line-height: 1.75rem;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 500;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.5rem;
+  --text-body--letter-spacing: -0.005em;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.25rem;
+  --text-label: 0.75rem;
+  --text-label--line-height: 1rem;
+  --text-label--letter-spacing: 0.01em;
+  --text-label--font-weight: 500;
+  --text-note: 1.25rem;
+  --text-note--line-height: 1.25rem;
+  --text-note--letter-spacing: -0.01em;
+
+  /* Spacing is Tailwind's 4px steps, and only 1 2 3 4 6 8 12 16 24. The frame is 768px between its rails. */
+  --container-frame: 48rem;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@custom-variant monitor (@media (min-width: 1600px) and (min-height: 900px));
-
-@media (max-width: 1024px) {
-  :root {
-    --carousel-width: 320px;
-    --carousel-height: 320px;
-    --carousel-z: 220px;
-  }
-
-  body, *, *::before, *::after {
-    cursor: auto !important;
-  }
-
-  .work__scene {
-    flex-direction: column !important;
-    justify-content: center !important;
-    gap: 3.5rem !important; /* Spacious gaps to restore spacious default layout */
-    padding: 7rem 1.5rem !important; /* Balanced padding between project sections */
-    height: auto !important; /* Dynamic height wraps content to eliminate huge empty gaps */
-  }
-  
-  .selected-work-label {
-    top: 2rem !important;
-    left: 2.25rem !important;
-    position: absolute !important;
-  }
-
-  .work-title-wrapper {
-    position: relative !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    order: 1 !important;
-    width: 100% !important;
-    text-align: center !important;
-  }
-
-  .work-scene-desc-new {
-    position: relative !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    order: 3 !important;
-    width: 90% !important;
-    max-width: 450px !important;
-    text-align: center !important;
-  }
-
-  .work__carousel {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    margin: 0 !important; /* Reset margin since gap handles the space */
-    order: 2 !important;
-  }
+/* The sky (Sky.tsx) is a display of 3px dots on a 4px grid. Its canvas holds one pixel per dot and is scaled up without
+   smoothing; `.dots` cuts the 1px gaps out of it, and `.gaps` is what shows through them, a little darker than the sky
+   and fading out where the sky meets the page. */
+.dots {
+  image-rendering: pixelated;
+  mask-image: linear-gradient(to right, #000 3px, transparent 3px), linear-gradient(to bottom, #000 3px, transparent 3px);
+  mask-size: 4px 4px;
+  mask-composite: intersect;
 }
-
-@media (max-width: 768px) {
-  :root {
-    --footer-height: 100dvh;
-    --carousel-width: 250px;
-    --carousel-height: 250px;
-    --carousel-z: 160px;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-montreal);
-  overflow-x: clip;
-}
-
-/* Hide standard browser scrollbars completely for clean, immersive creative look */
-html {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  overflow-x: clip;
-}
-
-::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-.heading-gradient {
-  background: linear-gradient(to top, #fff7d3 0%, #fffad6 33%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-  padding-top: 0.12em;
-  margin-top: -0.12em;
-}
-
-.pinyon-script-regular {
-  font-family: "Pinyon Script", cursive !important;
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* Page Transition Overlay Styles */
-.transition__overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100dvh;
-  z-index: 99999; /* Above all content including the menu overlay */
-  background-color: var(--accent-color);
-  clip-path: var(--clip, polygon(0% 50%, 0% 50%, 0% 50%, 0% 50%));
-  will-change: clip-path;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.transition__overlay .title__destination {
+.gaps {
   position: absolute;
-  width: 100%;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  text-transform: uppercase;
-  font-size: 5vw;
-  font-family: var(--font-tusker-standard);
-  font-weight: 500;
-  color: var(--yellow-soft);
-  text-align: center;
-  line-height: 1;
+  inset: 0;
+  background: var(--gap);
+  mask-image: linear-gradient(#000 30%, transparent 95%);
 }
 
-/* Masked text layouts for clean stagger reveals */
-.transition__overlay .words-wrapper {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
+/* The clock's blinking colon, and the now-playing equaliser: bars of dots that jump a dot at a time (heights on the 4px
+   pitch). */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes eq {
+  0% {
+    height: 7px;
+  }
+  25% {
+    height: 15px;
+  }
+  50% {
+    height: 3px;
+  }
+  75% {
+    height: 11px;
+  }
 }
 
-.transition__overlay .words {
-  display: inline-block;
-  will-change: transform;
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 }
-
-/* 3D Carousel & Scene Styles */
-.work__scene {
-  perspective: 900px;
-  position: relative;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: transparent; /* Show continuous parent background and grid lines */
-}
-
-.work__carousel {
-  width: var(--carousel-width);
-  height: var(--carousel-height);
-  top: 50%;
-  left: 50%;
-  margin-top: calc(var(--carousel-height) / -2);
-  margin-left: calc(var(--carousel-width) / -2);
-  position: absolute;
-  transform-style: preserve-3d;
-  will-change: transform;
-  transform: translateZ(calc(var(--carousel-z) * -1)) rotateY(0deg);
-}
-
-.work__carousel-cell {
-  position: absolute;
-  width: var(--carousel-width);
-  height: var(--carousel-height);
-  left: 0;
-  top: 0;
-  transform-style: preserve-3d;
-}
-
-.work__card {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.work__card-face {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background-color: #121212;
-  border-radius: 10px;
-}
-
-/* Hide global red cursor on 3D carousel hover to prevent duplicate cursor trailing */
-body.carousel-hovered .global-custom-cursor {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.2s ease;
-}
-
-/* Inline preloader active rule to prevent content flash during SSR hydration */
-html.preloader-active #app-main-content {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* Hide preloader immediately on refresh to prevent black screen flash */
-html.preloader-played .preloader-container {
-  display: none !important;
-}
-
