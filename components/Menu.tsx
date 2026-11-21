@@ -44,9 +44,18 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
     }
   }, [mounted, showPreloader, delay]);
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
     gsap.registerPlugin(CustomEase);
     CustomEase.create("menuEase", "0.65, 0.01, 0.05, 0.99");
+
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (!isOpen) return;
+    }
+
+    if (!overlayRef.current || !menuRef.current) return;
 
     const tl = gsap.timeline({
       defaults: { ease: "menuEase", duration: 0.7 },
@@ -63,35 +72,51 @@ export default function Menu({ delay = 0.3 }: { delay?: number }) {
         .set(overlayRef.current, { display: "block" })
         .set(menuRef.current, { display: "flex" })
         .set(menuRef.current, { xPercent: 0 })
-        .fromTo(overlayRef.current, { autoAlpha: 0 }, { autoAlpha: 1 })
-        .fromTo(
+        .fromTo(overlayRef.current, { autoAlpha: 0 }, { autoAlpha: 1 });
+
+      if (panels.length > 0) {
+        tl.fromTo(
           panels,
           { xPercent: 101 },
           { xPercent: 0, stagger: 0.12, duration: 0.575 },
           "<"
-        )
-        .fromTo(
-          links.map((el) => el.querySelector(".menu-link")),
-          { yPercent: 140, rotate: 10 },
-          { yPercent: 0, rotate: 0, stagger: 0.05 },
-          "<+=0.5"
-        )
-        .fromTo(
+        );
+      }
+
+      if (links.length > 0) {
+        const linkTargets = links.map((el) => el.querySelector(".menu-link")).filter(Boolean);
+        if (linkTargets.length > 0) {
+          tl.fromTo(
+            linkTargets,
+            { yPercent: 140, rotate: 10 },
+            { yPercent: 0, rotate: 0, stagger: 0.05 },
+            "<+=0.5"
+          );
+        }
+      }
+
+      if (targets.length > 0) {
+        tl.fromTo(
           targets,
           { autoAlpha: 0, yPercent: 50 },
           { autoAlpha: 1, yPercent: 0, stagger: 0.04 },
           "<+=0.2"
         );
+      }
     } else {
       document.body.style.overflow = "";
       const panels = bgPanelsRef.current.filter(Boolean);
 
-      tl.clear()
-        .to(overlayRef.current, { autoAlpha: 0 })
-        .to(menuRef.current, { xPercent: 120 }, "<")
-        .to(panels, { xPercent: 101, stagger: 0.05, duration: 0.5 }, "<")
-        .set(overlayRef.current, { display: "none" })
-        .set(menuRef.current, { display: "none" });
+      tl.clear();
+      if (panels.length > 0) {
+        tl.to(overlayRef.current, { autoAlpha: 0 })
+          .to(menuRef.current, { xPercent: 120 }, "<")
+          .to(panels, { xPercent: 101, stagger: 0.05, duration: 0.5 }, "<")
+          .set(overlayRef.current, { display: "none" })
+          .set(menuRef.current, { display: "none" });
+      } else {
+        gsap.set([overlayRef.current, menuRef.current], { display: "none" });
+      }
     }
 
     return () => { tl.kill(); };
