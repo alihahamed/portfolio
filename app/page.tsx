@@ -1,28 +1,34 @@
-"use client";
+import Sky from '@/components/site/Sky'
+import Intro from '@/components/site/Intro'
+import Now from '@/components/site/Now'
+import Work from '@/components/site/Work'
+import Activity from '@/components/site/Activity'
+import Toolbox from '@/components/site/Toolbox'
+import SignOff from '@/components/site/SignOff'
+import Dock from '@/components/site/Dock'
 
-import Hero from "@/components/Hero";
-import SelectedWork from "@/components/SelectedWork";
-import About from "@/components/About";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+// One centred column, 768px wide, framed like a sheet: down each side runs a band between two hairline rails, filled
+// with the sky's own dots (3px on a 4px grid, drawn by ruling page-coloured gaps over a tint) so the display carries on
+// down the page. The sections run top to bottom in this order, each designed on its own; the dock floats over the
+// bottom of the screen.
+const BAND =
+  'pointer-events-none absolute inset-y-0 w-3 border-line bg-line bg-[linear-gradient(to_right,var(--color-bg)_1px,transparent_1px),linear-gradient(var(--color-bg)_1px,transparent_1px)] bg-[length:4px_4px] sm:w-8'
 
 export default function Home() {
   return (
-    <div className="relative flex flex-col w-full  font-sans antialiased text-white">
-      {/* 1. Hero section containing localized WebGL Silk Background */}
-      <Hero />
-
-      {/* 2. Selected work horizontal carousel section */}
-      <SelectedWork />
-
-      {/* 3. About section with dynamic SVG grid lines and draggable stickers */}
-      <About />
-
-      {/* 4. Contact section with circular background clipPath reveal and dynamic corner rounding */}
-      <Contact />
-
-      {/* 5. sticky brutality red footer */}
-      <Footer />
+    <div className="overflow-x-clip px-2 pb-24 sm:px-4">
+      <main className="relative mx-auto max-w-[calc(var(--container-frame)+1.5rem)] border-x border-line px-3 sm:max-w-[calc(var(--container-frame)+4rem)] sm:px-8">
+        <span aria-hidden="true" className={`${BAND} left-0 border-r`} />
+        <span aria-hidden="true" className={`${BAND} right-0 border-l`} />
+        <Sky />
+        <Intro />
+        <Now />
+        <Work />
+        <Activity />
+        <Toolbox />
+        <SignOff />
+      </main>
+      <Dock />
     </div>
-  );
+  )
 }
